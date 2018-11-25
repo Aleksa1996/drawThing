@@ -35,7 +35,7 @@ let sendSignal = () => {
 logger('green', `PID ${pid} is alive, start watching process...`);
 // Initialize watcher.
 // Define your paths here.
-let watcher = chokidar.watch([basePath + '/app', basePath + '/resources', basePath + '/routes'], {
+let watcher = chokidar.watch([basePath + '/app', basePath + '/resources/views', basePath + '/routes'], {
 	ignored: /(^|[\/\\])\../,
 	persistent: true
 });
