@@ -10,15 +10,6 @@ import { store } from './store/store';
 
 const routerContext = {};
 
-// import axios from 'axios';
-
-// let res = axios.get('www.https://jsonplaceholder.typicode.com/todos/1');
-// res.then(ress => {
-// 	console.log(ress.data);
-// });
-// context sa php-a
-// store.dispatch(initializeSession());
-// let context = { url: '' };
 const dataRequirements = routes
 	.filter(route => matchPath(context.url, route)) // filter matching paths
 	.map(route => route.component) // map to components
@@ -37,7 +28,7 @@ Promise.all(dataRequirements).then(() => {
 	const reactDom = renderToString(jsx);
 	const reduxState = store.getState();
 	const helmetData = Helmet.renderStatic();
-	// console.log(reduxState);
+
 	dispatch(htmlTemplate(reactDom, reduxState, helmetData));
 });
 

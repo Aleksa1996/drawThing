@@ -1,5 +1,4 @@
 export const commonAction = () => {
-	console.log('commonAction');
 	return { type: '', payload: '' };
 };
 

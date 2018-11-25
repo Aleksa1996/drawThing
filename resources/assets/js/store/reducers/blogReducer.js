@@ -11,7 +11,7 @@ const reducer = (state = initialState, action) => {
 			return { ...state, fetched: state.fetched + 1 };
 		}
 		case FETCH_BLOGS_SUCCESS: {
-			// console.log(action);
+			// console.log(action.payload);
 			return { ...state, blogs: action.payload };
 		}
 		default:
