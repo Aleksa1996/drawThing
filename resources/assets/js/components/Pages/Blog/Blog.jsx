@@ -8,7 +8,10 @@ class Blog extends Component {
 	state = {};
 
 	componentDidMount() {
-		// console.log(this.props);
+		if (this.props.blogs.length == 0) {
+			this.props.fetchBlogs();
+		}
+
 		// this.props.fetchBlogs();
 	}
 
