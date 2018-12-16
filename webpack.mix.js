@@ -16,10 +16,14 @@ if (process.env.TARGET == 'web') {
 		},
 		devtool: 'source-map'
 	});
-	mix.react('resources/assets/js/client.js', 'public/js').sass('resources/assets/sass/app.scss', 'public/css');
+	mix
+		.react('resources/assets/js/client.js', 'public/js')
+		.sass('resources/assets/sass/app.scss', 'public/css')
+		.version();
 } else {
 	mix.webpackConfig({
 		target: 'node'
 	});
 	mix.react('resources/assets/js/server.js', 'public/js');
+	mix.disableNotifications();
 }

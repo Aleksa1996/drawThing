@@ -41,7 +41,7 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
             <meta name="csrf-token" content="${context.csrf_token}">
             ${helmetData.title.toString()}
             ${helmetData.meta.toString()}
-            <link rel="stylesheet" type="text/css" href="/css/app.css" />
+            <link rel="stylesheet" type="text/css" href="${context.css_bundle}" />
             ${helmetData.link.toString()}
         </head>
 
@@ -50,7 +50,7 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
             <script>
                 window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)}
             </script>
-            <script src="/js/client.js"></script>
+            <script src="${context.js_bundle}"></script>
         </body>
         </html>
     `;

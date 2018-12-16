@@ -81456,7 +81456,10 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_BLOGS_SUCCESS"]:
       {
+<<<<<<< Updated upstream
         // console.log(action.payload);
+=======
+>>>>>>> Stashed changes
         return _objectSpread({}, state, {
           blogs: action.payload
         });

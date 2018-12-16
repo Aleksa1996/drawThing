@@ -34977,7 +34977,8 @@ Promise.all(dataRequirements).then(function () {
 });
 
 function htmlTemplate(reactDom, reduxState, helmetData) {
-  return "\n        <!DOCTYPE html>\n        <html>\n        <head>\n            <meta charset=\"utf-8\">\n            <meta name=\"csrf-token\" content=\"".concat(context.csrf_token, "\">\n            ").concat(helmetData.title.toString(), "\n            ").concat(helmetData.meta.toString(), "\n            <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/app.css\" />\n            ").concat(helmetData.link.toString(), "\n        </head>\n\n        <body>\n            <div id=\"react-app\">").concat(reactDom, "</div>\n            <script>\n                window.__PRELOADED_STATE__ = ").concat(JSON.stringify(reduxState), "\n            </script>\n            <script src=\"/js/client.js\"></script>\n        </body>\n        </html>\n    ");
+  console.log(context);
+  return "\n        <!DOCTYPE html>\n        <html>\n        <head>\n            <meta charset=\"utf-8\">\n            <meta name=\"csrf-token\" content=\"".concat(context.csrf_token, "\">\n            ").concat(helmetData.title.toString(), "\n            ").concat(helmetData.meta.toString(), "\n            <link rel=\"stylesheet\" type=\"text/css\" href=\"").concat(context.css_bundle, "\" />\n            ").concat(helmetData.link.toString(), "\n        </head>\n\n        <body>\n            <div id=\"react-app\">").concat(reactDom, "</div>\n            <script>\n                window.__PRELOADED_STATE__ = ").concat(JSON.stringify(reduxState), "\n            </script>\n            <script src=\"").concat(context.js_bundle, "\"></script>\n        </body>\n        </html>\n    ");
 }
 
 /***/ }),
