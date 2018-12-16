@@ -81458,7 +81458,10 @@ var reducer = function reducer() {
       {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         // console.log(action.payload);
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
