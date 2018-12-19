@@ -13,4 +13,5 @@ yarn-error.log
 /public/js/server.js.map
 /public/js/client.js.map
 /public/mix-manifest.json
+/public/js/server/mix-manifest.json
 /package-lock.json

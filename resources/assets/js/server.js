@@ -35,9 +35,10 @@ Promise.all(dataRequirements).then(() => {
 function htmlTemplate(reactDom, reduxState, helmetData) {
 	return `
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
             <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="csrf-token" content="${context.csrf_token}">
             ${helmetData.title.toString()}
             ${helmetData.meta.toString()}

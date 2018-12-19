@@ -22,7 +22,8 @@ import asyncComponent from './hocs/asyncComponent';
 
 import Home from './components/Pages/Home/Home';
 import About from './components/Pages/About/About';
-import Blog from './components/Pages/Blog/Blog';
+import Contact from './components/Pages/Contact/Contact';
+import Game from './components/Pages/Game/Game';
 
 export const routes = [
 	{
@@ -38,16 +39,22 @@ export const routes = [
 		exact: true
 	},
 	{
-		id: '125',
-		path: '/blog',
-		component: Blog,
+		id: '126',
+		path: '/contact',
+		component: Contact,
+		exact: true
+	},
+	{
+		id: '127',
+		path: '/game',
+		component: Game,
 		exact: true
 	}
 ];
 
 const Router = props => {
 	return (
-		<Switch>
+		<Switch location={props.location}>
 			{routes.map((r, id) => (
 				<Route key={id} exact path={r.path} component={r.component} />
 			))}

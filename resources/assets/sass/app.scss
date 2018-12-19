@@ -1,12 +1,16 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
-// @import '~font-awesome/css/font-awesome.min';
+@import '~font-awesome/css/font-awesome.min';
 @import './_variables';
 @import '~bootstrap/scss/bootstrap';
 @import './global';
 
+@import '../js/components/Layout/Layout';
 @import '../js/components/Navigation/Navigation';
 
 @import '../js/components/Pages//Home/Home';
 @import '../js/components/Pages/About/About';
+@import '../js/components/Pages/Contact/Contact';
+@import '../js/components/Pages/Game/Game';
