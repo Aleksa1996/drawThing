@@ -11,12 +11,13 @@ let mix = require('laravel-mix');
  */
 
 mix.webpackConfig({
-	output: {
-		chunkFilename: 'js/[name].js'
-	},
+	// output: {
+	// 	chunkFilename: '[name].js'
+	// },
 	devtool: 'source-map'
 });
 mix
 	.react('resources/assets/js/client.js', 'public/js')
 	.sass('resources/assets/sass/app.scss', 'public/css')
-	.version();
+	.version()
+	.extract();

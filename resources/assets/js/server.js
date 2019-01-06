@@ -1,4 +1,25 @@
-/* global context, dispatch */
+// Helper for disabling console log
+const ___loggger___ = (function() {
+	let oldConsoleLog = null;
+	let pub = {};
+
+	pub.enableLogger = function enableLogger() {
+		if (oldConsoleLog == null) return;
+
+		global['console']['log'] = oldConsoleLog;
+	};
+
+	pub.disableLogger = function disableLogger() {
+		oldConsoleLog = console.log;
+		global['console']['log'] = function() {};
+	};
+
+	return pub;
+})();
+// disabling console log while server side rendering
+___loggger___.disableLogger();
+
+/* globals:  [context, dispatch] */
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
@@ -28,11 +49,14 @@ Promise.all(dataRequirements).then(() => {
 	const reactDom = renderToString(jsx);
 	const reduxState = store.getState();
 	const helmetData = Helmet.renderStatic();
+	// enabling it again so we can output rendered html to PHP
+	___loggger___.enableLogger();
 
 	dispatch(htmlTemplate(reactDom, reduxState, helmetData));
 });
 
 function htmlTemplate(reactDom, reduxState, helmetData) {
+	const js_bundles = context.js_bundle.map(b => `<script src="${b}"></script>`);
 	return `
         <!DOCTYPE html>
         <html lang="en">
@@ -51,7 +75,7 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
             <script>
                 window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)}
             </script>
-            <script src="${context.js_bundle}"></script>
+            ${js_bundles.join('\n')}
         </body>
         </html>
     `;

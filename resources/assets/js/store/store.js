@@ -7,7 +7,7 @@ import api from '../api';
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
 import commonReducer from './reducers/commonReducer';
-import blogReducer from './reducers/blogReducer';
+import todoReducer from './reducers/todoReducer';
 //Reducer imports end
 
 const isServer = !(typeof window !== 'undefined' && window.document && window.document.createElement);
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
 	commonReducer: commonReducer,
-	blogReducer: blogReducer
+	todoReducer: todoReducer
 });
 
 let serverState = {};

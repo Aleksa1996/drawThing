@@ -1,7 +1,7 @@
-import * as blog from './blog';
+import * as todo from './todo';
 
 const api = {
-	blog: blog
+	todo: todo
 };
 
 export default api;
