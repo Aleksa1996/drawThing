@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import asyncComponent from './hocs/asyncComponent';
+import { v4 } from 'uuid';
 
 // const HomeAsync = asyncComponent(() => import('./components/Pages/Home/Home'));
 // const AboutAsync = asyncComponent(() => import('./components/Pages/About/About'));
@@ -27,25 +28,25 @@ import Game from './components/Pages/Game/Game';
 
 export const routes = [
 	{
-		id: '123',
+		id: v4(),
 		path: '/',
 		component: Home,
 		exact: true
 	},
 	{
-		id: '124',
+		id: v4(),
 		path: '/about',
 		component: About,
 		exact: true
 	},
 	{
-		id: '126',
+		id: v4(),
 		path: '/contact',
 		component: Contact,
 		exact: true
 	},
 	{
-		id: '127',
+		id: v4(),
 		path: '/game',
 		component: Game,
 		exact: true

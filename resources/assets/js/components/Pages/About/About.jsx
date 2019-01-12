@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const About = props => {
-	return <div>About Functional Component</div>;
-};
+import Page from '../Page';
+
+class About extends Component {
+	state = {};
+	render() {
+		return <Page title="About - Drawthing">About Component</Page>;
+	}
+}
+
 export default About;

@@ -5,26 +5,33 @@ import { v4 } from 'uuid';
 export const createRenderer = render => ({ input, meta, label, className, ...rest }) => (
 	<div className={`form-group-wrapper ${className || 'col-md-12'}`}>
 		<div className="form-group">
-			{rest.type != 'checkbox' && <label htmlFor={input.name}>{label}</label>}
+			{rest.type != 'checkbox' && label.active && <label htmlFor={input.name}>{label.text}</label>}
 			{render(input, label, rest)}
 			{meta.error && meta.touched && <div className="invalid-feedback d-block">{meta.error}</div>}
 		</div>
 	</div>
 );
 
-export const RenderInput = createRenderer((input, label, { type, disabled }) => (
+export const RenderInput = createRenderer((input, label, { type, disabled, placeholder }) => (
 	<input
 		{...input}
 		type={type || 'text'}
 		id={input.name}
 		disabled={disabled || false}
-		placeholder={label}
+		placeholder={placeholder.active ? placeholder.text : ''}
 		className="form-control"
 	/>
 ));
 
-export const RenderTextarea = createRenderer((input, label, { disabled, options }) => (
-	<textarea {...input} id={input.name} disabled={disabled || false} placeholder={label} className="form-control" {...options} />
+export const RenderTextarea = createRenderer((input, label, { disabled, options, placeholder }) => (
+	<textarea
+		{...input}
+		id={input.name}
+		disabled={disabled || false}
+		placeholder={placeholder.active ? placeholder.text : ''}
+		className="form-control"
+		{...options}
+	/>
 ));
 
 export const RenderSelect = createRenderer((input, label, { disabled, ...rest }) => (
@@ -54,25 +61,29 @@ export const RenderFile = createRenderer(({ value, onChange, onBlur, ...input },
 export const RenderCheckbox = createRenderer((input, label, { disabled, ...rest }) => (
 	<div className="form-check">
 		<input {...input} type="checkbox" id={input.name} disabled={disabled || false} className="form-check-input" />
-		<label className="form-check-label" htmlFor={input.name}>
-			{label}
-		</label>
+		{label.active && (
+			<label className="form-check-label" htmlFor={input.name}>
+				{label.text}
+			</label>
+		)}
 	</div>
 ));
 
 const RenderRadio = ({ input, label, ...rest }) => (
 	<div className="form-check">
 		<input {...input} type="radio" id={input.name + input.value} className="form-check-input" />
-		<label className="form-check-label" htmlFor={input.name + input.value}>
-			{label}
-		</label>
+		{label.active && (
+			<label className="form-check-label" htmlFor={input.name + input.value}>
+				{label.text}
+			</label>
+		)}
 	</div>
 );
 
 export const FieldRadioGroup = ({ label, options, cssClasses, ...rest }) => (
 	<div className={`form-group-wrapper ${cssClasses || 'col-md-12'}`}>
 		<div className="form-group">
-			<label>{label}</label>
+			{label.active && <label>{label.text}</label>}
 			{Object.entries(options).map(([value, text]) => (
 				<Field key={v4()} label={text} value={value} component={RenderRadio} {...rest} />
 			))}

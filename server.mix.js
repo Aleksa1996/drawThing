@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,7 +12,8 @@ let mix = require('laravel-mix');
  */
 
 mix.webpackConfig({
-	target: 'node'
+	target: 'node',
+	plugins: [new HardSourceWebpackPlugin()]
 });
 mix
 	.react('resources/assets/js/server.js', 'public/js/server')

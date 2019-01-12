@@ -67,7 +67,10 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
             ${helmetData.title.toString()}
             ${helmetData.meta.toString()}
             <link rel="stylesheet" type="text/css" href="${context.css_bundle}" />
-            ${helmetData.link.toString()}
+			${helmetData.link.toString()}
+			<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+			<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
         </head>
 
         <body>

@@ -12659,6 +12659,45 @@ body {
   color: #ff5f6d;
 }
 
+.input-label-material {
+  position: relative;
+}
+
+.input-label-material .form-control {
+  background: transparent;
+  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.5rem 0.75rem;
+}
+
+.input-label-material .form-control:focus {
+  box-shadow: none;
+  border-color: #ff5f6d;
+}
+
+.input-label-material .form-control:focus ~ label {
+  -webkit-transform: translateY(-150%) scale(0.75);
+          transform: translateY(-150%) scale(0.75);
+  color: #ff5f6d !important;
+  background: #fff;
+}
+
+.input-label-material label {
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0px 10px;
+  pointer-events: none;
+}
+
+.label-material {
+  background: #fff;
+  -webkit-transform: translateY(-150%) scale(0.75) !important;
+          transform: translateY(-150%) scale(0.75) !important;
+}
+
 #main-container {
   padding-top: 88px;
 }
@@ -12749,6 +12788,10 @@ body {
   100% {
     top: 0px;
   }
+}
+
+#contactComponent label {
+  color: red;
 }
 
 

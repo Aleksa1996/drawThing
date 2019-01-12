@@ -1,0 +1,32 @@
+.input-label-material {
+	position: relative;
+	.form-control {
+		background: transparent;
+		transition: 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+		&:focus {
+			box-shadow: none;
+			border-color: $mytheme-color1;
+			// border-width: 2px;
+		}
+
+		&:focus ~ label {
+			transform: translateY(-150%) scale(0.75);
+			color: $mytheme-color1 !important;
+			background: #fff;
+		}
+		padding: 1.5rem 0.75rem;
+	}
+	label {
+		position: absolute;
+		top: 50%;
+		left: 0px;
+		transform: translateY(-50%);
+		transition: 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+		padding: 0px 10px;
+		pointer-events: none;
+	}
+}
+.label-material {
+	background: #fff;
+	transform: translateY(-150%) scale(0.75) !important;
+}

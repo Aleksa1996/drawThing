@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import Page from '../Page';
 
 class Home extends Component {
 	state = {};
 	render() {
 		return (
-			<div>
+			<Page title="Home - Drawthing">
 				<div className="home-page-banner text-center">
 					<a href="#" className="mybtn1">
 						<i className="fa fa-play mr-2" aria-hidden="true" />
@@ -16,7 +17,7 @@ class Home extends Component {
 						<i className="fa fa-chevron-down" aria-hidden="true" />
 					</a>
 				</div>
-			</div>
+			</Page>
 		);
 	}
 }
