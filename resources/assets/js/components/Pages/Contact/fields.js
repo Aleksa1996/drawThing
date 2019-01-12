@@ -4,46 +4,46 @@ export const formFields = generateFormFields({
 	name: {
 		type: 'text',
 		label: {
-			text: 'Your name',
-			active: false,
+			text: 'Name',
+			active: true,
 			options: {}
-		},
-		placeholder: {
-			active: false,
-			text: ''
 		},
 		validation: {
 			required: true,
 			minLength: 2
 		},
+		materialDesign: true,
 		errMessage: 'Name must be min 2 characters!'
 	},
 	email: {
 		type: 'email',
 		label: {
-			text: 'Your email'
-		},
-		placeholder: {
-			text: 'hello'
+			text: 'Email'
 		},
 		validation: {
 			required: true,
 			email: true
 		},
+		materialDesign: true,
 		errMessage: 'Email must be valid!'
 	},
 	subject: {
-		type: 'subject',
-		label: 'Your subject',
+		type: 'text',
+		label: {
+			text: 'Subject'
+		},
 		validation: {
 			required: true,
 			minLength: 2
 		},
+		materialDesign: true,
 		errMessage: 'subject must be min 2 characters!'
 	},
 	message: {
 		type: 'textarea',
-		label: 'Message',
+		label: {
+			text: 'Message'
+		},
 		options: {
 			rows: '6'
 		},
@@ -51,6 +51,7 @@ export const formFields = generateFormFields({
 			required: true,
 			minLength: 5
 		},
+		materialDesign: true,
 		errMessage: 'Message must be min 5 characters!'
 	}
 });

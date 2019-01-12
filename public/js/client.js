@@ -668,10 +668,12 @@ function (_Component) {
       }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].subject)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
         name: "message",
         component: _hocs__WEBPACK_IMPORTED_MODULE_4__["RenderTextarea"]
-      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].message)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].message)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
         type: "submit",
         className: "btn btn-primary"
-      }, "Submit")))));
+      }, "Submit"))))));
     }
   }]);
 
@@ -709,46 +711,46 @@ var formFields = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["generateFormFields"
   name: {
     type: 'text',
     label: {
-      text: 'Your name',
-      active: false,
+      text: 'Name',
+      active: true,
       options: {}
-    },
-    placeholder: {
-      active: false,
-      text: ''
     },
     validation: {
       required: true,
       minLength: 2
     },
+    materialDesign: true,
     errMessage: 'Name must be min 2 characters!'
   },
   email: {
     type: 'email',
     label: {
-      text: 'Your email'
-    },
-    placeholder: {
-      text: 'hello'
+      text: 'Email'
     },
     validation: {
       required: true,
       email: true
     },
+    materialDesign: true,
     errMessage: 'Email must be valid!'
   },
   subject: {
-    type: 'subject',
-    label: 'Your subject',
+    type: 'text',
+    label: {
+      text: 'Subject'
+    },
     validation: {
       required: true,
       minLength: 2
     },
+    materialDesign: true,
     errMessage: 'subject must be min 2 characters!'
   },
   message: {
     type: 'textarea',
-    label: 'Message',
+    label: {
+      text: 'Message'
+    },
     options: {
       rows: '6'
     },
@@ -756,6 +758,7 @@ var formFields = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["generateFormFields"
       required: true,
       minLength: 5
     },
+    materialDesign: true,
     errMessage: 'Message must be min 5 characters!'
   }
 });
@@ -1108,14 +1111,18 @@ var createRenderer = function createRenderer(render) {
         rest = _objectWithoutProperties(_ref, ["input", "meta", "label", "className"]);
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "form-group-wrapper ".concat(className || 'col-md-12')
+      className: "form-group-wrapper ".concat(rest.materialDesign ? 'input-material-wrapper' : '', " ").concat(className || 'col-md-12')
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "form-group"
     }, rest.type != 'checkbox' && label.active && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+      className: [meta.active ? 'input-focused' : '', input.value.length > 0 ? 'input-filled' : ''].join(' '),
       htmlFor: input.name
-    }, label.text), render(input, label, rest), meta.error && meta.touched && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, label.text), render(input, label, rest)), meta.error && meta.touched && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "invalid-feedback d-block"
-    }, meta.error)));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-exclamation-circle",
+      "aria-hidden": "true"
+    }), " \xA0", meta.error));
   };
 };
 var RenderInput = createRenderer(function (input, label, _ref2) {
@@ -1503,6 +1510,7 @@ var defaults = {
   validation: {
     required: true
   },
+  materialDesign: false,
   errMessage: 'required!'
 };
 

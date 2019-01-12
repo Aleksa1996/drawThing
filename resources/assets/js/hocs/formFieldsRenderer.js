@@ -3,12 +3,24 @@ import { Field } from 'redux-form';
 import { v4 } from 'uuid';
 
 export const createRenderer = render => ({ input, meta, label, className, ...rest }) => (
-	<div className={`form-group-wrapper ${className || 'col-md-12'}`}>
+	<div className={`form-group-wrapper ${rest.materialDesign ? 'input-material-wrapper' : ''} ${className || 'col-md-12'}`}>
 		<div className="form-group">
-			{rest.type != 'checkbox' && label.active && <label htmlFor={input.name}>{label.text}</label>}
+			{rest.type != 'checkbox' && label.active && (
+				<label
+					className={[meta.active ? 'input-focused' : '', input.value.length > 0 ? 'input-filled' : ''].join(' ')}
+					htmlFor={input.name}
+				>
+					{label.text}
+				</label>
+			)}
 			{render(input, label, rest)}
-			{meta.error && meta.touched && <div className="invalid-feedback d-block">{meta.error}</div>}
 		</div>
+		{meta.error && meta.touched && (
+			<div className="invalid-feedback d-block">
+				<i className="fa fa-exclamation-circle" aria-hidden="true" /> &nbsp;
+				{meta.error}
+			</div>
+		)}
 	</div>
 );
 

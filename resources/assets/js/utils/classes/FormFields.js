@@ -40,5 +40,6 @@ const defaults = {
 	validation: {
 		required: true
 	},
+	materialDesign: false,
 	errMessage: 'required!'
 };
