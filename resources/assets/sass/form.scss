@@ -1,6 +1,6 @@
 .input-material-wrapper {
 	min-height: 75px;
-	margin-bottom: 0.5rem;
+	margin-bottom: 1rem;
 	.form-group {
 		position: relative;
 		margin-bottom: 0px;
@@ -8,9 +8,10 @@
 			background: transparent;
 			transition: 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
 			padding: 1.5rem 0.75rem;
+			border-width: 2px;
 			&:focus {
 				box-shadow: none;
-				border-color: $mytheme-color1;
+				border-color: $mytheme-text-main;
 			}
 		}
 		label {
@@ -27,7 +28,7 @@
 			transform: scale(0.75);
 			top: -14px;
 			left: 0;
-			color: $mytheme-color1 !important;
+			color: $mytheme-text-main !important;
 			background: #fff;
 		}
 	}

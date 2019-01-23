@@ -1,10 +1,6 @@
 * {
 	font-family: 'Roboto';
 }
-body {
-	background: $mytheme-background1;
-	color: #fff;
-}
 .fade-appear,
 .fade-enter {
 	opacity: 0;
@@ -30,30 +26,34 @@ body {
 	text-decoration: none;
 	position: relative;
 	padding: 15px 50px;
-	margin: 15px 30px;
+	// margin: 15px 30px;
 	color: #fff;
 	border: 3px solid #fff;
 	overflow: hidden;
 	border-radius: 3px;
+	background: none;
+	cursor: pointer;
+	outline: none !important;
+	z-index: 1;
 
 	&:hover {
 		text-decoration: none;
-		color: $mytheme-color1;
-		&::before {
+		color: $mytheme-text-main;
+		&::after {
 			width: 80%;
 			opacity: 1;
 		}
 	}
 
 	&:active {
-		color: $mytheme-color1;
-		&::before {
+		color: $mytheme-text-main;
+		&::after {
 			width: 150%;
 			opacity: 1;
 		}
 	}
 
-	&::before {
+	&::after {
 		width: 0%;
 		height: 100%;
 		opacity: 0;
@@ -68,17 +68,17 @@ body {
 	}
 }
 .mybtn2 {
-	display: inline-block;
-	text-decoration: none;
-	position: relative;
-	padding: 15px 50px;
-	margin: 15px 30px;
-	color: #fff;
-	border: 3px solid #fff;
-	overflow: hidden;
-	border-radius: 3px;
-	&:hover {
-		text-decoration: none;
-		color: $mytheme-color1;
+	@extend .mybtn1;
+	color: $mytheme-text-main;
+	border: 2px solid $mytheme-text-main;
+	&::after {
+		background: $mytheme-text-main;
 	}
+
+	&:hover {
+		color: #fff;
+	}
+}
+.page-padding {
+	padding-top: 88px;
 }

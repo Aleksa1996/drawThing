@@ -37,16 +37,26 @@
 // $font-family-base: $font-family-sans-serif !default;
 // $font-size-base: 1rem !default;
 
-$mytheme-background1: linear-gradient(90deg, #ff5f6d 0%, #ffc371 100%);
-$mytheme-background2: #fff;
-$mytheme-background3: #f5f5f5;
-$mytheme-background4: linear-gradient(90deg, #02aab0 0%, #00cdac 100%);
-$mytheme-background5: #191919;
+// colors
+// #ff5f6d;
+// #2D3156;
+// #fff;
+// #f5f5f5;
 
-$mytheme-color1: #ff5f6d;
-$mytheme-color2: #191919;
-$mytheme-color3: #9b9b9b;
-$mytheme-color4: linear-gradient(90deg, #ff5f6d 0%, #ffc371 100%);
+$mytheme-bg-main: #c24847;
+$mytheme-bg-secondary: #f5f5f5;
+
+$mytheme-bg-main-gradient: linear-gradient(to right top, #c24847, #a73a5d, #813768, #553665, #2d3156);
+// $mytheme-background4: linear-gradient(90deg, #02aab0 0%, #00cdac 100%);
+// $mytheme-background5: #191919;
+
+$mytheme-text-main: #ff5f6d;
+$mytheme-text-secondary: #434345;
+// $mytheme-text-main-dark: darken($mytheme-text-main, 15%);
+// $mytheme-text-secondary: #2d3156;
+
+// $mytheme-color2: #191919;
+// $mytheme-color3: #9b9b9b;
 
 /* HSL */
 // $specific-theme-color1: hsla(355%, 78%, 56%, 1);

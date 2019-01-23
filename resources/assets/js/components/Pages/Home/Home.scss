@@ -1,24 +1,85 @@
-.home-page-banner {
-	.rules-button {
-		position: absolute;
-		margin: 0px;
-		left: 50%;
-		transform: translateX(-50%);
-		bottom: 0px;
-		border-radius: 3px;
-		color: #fff;
-		transition: all 0.3s ease-in-out;
-		padding: 15px 5px;
-		&:hover {
-			text-decoration: none;
-			color: $mytheme-color1;
+.page-home {
+	.page-home-banner {
+		background-image: url('/img/_background.jpg');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		width: 100%;
+		height: 100vh;
+		.rules-button {
+			position: absolute;
+			margin: 0px;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: 0px;
+			border-radius: 3px;
+			color: #fff;
+			transition: all 0.3s ease-in-out;
+			padding: 15px 5px;
+			&:hover {
+				text-decoration: none;
+			}
+			i {
+				animation-name: rules-button-animation;
+				animation-duration: 1.4s;
+				animation-iteration-count: infinite;
+				position: relative;
+				animation-timing-function: ease-in-out;
+			}
 		}
-		i {
-			animation-name: rules-button-animation;
-			animation-duration: 1.4s;
-			animation-iteration-count: infinite;
-			position: relative;
-			animation-timing-function: ease-in-out;
+	}
+
+	.page-home-rules {
+		position: relative;
+		.page-home-rules-map {
+			position: absolute;
+			height: 100%;
+			width: 2px;
+			background: $mytheme-text-main;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.page-home-rules-pulse {
+			position: absolute;
+			right: -18px;
+			width: 35px;
+			height: 35px;
+			border-radius: 50%;
+			background: $mytheme-text-main;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			color: #fff;
+			justify-content: center;
+			align-items: center;
+			font-size: 21px;
+			&::before,
+			&::after {
+				content: '';
+				border: 1px solid $mytheme-text-main;
+				width: 35px;
+				height: 35px;
+				animation: pulse 1.5s infinite 1.5s;
+				position: absolute;
+				border-radius: 50%;
+			}
+			&::after {
+				animation: pulse 1.5s infinite 1s;
+			}
+			i {
+				position: relative;
+				z-index: 1;
+			}
+		}
+		.page-home-rules-item-container {
+			.page-home-rules-item-text {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				p {
+					padding: 40px;
+				}
+			}
 		}
 	}
 }
@@ -32,5 +93,15 @@
 	}
 	100% {
 		top: 0px;
+	}
+}
+
+@keyframes pulse {
+	from {
+		transform: scale(0.3);
+	}
+	to {
+		transform: scale(2);
+		opacity: 0;
 	}
 }

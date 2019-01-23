@@ -2,9 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navigation = props => {
+	let isHomePage = props.location.pathname == '/';
+	let isScrolled = props.scrollTop >= 20;
 	return (
-		<nav className="main-nav navbar navbar-expand-lg fixed-top">
-			<Link to="/" className="navbar-brand text-uppercase my-3 text-white">
+		<nav
+			className={`main-nav navbar navbar-expand-lg fixed-top ${
+				isHomePage ? (isScrolled ? 'main-nav-scrolled' : '') : 'main-nav-scrolled'
+			}`}
+		>
+			<Link to="/" className="navbar-brand text-uppercase my-3">
 				DrawThing
 			</Link>
 			<button
@@ -23,22 +29,22 @@ const Navigation = props => {
 			<div className="navbar-collapse collapse" id="mainnavbarToggler">
 				<ul className="navbar-nav ml-auto">
 					<li className="nav-item active mx-2">
-						<Link to="/" className="nav-link text-white">
+						<Link to="/" className="nav-link">
 							Home <span className="sr-only">(current)</span>
 						</Link>
 					</li>
 					<li className="nav-item mx-2">
-						<Link to="/about" className="nav-link text-white">
+						<Link to="/about" className="nav-link">
 							About
 						</Link>
 					</li>
 					<li className="nav-item mx-2">
-						<Link to="/contact" className="nav-link text-white">
+						<Link to="/contact" className="nav-link">
 							Contact
 						</Link>
 					</li>
 					<li className="nav-item mx-2">
-						<Link to="/game" className="nav-link text-white">
+						<Link to="/game" className="nav-link">
 							Play now !
 						</Link>
 					</li>

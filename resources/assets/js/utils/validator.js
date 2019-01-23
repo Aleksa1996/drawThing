@@ -36,7 +36,7 @@ export const checkValidity = (value, rules) => {
 export const validate = formFields => (values, props) => {
 	const errors = {};
 	const formFieldsMap = new Map(Object.entries(formFields));
-
+	console.log(_);
 	for (let [name, { validation, errMessage }] of formFieldsMap) {
 		if (!checkValidity(_.get(values, name, ''), validation)) errors[name] = errMessage;
 	}

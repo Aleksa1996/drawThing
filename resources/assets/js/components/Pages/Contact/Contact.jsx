@@ -30,7 +30,7 @@ class Contact extends Component {
 	render() {
 		const { handleSubmit } = this.props;
 		return (
-			<Page title="Contact me - Drawthing">
+			<Page title="Contact me - Drawthing" className="page-contact container page-padding">
 				<div id="contactComponent" className="row justify-content-md-center">
 					<div className="bg-white rounded shadow px-5 py-3 col-md-7">
 						<form onSubmit={handleSubmit(this.handleContactForm)}>
@@ -39,7 +39,7 @@ class Contact extends Component {
 							<Field name="subject" component={RenderInput} {...formFields.subject} />
 							<Field name="message" component={RenderTextarea} {...formFields.message} />
 							<div className="col-md-12">
-								<Button type="submit" className="btn btn-primary">
+								<Button type="submit" icon="fa-paper-plane" className="mybtn2">
 									Submit
 								</Button>
 							</div>

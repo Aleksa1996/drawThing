@@ -5,7 +5,7 @@ class Page extends Component {
 	state = {};
 	render() {
 		return (
-			<div>
+			<div className={this.props.className || ''}>
 				<Helmet>
 					<title>{this.props.title || 'Drawthing'}</title>
 				</Helmet>
