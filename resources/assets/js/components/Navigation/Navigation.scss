@@ -1,7 +1,6 @@
 .main-nav {
 	font-size: 1.2rem;
 	height: 75px;
-	transition: all 0.2s ease-in-out;
 	.navbar-brand {
 		color: #fff;
 	}
@@ -35,25 +34,26 @@
 	}
 }
 .main-nav-scrolled {
-	top: -75px;
+	opacity: 0;
 	.navbar-brand {
-		color: $mytheme-text-secondary !important;
+		color: $mytheme-color-second !important;
 		&:hover {
-			color: $mytheme-text-main !important;
+			color: $mytheme-color-first !important;
 		}
 	}
 	.nav-link {
-		color: $mytheme-text-secondary !important;
+		color: $mytheme-color-second !important;
 		&::before {
-			background: $mytheme-text-main !important;
+			background: $mytheme-color-first !important;
 		}
 	}
 	animation: nav-slide 0.2s ease-in-out 0.4s forwards;
+	@extend .shadow;
 }
 
 @keyframes nav-slide {
 	100% {
-		top: 0px;
-		background: $mytheme-bg-secondary;
+		opacity: 1;
+		background: #fff;
 	}
 }

@@ -7,10 +7,10 @@ class Footer extends Component {
 			<footer className="container-fluid main-footer footer py-4">
 				<div className="row">
 					<div className="col-md-6 text-left justify-content-center align-items-center d-flex">
-						&copy; 2019 &nbsp;{' '}
+						&copy; 2019 &nbsp;
 						<a href="https://aleksajovanovic.com" title="My portfolio">
 							Aleksa Jovanovic
-						</a>{' '}
+						</a>
 						&nbsp; 179/15
 					</div>
 					<div className="col-md-6 text-right justify-content-center align-items-center d-flex">
@@ -22,7 +22,7 @@ class Footer extends Component {
 							</li>
 							<li className="mx-3">
 								<a href="https://github.com/Aleksa1996">
-									<i className="fa fa-github-alt" aria-hidden="true" title="My github profile" />
+									<i className="fa fa-github" aria-hidden="true" title="My github profile" />
 								</a>
 							</li>
 						</ul>

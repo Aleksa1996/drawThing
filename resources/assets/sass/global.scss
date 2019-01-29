@@ -1,6 +1,11 @@
 * {
 	font-family: 'Roboto';
 }
+
+body {
+	color: $mytheme-color-second;
+}
+
 .fade-appear,
 .fade-enter {
 	opacity: 0;
@@ -26,7 +31,6 @@
 	text-decoration: none;
 	position: relative;
 	padding: 15px 50px;
-	// margin: 15px 30px;
 	color: #fff;
 	border: 3px solid #fff;
 	overflow: hidden;
@@ -38,7 +42,7 @@
 
 	&:hover {
 		text-decoration: none;
-		color: $mytheme-text-main;
+		color: $mytheme-color-first;
 		&::after {
 			width: 80%;
 			opacity: 1;
@@ -46,7 +50,7 @@
 	}
 
 	&:active {
-		color: $mytheme-text-main;
+		color: $mytheme-color-first;
 		&::after {
 			width: 150%;
 			opacity: 1;
@@ -60,25 +64,62 @@
 		content: '';
 		transform: translateX(-50%) translateY(-50%);
 		background: #fff;
-		transition: all 0.3s;
 		top: 50%;
 		left: 50%;
 		position: absolute;
 		z-index: -1;
+		@extend .my-transition-elastic;
 	}
 }
 .mybtn2 {
 	@extend .mybtn1;
-	color: $mytheme-text-main;
-	border: 2px solid $mytheme-text-main;
+	color: $mytheme-color-first;
+	border: 2px solid $mytheme-color-first;
 	&::after {
-		background: $mytheme-text-main;
+		background: $mytheme-color-first;
 	}
 
 	&:hover {
 		color: #fff;
 	}
 }
+
 .page-padding {
 	padding-top: 88px;
+}
+
+.my-transition-elastic {
+	transition: all 0.6s cubic-bezier(0.39, 1.66, 0.12, 0.9);
+}
+
+.impact {
+	background: $mytheme-color-first;
+	position: relative;
+	&::before,
+	&::after {
+		background: #fff;
+		position: absolute;
+		content: '';
+		height: 45px;
+		width: 100%;
+		z-index: 2;
+		left: 0px;
+	}
+	&::before {
+		top: 0px;
+	}
+	&::after {
+		bottom: 0px;
+	}
+	.impact-inner {
+		background: $mytheme-color-second;
+		color: #fff;
+		width: 60%;
+		margin: 0 auto;
+		position: relative;
+		z-index: 3;
+		padding: 55px 30px;
+
+		@extend .shadow;
+	}
 }

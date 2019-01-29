@@ -12,8 +12,8 @@ let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
  */
 
 mix.webpackConfig({
-	target: 'node',
-	plugins: [new HardSourceWebpackPlugin()]
+	target: 'node'
+	// plugins: [new HardSourceWebpackPlugin()]
 });
 mix
 	.react('resources/assets/js/server.js', 'public/js/server')

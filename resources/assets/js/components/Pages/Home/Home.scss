@@ -31,21 +31,20 @@
 
 	.page-home-rules {
 		position: relative;
+		background: #fff;
 		.page-home-rules-map {
 			position: absolute;
 			height: 100%;
 			width: 2px;
-			background: $mytheme-text-main;
+			background: $mytheme-color-first;
 			left: 50%;
 			transform: translateX(-50%);
 		}
 		.page-home-rules-pulse {
 			position: absolute;
-			right: -18px;
-			width: 35px;
-			height: 35px;
-			border-radius: 50%;
-			background: $mytheme-text-main;
+			width: 36px;
+			height: 36px;
+			background: $mytheme-color-first;
 			top: 50%;
 			transform: translateY(-50%);
 			display: flex;
@@ -56,9 +55,9 @@
 			&::before,
 			&::after {
 				content: '';
-				border: 1px solid $mytheme-text-main;
-				width: 35px;
-				height: 35px;
+				border: 1px solid $mytheme-color-first;
+				width: 36px;
+				height: 36px;
 				animation: pulse 1.5s infinite 1.5s;
 				position: absolute;
 				border-radius: 50%;
@@ -69,15 +68,36 @@
 			i {
 				position: relative;
 				z-index: 1;
+				font-size: 20px;
 			}
 		}
+		.page-home-rules-pulse-left {
+			left: -18px;
+		}
+		.page-home-rules-pulse-right {
+			right: -18px;
+		}
+
 		.page-home-rules-item-container {
 			.page-home-rules-item-text {
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				flex-direction: column;
 				p {
 					padding: 40px;
+				}
+			}
+			.page-home-rules-item-image {
+				text-align: center;
+				perspective: 30px;
+				img {
+					width: 450px;
+					margin: 20px 5px;
+					@extend .my-transition-elastic;
+					&:hover {
+						transform: translateZ(2px);
+					}
 				}
 			}
 		}

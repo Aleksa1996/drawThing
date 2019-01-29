@@ -45,7 +45,7 @@ export const formFields = generateFormFields({
 			text: 'Message'
 		},
 		options: {
-			rows: '6'
+			rows: '3'
 		},
 		validation: {
 			required: true,

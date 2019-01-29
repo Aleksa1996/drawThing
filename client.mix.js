@@ -15,8 +15,8 @@ mix.webpackConfig({
 	// output: {
 	// 	chunkFilename: '[name].js'
 	// },
-	devtool: 'source-map',
-	plugins: [new HardSourceWebpackPlugin()]
+	devtool: 'source-map'
+	// plugins: [new HardSourceWebpackPlugin()]
 });
 mix
 	.react('resources/assets/js/client.js', 'public/js')

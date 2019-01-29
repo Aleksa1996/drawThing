@@ -6,24 +6,8 @@ import Footer from '../Footer/Footer';
 import Router from '../../Router';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import { debounce as _debounce } from 'lodash';
-
 class Layout extends Component {
-	state = {
-		scrollTop: 0
-	};
-
-	componentDidMount() {
-		window.addEventListener('scroll', _debounce(this.handleScroll, 70));
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll);
-	}
-
-	handleScroll = ev => {
-		this.setState({ scrollTop: window.pageYOffset });
-	};
+	state = {};
 
 	render() {
 		const currentKey = this.props.location.pathname.split('/')[1] || '/';

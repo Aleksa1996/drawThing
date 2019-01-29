@@ -1,5 +1,5 @@
 .main-footer {
-	background: $mytheme-text-secondary;
+	background: $mytheme-color-second;
 	color: #fff;
 	.text-left {
 		font-size: 14px;
@@ -7,10 +7,10 @@
 	a {
 		color: #fff;
 		&:hover {
-			color: $mytheme-text-main;
+			@extend .my-transition-elastic;
+			color: $mytheme-color-first;
 		}
 	}
-	border-top: 1px solid #ced4da;
 	.main-footer-icons {
 		list-style: none;
 		display: flex;
@@ -22,7 +22,7 @@
 				font-size: 20px;
 				color: #fff;
 				&:hover {
-					color: $mytheme-text-main;
+					color: $mytheme-color-first;
 				}
 			}
 		}

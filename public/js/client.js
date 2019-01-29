@@ -374,10 +374,10 @@ function (_Component) {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 text-left justify-content-center align-items-center d-flex"
-      }, "\xA9 2019 \xA0", ' ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, "\xA9 2019 \xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://aleksajovanovic.com",
         title: "My portfolio"
-      }, "Aleksa Jovanovic"), ' ', "\xA0 179/15"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Aleksa Jovanovic"), "\xA0 179/15"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 text-right justify-content-center align-items-center d-flex"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "main-footer-icons"
@@ -394,7 +394,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://github.com/Aleksa1996"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-github-alt",
+        className: "fa fa-github",
         "aria-hidden": "true",
         title: "My github profile"
       })))))));
@@ -456,8 +456,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Router */ "./resources/assets/js/Router.js");
 /* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-transition-group */ "./node_modules/react-transition-group/index.js");
 /* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_transition_group__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -484,7 +482,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var Layout =
 /*#__PURE__*/
 function (_Component) {
@@ -501,26 +498,10 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Layout)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
-      scrollTop: 0
-    }, _this.handleScroll = function (ev) {
-      _this.setState({
-        scrollTop: window.pageYOffset
-      });
-    }, _temp));
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Layout)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _temp));
   }
 
   _createClass(Layout, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      window.addEventListener('scroll', Object(lodash__WEBPACK_IMPORTED_MODULE_5__["debounce"])(this.handleScroll, 70));
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      window.removeEventListener('scroll', this.handleScroll);
-    }
-  }, {
     key: "render",
     value: function render() {
       var currentKey = this.props.location.pathname.split('/')[1] || '/';
@@ -560,76 +541,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-
-
-
-var Navigation = function Navigation(props) {
-  var isHomePage = props.location.pathname == '/';
-  var isScrolled = props.scrollTop >= 20;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-    className: "main-nav navbar navbar-expand-lg fixed-top ".concat(isHomePage ? isScrolled ? 'main-nav-scrolled' : '' : 'main-nav-scrolled')
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/",
-    className: "navbar-brand text-uppercase my-3"
-  }, "DrawThing"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "navbar-toggler",
-    type: "button",
-    "data-toggle": "collapse",
-    "data-target": "#mainnavbarToggler",
-    "aria-controls": "mainnavbarToggler",
-    "aria-expanded": "false",
-    "aria-label": "Toggle navigation"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "navbar-toggler-icon d-flex justify-content-center align-items-center"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-bars",
-    "aria-hidden": "true"
-  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "navbar-collapse collapse",
-    id: "mainnavbarToggler"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-    className: "navbar-nav ml-auto"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item active mx-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/",
-    className: "nav-link"
-  }, "Home ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "sr-only"
-  }, "(current)"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item mx-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/about",
-    className: "nav-link"
-  }, "About")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item mx-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/contact",
-    className: "nav-link"
-  }, "Contact")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "nav-item mx-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-    to: "/game",
-    className: "nav-link"
-  }, "Play now !")))));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Navigation);
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/Pages/About/About.jsx":
-/*!**************************************************************!*\
-  !*** ./resources/assets/js/components/Pages/About/About.jsx ***!
-  \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -651,6 +564,143 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+var Navigation =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Navigation, _Component);
+
+  function Navigation() {
+    var _getPrototypeOf2;
+
+    var _temp, _this;
+
+    _classCallCheck(this, Navigation);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Navigation)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
+      scrollTop: 0
+    }, _this.handleScroll = function (ev) {
+      if (_this.props.location.pathname == '/') {
+        _this.setState({
+          scrollTop: window.pageYOffset
+        });
+      }
+    }, _temp));
+  }
+
+  _createClass(Navigation, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      window.addEventListener('scroll', Object(lodash__WEBPACK_IMPORTED_MODULE_2__["debounce"])(this.handleScroll, 70));
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var isHomePage = this.props.location.pathname == '/';
+      var isScrolled = this.state.scrollTop >= 20;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
+        className: "main-nav navbar navbar-expand-lg fixed-top ".concat(isHomePage ? isScrolled ? 'main-nav-scrolled' : '' : 'main-nav-scrolled')
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/",
+        className: "navbar-brand text-uppercase my-3"
+      }, "DrawThing"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "navbar-toggler",
+        type: "button",
+        "data-toggle": "collapse",
+        "data-target": "#mainnavbarToggler",
+        "aria-controls": "mainnavbarToggler",
+        "aria-expanded": "false",
+        "aria-label": "Toggle navigation"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "navbar-toggler-icon d-flex justify-content-center align-items-center"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-bars",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "navbar-collapse collapse",
+        id: "mainnavbarToggler"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "navbar-nav ml-auto"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item active mx-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/",
+        className: "nav-link"
+      }, "Home ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "sr-only"
+      }, "(current)"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item mx-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/about",
+        className: "nav-link"
+      }, "About")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item mx-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/contact",
+        className: "nav-link"
+      }, "Contact")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+        className: "nav-item mx-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/game",
+        className: "nav-link"
+      }, "Play now !")))));
+    }
+  }]);
+
+  return Navigation;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Navigation);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/About/About.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/About/About.jsx ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(uuid__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var _TechCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TechCard */ "./resources/assets/js/components/Pages/About/TechCard.jsx");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
 var About =
 /*#__PURE__*/
 function (_Component) {
@@ -667,15 +717,90 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(About)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _temp));
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(About)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
+      technologies: [{
+        type: 'Backend',
+        items: [{
+          heading: "Laravel",
+          description: "Main component that connects other components, handles whole game (routing, authentication, restfull API...).\n\t\t\t\t\t\tI chose him because he is much simpler than the other frameworks, code is very intuitive and there is nothing that you can't do with him.",
+          img: "/img/laravel.png",
+          link: 'https://laravel.com/'
+        }, {
+          heading: "Swoole",
+          description: "Provides HTTP and WebSocket Server. Responds to requests from outside with help of NGINX's reverse proxy.\n\t\t\t\t\t\tPowers up Laravel (giving him huge speed) by keeping his bootstrap in memory,\n\t\t\t\t\t\tgiving PHP possibility to do tasks asynchronously.",
+          img: "/img/swoole.png",
+          link: 'https://www.swoole.co.uk/'
+        }, {
+          heading: "Node.js",
+          description: "Primarily used for server side rendering. To render HTML from React.js app, so we can solve\n\t\t\t\t\t\tSEO problem by not providing blank page, also i used it alot in dev environment.",
+          img: "/img/nodejs.png",
+          link: 'https://nodejs.org/'
+        }]
+      }, {
+        type: 'Frontend',
+        items: [{
+          heading: "React.js",
+          description: "This project was imagined to be Single Page Application (SPA) and that wouldn't be possible without React.\n\t\t\t\t\t\tAll HTML elements, all forms, the whole game ui that you see here is rendered by React",
+          img: "/img/react.png",
+          link: 'https://reactjs.org/'
+        }, {
+          heading: "Redux.js",
+          description: "Used in combination with React. manages application state.\n\t\t\t\t\t\tThanks to redux i have access to data in any React component without (passing props) pain\n\t\t\t\t\t\tthe pattern that it provides is really awesome, it gives you ability to separate your code logic from view.",
+          img: "/img/redux.png",
+          link: 'https://redux.js.org/'
+        }]
+      }, {
+        type: 'Storage',
+        items: [{
+          heading: "MySQL",
+          description: "Relational Database Management System, really efficient way for manipulating important game data.",
+          img: "/img/mysql.png",
+          link: 'https://www.mysql.com/'
+        }, {
+          heading: "Redis",
+          description: "Efficcient and fast in-memory key-value database with optional durability. Used to cache data for better application performances.",
+          img: "/img/redis.png",
+          link: 'https://redis.io/'
+        }]
+      }]
+    }, _temp));
   }
 
   _createClass(About, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        title: "About - Drawthing"
-      }, "About Component");
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "About - Drawthing",
+        className: "page-about"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "page-padding"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "impact"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "impact-inner"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "page-about-heading"
+      }, "About project"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-about-description"
+      }, "The main concept and idea of this project is learning and discovering the ways in which new and modern web technologies work, the way that they cooperate with each other in order to breathe life into today's modern web applications. The main focus in this application is real-time communication between server and clients provided by WebSockets. In the process of creating this web application I have tried to explore all the possibilities and benefits that WebSockets offer. WebSockets are interesting and popular on the web today, also they are relatively new to me and that's the reasons why I chose this kind of project. Large number of guides that I've run into led me to Node.js, but I wanted to do it in PHP, and then I met Swoole (PHP framework). It supports WebSockets along with a bunch of other stuff. Been playing with it for three days, and all I can say is that it's really amazing. I want to point out that these technologies are not randomly selected. Each of them has its own purpose, and task to do (problem to solve). Below you can read more about what they do in this application.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "container page-about-tech"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        className: "page-about-tech-heading"
+      }, "Technologies that made this project possible:"), this.state.technologies.map(function (t) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "page-about-tech-row",
+          key: Object(uuid__WEBPACK_IMPORTED_MODULE_1__["v4"])()
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+          className: "page-about-tech-row-heading"
+        }, t.type), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        }, t.items.map(function (i) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "col-md-4",
+            key: Object(uuid__WEBPACK_IMPORTED_MODULE_1__["v4"])()
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TechCard__WEBPACK_IMPORTED_MODULE_3__["default"], i));
+        })));
+      })));
     }
   }]);
 
@@ -683,6 +808,44 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (About);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/About/TechCard.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/About/TechCard.jsx ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var TechCard = function TechCard(_ref) {
+  var heading = _ref.heading,
+      description = _ref.description,
+      img = _ref.img,
+      link = _ref.link;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "page-about-tech-card-wrapper-link",
+    target: "_blank",
+    href: link
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "page-about-tech-card rounded"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+    className: "page-about-tech-card-heading"
+  }, heading), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "page-about-tech-card-description"
+  }, description), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    src: img,
+    className: "img-fluid page-about-tech-card-image"
+  })));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (TechCard);
 
 /***/ }),
 
@@ -772,12 +935,53 @@ function (_Component) {
       var handleSubmit = this.props.handleSubmit;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_8__["default"], {
         title: "Contact me - Drawthing",
-        className: "page-contact container page-padding"
+        className: "page-contact"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "contactComponent",
-        className: "row justify-content-md-center"
+        className: "page-padding page-contact-wrapper"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "bg-white rounded shadow px-5 py-3 col-md-7"
+        className: "container"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        className: "page-contact-heading"
+      }, "Get in touch !"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-contact-description"
+      }, "If you have any questions about this project, how it works or maybe about technologies that i used, just say hello. Also I am always open to discussing new projects, creative ideas or opportunities."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-contact-description"
+      }, "Author of this project:", ' ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        target: "_blank",
+        href: "https://aleksajovanovic.com"
+      }, "Aleksa Jovanovic")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "page-contact-icons"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        target: "_blank",
+        href: "mailto:aleksa.j.1996@gmail.com?Subject=Hello",
+        className: "mybtn1"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-envelope-o",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        target: "_blank",
+        href: "https://github.com/Aleksa1996/",
+        className: "mybtn1"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-github",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        target: "_blank",
+        href: "https://www.linkedin.com/in/aleksaj",
+        className: "mybtn1"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-linkedin",
+        "aria-hidden": "true"
+      })))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "page-contact-form"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "bg-white rounded shadow py-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: handleSubmit(this.handleContactForm)
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
@@ -798,7 +1002,7 @@ function (_Component) {
         type: "submit",
         icon: "fa-paper-plane",
         className: "mybtn2"
-      }, "Submit"))))));
+      }, "Submit"))))))))));
     }
   }]);
 
@@ -877,7 +1081,7 @@ var formFields = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["generateFormFields"
       text: 'Message'
     },
     options: {
-      rows: '6'
+      rows: '3'
     },
     validation: {
       required: true,
@@ -970,6 +1174,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -991,26 +1198,27 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var Home =
 /*#__PURE__*/
 function (_Component) {
   _inherits(Home, _Component);
 
   function Home() {
-    var _getPrototypeOf2;
-
-    var _temp, _this;
-
     _classCallCheck(this, Home);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Home)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _temp));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Home).apply(this, arguments));
   }
 
   _createClass(Home, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -1020,13 +1228,13 @@ function (_Component) {
         className: "page-home-banner text-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "page-padding"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: "/game",
         className: "mybtn1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-play mr-2",
         "aria-hidden": "true"
-      }), "Play now!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }), "Play now !"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "#",
         className: "text-center rules-button"
       }, "Rules", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -1040,31 +1248,49 @@ function (_Component) {
         className: "row page-home-rules-item-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 page-home-rules-item-text"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure esse, beatae et animi error itaque atque deserunt? Esse qui harum laudantium fugiat. Perferendis, at obcaecati voluptates eius aliquam necessitatibus autem!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "page-home-rules-pulse"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Some heading 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure esse, beatae et animi error itaque atque deserunt? Esse qui harum laudantium fugiat. Perferendis, at obcaecati voluptates eius aliquam necessitatibus autem!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "page-home-rules-pulse page-home-rules-pulse-right rounded-circle"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-question",
         "aria-hidden": "true"
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6",
-        style: {
-          height: '300px'
-        }
-      }, "Image"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6",
-        style: {
-          height: '300px'
-        }
-      }, "Image"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "/img/placeholder.png",
+        className: "img-fluid shadow"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "/img/placeholder.png",
+        className: "img-fluid shadow"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 page-home-rules-item-text"
-      }, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Maybe next heading over here!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "page-home-rules-pulse page-home-rules-pulse-left rounded-circle"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-exclamation",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 page-home-rules-item-text"
-      }, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6",
-        style: {
-          height: '300px'
-        }
-      }, "Image"))));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "And here is our last heading"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "page-home-rules-pulse page-home-rules-pulse-right rounded-circle"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-paint-brush",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "/img/placeholder.png",
+        className: "img-fluid shadow"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12 text-center bg-white"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: "/game",
+        className: "mybtn2 mb-4"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-play mr-2",
+        "aria-hidden": "true"
+      }), "Play now !")))));
     }
   }]);
 
