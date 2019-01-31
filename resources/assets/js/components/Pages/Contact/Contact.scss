@@ -11,9 +11,11 @@
 			text-decoration: underline;
 		}
 	}
+
 	.page-contact-wrapper {
 		position: relative;
-		height: 92vh;
+		height: calc(100vh - 78px);
+		overflow: hidden;
 
 		.container {
 			margin-top: 100px;
@@ -36,7 +38,15 @@
 			position: absolute;
 			right: 0px;
 			top: 0px;
-			background: #fff;
+			background-image: url('/img/contact_questionmarks.png');
+			background-attachment: fixed;
+			background-position: center;
+			background-size: 34%;
+			@extend .my-transition-elastic;
+		}
+
+		&:hover:after {
+			transform: scale(1.2);
 		}
 
 		.page-contact-icons {
@@ -56,10 +66,10 @@
 				}
 			}
 		}
-	}
 
-	#page-contact-form {
-		position: relative;
-		z-index: 5;
+		#page-contact-form {
+			position: relative;
+			z-index: 5;
+		}
 	}
 }

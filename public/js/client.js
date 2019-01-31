@@ -502,6 +502,13 @@ function (_Component) {
   }
 
   _createClass(Layout, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (this.props.location !== prevProps.location) {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var currentKey = this.props.location.pathname.split('/')[1] || '/';
@@ -861,17 +868,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-form */ "./node_modules/redux-form/es/index.js");
-/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_form__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _actions_todoActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../actions/todoActions */ "./resources/assets/js/actions/todoActions.js");
-/* harmony import */ var _hocs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../hocs */ "./resources/assets/js/hocs/index.js");
-/* harmony import */ var _Form_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Form/Button */ "./resources/assets/js/components/Form/Button.jsx");
-/* harmony import */ var _fields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./fields */ "./resources/assets/js/components/Pages/Contact/fields.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils */ "./resources/assets/js/utils/index.js");
-/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var _actions_todoActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../actions/todoActions */ "./resources/assets/js/actions/todoActions.js");
+/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var _ContactForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ContactForm */ "./resources/assets/js/components/Pages/Contact/ContactForm.jsx");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -895,10 +895,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
-
-
-
 var Contact =
 /*#__PURE__*/
 function (_Component) {
@@ -915,25 +911,15 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Contact)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
-      email: '',
-      password: ''
-    }, _this.handleContactForm = function (values) {
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Contact)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _this.handleSubmitContactForm = function (values) {
       console.log(values);
     }, _temp));
   }
 
   _createClass(Contact, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      // this.props.fetchTodos();
-      console.log(_fields__WEBPACK_IMPORTED_MODULE_6__["formFields"]);
-    }
-  }, {
     key: "render",
     value: function render() {
-      var handleSubmit = this.props.handleSubmit;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Contact me - Drawthing",
         className: "page-contact"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -950,7 +936,7 @@ function (_Component) {
         className: "page-contact-description"
       }, "If you have any questions about this project, how it works or maybe about technologies that i used, just say hello. Also I am always open to discussing new projects, creative ideas or opportunities."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "page-contact-description"
-      }, "Author of this project:", ' ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, "Author of this project: \xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         target: "_blank",
         href: "https://aleksajovanovic.com"
       }, "Aleksa Jovanovic")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -982,27 +968,9 @@ function (_Component) {
         id: "page-contact-form"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "bg-white rounded shadow py-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: handleSubmit(this.handleContactForm)
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
-        name: "name",
-        component: _hocs__WEBPACK_IMPORTED_MODULE_4__["RenderInput"]
-      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
-        name: "email",
-        component: _hocs__WEBPACK_IMPORTED_MODULE_4__["RenderInput"]
-      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].email)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
-        name: "subject",
-        component: _hocs__WEBPACK_IMPORTED_MODULE_4__["RenderInput"]
-      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].subject)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_2__["Field"], _extends({
-        name: "message",
-        component: _hocs__WEBPACK_IMPORTED_MODULE_4__["RenderTextarea"]
-      }, _fields__WEBPACK_IMPORTED_MODULE_6__["formFields"].message)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-12"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        type: "submit",
-        icon: "fa-paper-plane",
-        className: "mybtn2"
-      }, "Submit"))))))))));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ContactForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        handleSubmitContactForm: this.handleSubmitContactForm
+      }))))))));
     }
   }]);
 
@@ -1015,12 +983,120 @@ function (_Component) {
     todos: state.todoReducer.todos
   };
 }, {
-  fetchTodos: _actions_todoActions__WEBPACK_IMPORTED_MODULE_3__["fetchTodos"]
-})(Object(redux_form__WEBPACK_IMPORTED_MODULE_2__["reduxForm"])({
+  fetchTodos: _actions_todoActions__WEBPACK_IMPORTED_MODULE_2__["fetchTodos"]
+})(Contact));
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/Contact/ContactForm.jsx":
+/*!**********************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/Contact/ContactForm.jsx ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-form */ "./node_modules/redux-form/es/index.js");
+/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_form__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _hocs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../hocs */ "./resources/assets/js/hocs/index.js");
+/* harmony import */ var _Form_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Form/Button */ "./resources/assets/js/components/Form/Button.jsx");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../utils */ "./resources/assets/js/utils/index.js");
+/* harmony import */ var _fields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fields */ "./resources/assets/js/components/Pages/Contact/fields.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+
+
+
+var ContactForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(ContactForm, _Component);
+
+  function ContactForm() {
+    var _getPrototypeOf2;
+
+    var _temp, _this;
+
+    _classCallCheck(this, ContactForm);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ContactForm)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _this.handleContactForm = Object(lodash__WEBPACK_IMPORTED_MODULE_6__["throttle"])(function (values) {
+      _this.props.handleSubmitContactForm(values);
+    }, 1000), _temp));
+  }
+
+  _createClass(ContactForm, [{
+    key: "render",
+    value: function render() {
+      var handleSubmit = this.props.handleSubmit;
+      var name = _fields__WEBPACK_IMPORTED_MODULE_5__["formFields"].name,
+          email = _fields__WEBPACK_IMPORTED_MODULE_5__["formFields"].email,
+          subject = _fields__WEBPACK_IMPORTED_MODULE_5__["formFields"].subject,
+          message = _fields__WEBPACK_IMPORTED_MODULE_5__["formFields"].message;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: handleSubmit(this.handleContactForm)
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], _extends({
+        name: "name",
+        component: _hocs__WEBPACK_IMPORTED_MODULE_2__["RenderInput"]
+      }, name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], _extends({
+        name: "email",
+        component: _hocs__WEBPACK_IMPORTED_MODULE_2__["RenderInput"]
+      }, email)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], _extends({
+        name: "subject",
+        component: _hocs__WEBPACK_IMPORTED_MODULE_2__["RenderInput"]
+      }, subject)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], _extends({
+        name: "message",
+        component: _hocs__WEBPACK_IMPORTED_MODULE_2__["RenderTextarea"]
+      }, message)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        type: "submit",
+        icon: "fa-paper-plane",
+        className: "mybtn2"
+      }, "Submit")));
+    }
+  }]);
+
+  return ContactForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(redux_form__WEBPACK_IMPORTED_MODULE_1__["reduxForm"])({
   form: 'contact-form',
-  validate: Object(_utils__WEBPACK_IMPORTED_MODULE_7__["validate"])(_fields__WEBPACK_IMPORTED_MODULE_6__["formFields"]),
+  validate: Object(_utils__WEBPACK_IMPORTED_MODULE_4__["validate"])(_fields__WEBPACK_IMPORTED_MODULE_5__["formFields"]),
   enableReinitialize: true
-})(Contact)));
+})(ContactForm));
 
 /***/ }),
 
@@ -1990,7 +2066,6 @@ var validate = function validate(formFields) {
   return function (values, props) {
     var errors = {};
     var formFieldsMap = new Map(Object.entries(formFields));
-    console.log(_);
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;

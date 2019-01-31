@@ -1,34 +1,19 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
 
+import { connect } from 'react-redux';
 import { fetchTodos } from '../../../actions/todoActions';
 
-import { RenderInput, RenderTextarea } from '../../../hocs';
-import Button from '../../Form/Button';
-
-import { formFields } from './fields';
-import { validate } from '../../../utils';
-
 import Page from '../Page';
+import ContactForm from './ContactForm';
 
 class Contact extends Component {
-	state = {
-		email: '',
-		password: ''
-	};
+	state = {};
 
-	componentDidMount() {
-		// this.props.fetchTodos();
-		console.log(formFields);
-	}
-
-	handleContactForm = values => {
+	handleSubmitContactForm = values => {
 		console.log(values);
 	};
 
 	render() {
-		const { handleSubmit } = this.props;
 		return (
 			<Page title="Contact me - Drawthing" className="page-contact">
 				<div className="page-padding page-contact-wrapper">
@@ -42,7 +27,7 @@ class Contact extends Component {
 								</p>
 
 								<p className="page-contact-description">
-									Author of this project:{' '}
+									Author of this project: &nbsp;
 									<a target="_blank" href="https://aleksajovanovic.com">
 										Aleksa Jovanovic
 									</a>
@@ -70,17 +55,7 @@ class Contact extends Component {
 							<div className="col-md-6">
 								<div id="page-contact-form">
 									<div className="bg-white rounded shadow py-3">
-										<form onSubmit={handleSubmit(this.handleContactForm)}>
-											<Field name="name" component={RenderInput} {...formFields.name} />
-											<Field name="email" component={RenderInput} {...formFields.email} />
-											<Field name="subject" component={RenderInput} {...formFields.subject} />
-											<Field name="message" component={RenderTextarea} {...formFields.message} />
-											<div className="col-md-12">
-												<Button type="submit" icon="fa-paper-plane" className="mybtn2">
-													Submit
-												</Button>
-											</div>
-										</form>
+										<ContactForm handleSubmitContactForm={this.handleSubmitContactForm} />
 									</div>
 								</div>
 							</div>
@@ -97,10 +72,4 @@ class Contact extends Component {
 export default connect(
 	state => ({ todos: state.todoReducer.todos }),
 	{ fetchTodos }
-)(
-	reduxForm({
-		form: 'contact-form',
-		validate: validate(formFields),
-		enableReinitialize: true
-	})(Contact)
-);
+)(Contact);

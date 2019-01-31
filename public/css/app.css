@@ -12668,6 +12668,7 @@ body {
 }
 
 .my-transition-elastic,
+.page-contact .page-contact-wrapper:after,
 .page-about .page-about-tech .page-about-tech-row .page-about-tech-card-wrapper-link,
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-image img,
 .main-footer a:hover,
@@ -13125,7 +13126,8 @@ body {
 
 .page-contact .page-contact-wrapper {
   position: relative;
-  height: 92vh;
+  height: calc(100vh - 78px);
+  overflow: hidden;
 }
 
 .page-contact .page-contact-wrapper .container {
@@ -13149,7 +13151,15 @@ body {
   position: absolute;
   right: 0px;
   top: 0px;
-  background: #fff;
+  background-image: url("/img/contact_questionmarks.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: 34%;
+}
+
+.page-contact .page-contact-wrapper:hover:after {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 
 .page-contact .page-contact-wrapper .page-contact-icons ul {
@@ -13170,7 +13180,7 @@ body {
   text-decoration: none;
 }
 
-.page-contact #page-contact-form {
+.page-contact .page-contact-wrapper #page-contact-form {
   position: relative;
   z-index: 5;
 }
