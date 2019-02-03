@@ -1,0 +1,29 @@
+.game-tools-container {
+	width: 350px;
+	position: absolute;
+	z-index: 100000;
+	color: $mytheme-color-second;
+	background: #fff;
+
+	.game-tools-handle {
+		padding: 17px 15px;
+		cursor: move;
+		background: $mytheme-color-fourth;
+		&:hover {
+			cursor: move;
+		}
+		.game-tools-header-icons {
+			i {
+				margin-left: 10px;
+				border: 1px solid #fff;
+				padding: 10px;
+				border-radius: 50%;
+				background: #fff;
+			}
+		}
+	}
+
+	form {
+		padding: 15px 15px 5px;
+	}
+}

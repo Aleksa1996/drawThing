@@ -123,3 +123,19 @@ body {
 		@extend .shadow;
 	}
 }
+
+.form-group {
+	.form-control,
+	[class^='custom'] {
+		border-width: 2px;
+	}
+
+	.form-control:focus,
+	[class^='custom']:focus {
+		color: #25313d;
+		background-color: #fff;
+		border-color: $mytheme-color-first;
+		outline: 0;
+		box-shadow: none;
+	}
+}
