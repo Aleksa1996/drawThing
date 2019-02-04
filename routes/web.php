@@ -11,10 +11,6 @@
 |
  */
 
-Route::group(['prefix' => '/api'], function () {
-    Route::get('/blog', 'BlogController@index');
-});
-
 Route::get('/{any?}', function () {
     var_dump('OPALAAAA!');
     return view('welcome');
