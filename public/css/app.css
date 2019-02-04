@@ -12668,6 +12668,7 @@ body {
 }
 
 .my-transition-elastic,
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu ul li,
 .page-contact .page-contact-wrapper:after,
 .page-about .page-about-tech .page-about-tech-row .page-about-tech-card-wrapper-link,
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-image img,
@@ -12704,7 +12705,7 @@ body {
 .impact .impact-inner {
   background: #25313d;
   color: #fff;
-  width: 60%;
+  width: 80%;
   margin: 0 auto;
   position: relative;
   z-index: 3;
@@ -12768,7 +12769,7 @@ body {
 
 .main-nav {
   font-size: 1.2rem;
-  height: 75px;
+  height: 65px;
 }
 
 .main-nav .navbar-brand {
@@ -13140,8 +13141,10 @@ body {
 
 .page-contact .page-contact-wrapper {
   position: relative;
-  height: calc(100vh - 78px);
+  min-height: 100vh;
   overflow: hidden;
+  padding-top: 70px;
+  padding-bottom: 70px;
 }
 
 .page-contact .page-contact-wrapper .container {
@@ -13200,28 +13203,198 @@ body {
 }
 
 .page-game {
-  background: #37ca8a;
+  background: url("/img/pattern_bg_4.png");
+  background-size: contain;
+  background-attachment: fixed;
   color: #fff;
+  padding-top: 65px;
 }
 
 .page-game .game-board-container {
-  min-height: calc(100vh - 78px);
+  min-height: 100vh;
+}
+
+.game-board-container-center {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.game-board-container-center .game-board-sketchpad {
+  background: #fff;
+  overflow: hidden;
+}
+
+.game-board-container-center .game-board-sketchpad .game-board-sketchpad-canvas {
+  display: block;
+  margin: 0 auto;
+  cursor: crosshair;
+}
+
+.game-board-container-center .game-board-sketchpad .game-board-sketchpad-canvas:hover {
+  cursor: crosshair;
+}
+
+.game-board-container-right {
+  height: 100%;
+  max-height: 730px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  color: #25313d;
+}
+
+.game-board-container-right .game-board-chat {
+  background: #fff;
+  height: inherit;
+  overflow: hidden;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-header {
+  background: #f5f5f5;
+  padding: 10px 10px;
+  font-size: 18px;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-header i {
+  margin-right: 15px;
+  font-size: 25px;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-body {
+  background: #fff;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  overflow-y: scroll;
+  max-height: calc(100% - 95px - 58px);
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-body .game-board-chat-message {
+  width: auto;
+  display: inline-block;
+  margin: 5px 0px 10px 20px;
+  padding: 5px 20px 5px 0px;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-body .game-board-chat-message .game-board-chat-text {
+  padding: 10px 15px;
+  background: #f5f5f5;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-body .game-board-chat-message .game-board-chat-text p {
+  word-break: break-all;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer {
+  width: 100%;
+  padding: 15px;
+  position: relative;
+  background: #f5f5f5;
+  border-top: 2px solid #e6e6e6;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input {
+  border-width: 2px;
+  height: 65px;
+  padding: 10px;
+  background: #fff;
+  color: #25313d;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input:focus {
+  box-shadow: none;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  font-size: 1.5rem;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis:hover {
+  cursor: pointer;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown a {
+  background: none;
+  color: #ced4da;
+  border: none;
+  font-size: 1.5rem;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown a::after {
+  display: none;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown a:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu {
+  width: 300px;
+  background: #f5f5f5;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 15px 0px;
+  padding: 0px;
+  width: 100%;
+  list-style: none;
+  -webkit-perspective: 30px;
+          perspective: 30px;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu ul li {
+  font-size: 1.2rem;
+  border-radius: 50%;
+  background: #fff;
+  padding: 0px 7px;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu ul li:hover {
+  background: #37ca8a;
+  color: #fff;
+  -webkit-transform: scale(1.5, 1.5);
+          transform: scale(1.5, 1.5);
 }
 
 .game-board-container-left {
   padding-top: 15px;
   padding-bottom: 15px;
+  height: 100%;
+  max-height: 730px;
 }
 
 .game-board-container-left .game-board-score {
   background: #fff;
   color: #25313d;
+  height: inherit;
+  overflow: hidden;
+}
+
+.game-board-container-left .game-board-score .game-board-score-header {
+  background: #f5f5f5;
+  padding: 10px 10px;
+  font-size: 18px;
+}
+
+.game-board-container-left .game-board-score .game-board-score-header i {
+  margin-right: 15px;
+  font-size: 25px;
 }
 
 .game-board-container-left .game-board-score .game-board-score-list {
   list-style-type: none;
   margin: 0 auto;
-  padding: 15px 0px;
+  padding: 5px 0px;
 }
 
 .game-board-container-left .game-board-score .game-board-score-list .game-board-score-row {
@@ -13239,7 +13412,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 25%;
+  width: 30%;
 }
 
 .game-board-container-left .game-board-score .game-board-score-list .game-board-score-row .game-board-score-avatar-container .game-board-score-drawing {
@@ -13264,8 +13437,8 @@ body {
 }
 
 .game-board-container-left .game-board-score .game-board-score-list .game-board-score-row .game-board-score-avatar-container .game-board-score-avatar {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   position: relative;
   display: inline-block;
   border: 2px solid #3a3c3e;
@@ -13283,12 +13456,13 @@ body {
 }
 
 .game-board-container-left .game-board-score .game-board-score-list .game-board-score-row .game-board-score-username {
-  width: 50%;
+  width: 70%;
   padding: 0px 10px;
 }
 
 .game-board-container-left .game-board-score .game-board-score-list .game-board-score-row .game-board-score-points {
-  width: 25%;
+  display: block;
+  width: 100%;
 }
 
 @-webkit-keyframes brush {
@@ -13377,7 +13551,13 @@ body {
 
 .game-board-toolbar-container {
   background: #25313d;
-  padding: 10px 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  z-index: 10001;
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  left: 0px;
 }
 
 .game-board-toolbar-container .game-board-guessing-word-container .game-board-guessing-word {
@@ -13399,19 +13579,28 @@ body {
 .game-tools-container {
   width: 350px;
   position: absolute;
-  z-index: 100000;
+  z-index: 10000;
   color: #25313d;
   background: #fff;
 }
 
 .game-tools-container .game-tools-handle {
-  padding: 17px 15px;
+  padding: 10px 10px;
   cursor: move;
   background: #f5f5f5;
 }
 
 .game-tools-container .game-tools-handle:hover {
   cursor: move;
+}
+
+.game-tools-container .game-tools-handle i.fa-wrench {
+  margin-right: 15px;
+  font-size: 25px;
+}
+
+.game-tools-container .game-tools-handle span {
+  font-size: 18px;
 }
 
 .game-tools-container .game-tools-handle .game-tools-header-icons i {
@@ -13424,6 +13613,92 @@ body {
 
 .game-tools-container form {
   padding: 15px 15px 5px;
+}
+
+.page-start-game {
+  background: url("/img/pattern_bg_4.png");
+  background-attachment: fixed;
+  background-size: contain;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
+  position: relative;
+}
+
+.page-start-game .game-start-container {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.page-start-game .game-start-container .game-start-card {
+  padding: 15px;
+  background: #fff;
+  width: 550px;
+  margin: 0 auto 0px 0px;
+  position: relative;
+  z-index: 2;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-heading {
+  text-align: center;
+  color: #37ca8a;
+  font-size: 2rem;
+  padding: 5px 0px 15px;
+  border-bottom: 2px solid #e6e6e6;
+  text-transform: uppercase;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-canvas-container {
+  text-align: center;
+  padding: 10px;
+  color: #37ca8a;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-canvas-container .game-start-canvas {
+  background: #fff;
+  border: 2px solid #e6e6e6;
+  cursor: crosshair;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-canvas-container .game-start-canvas:hover {
+  cursor: crosshair;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-username-form-container {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-username-form-container .game-start-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.page-start-game .game-start-container .game-start-card .game-start-username-form-container .game-start-buttons .mybtn2 {
+  width: 160px;
+  padding: 15px 15px;
+}
+
+.page-start-game .game-start-container .game-start-rules-container {
+  background: #25313d;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  right: 7%;
+  width: 55%;
+  height: 740px;
+  padding: 20px 30px 0px 14%;
+  z-index: 1;
+}
+
+.page-start-game .game-start-container .game-start-rules-container .game-start-rules-heading {
+  text-align: center;
+  color: #37ca8a;
 }
 
 

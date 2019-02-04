@@ -1,16 +1,23 @@
 .game-tools-container {
 	width: 350px;
 	position: absolute;
-	z-index: 100000;
+	z-index: 10000;
 	color: $mytheme-color-second;
 	background: #fff;
 
 	.game-tools-handle {
-		padding: 17px 15px;
+		padding: 10px 10px;
 		cursor: move;
 		background: $mytheme-color-fourth;
 		&:hover {
 			cursor: move;
+		}
+		i.fa-wrench {
+			margin-right: 15px;
+			font-size: 25px;
+		}
+		span {
+			font-size: 18px;
 		}
 		.game-tools-header-icons {
 			i {

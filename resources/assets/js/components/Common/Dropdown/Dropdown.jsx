@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 import { v4 } from 'uuid';
 
-const Dropdown = ({ children, actions, id, className, classNameMenu }) => {
+const Dropdown = ({ children, actions, id, className, classNameMenu, classNameContainer }) => {
 	return (
-		<div className="dropdown">
+		<div className={`dropdown ${classNameContainer || ''}`}>
 			<a
 				className={`btn btn-secondary dropdown-toggle ${className || ''}`}
 				href="javascript:void(0)"

@@ -23,7 +23,10 @@ class GameTools extends Component {
 			>
 				<div className="game-tools-container shadow rounded">
 					<div className="game-tools-handle d-flex justify-content-between align-items-baseline rounded">
-						<span>Available tools</span>
+						<span>
+							<i className="fa fa-wrench" aria-hidden="true" />
+							Available tools
+						</span>
 						<div className="game-tools-header-icons">
 							<i className="fa fa-arrows" aria-hidden="true" />
 							<i

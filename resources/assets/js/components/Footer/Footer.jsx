@@ -4,7 +4,7 @@ class Footer extends Component {
 	state = {};
 	render() {
 		return (
-			<footer className="container-fluid main-footer footer py-4">
+			<footer className="container-fluid main-footer footer py-3">
 				<div className="row">
 					<div className="col-md-6 text-left justify-content-center align-items-center d-flex">
 						&copy; 2019 &nbsp;

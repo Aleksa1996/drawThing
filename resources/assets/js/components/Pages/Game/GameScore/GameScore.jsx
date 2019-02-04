@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 
 class GameScore extends Component {
 	state = {
-		users: [1, 2, 3, 4, 5, 6]
+		users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 	};
 	render() {
 		return (
 			<div className="col-md-3">
 				<div className="game-board-container-left">
 					<div className="game-board-score shadow rounded">
+						<div className="game-board-score-header rounded">
+							<i className="fa fa-trophy" aria-hidden="true" />
+							<span>Scoreboard</span>
+						</div>
 						<ul className="game-board-score-list">
 							{this.state.users.map(u => (
 								<li key={u} className="game-board-score-row rounded">
@@ -22,8 +26,10 @@ class GameScore extends Component {
 											<span className="game-board-score-position">{u}</span>
 										</span>
 									</span>
-									<span className="game-board-score-username">Username</span>
-									<span className="game-board-score-points">Points</span>
+									<span className="game-board-score-username">
+										Username
+										<small className="game-board-score-points">({Math.floor(Math.random() * 10) * u}) point/s</small>
+									</span>
 								</li>
 							))}
 						</ul>

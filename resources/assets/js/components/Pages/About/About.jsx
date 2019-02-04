@@ -65,7 +65,7 @@ class About extends Component {
 					},
 					{
 						heading: `Redis`,
-						description: `Efficcient and fast in-memory key-value database with optional durability. Used to cache data for better application performances.`,
+						description: `Efficcient and fast in-memory key-value database with optional durability. Used to cache data for better application performance.`,
 						img: `/img/redis.png`,
 						link: 'https://redis.io/'
 					}

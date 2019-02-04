@@ -1,0 +1,19 @@
+.game-board-container-center {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	.game-board-sketchpad {
+		background: #fff;
+		overflow: hidden;
+
+		.game-board-sketchpad-canvas {
+			display: block;
+			margin: 0 auto;
+
+			cursor: crosshair;
+
+			&:hover {
+				cursor: crosshair;
+			}
+		}
+	}
+}

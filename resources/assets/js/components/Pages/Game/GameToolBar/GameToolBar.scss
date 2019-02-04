@@ -1,6 +1,12 @@
 .game-board-toolbar-container {
 	background: $mytheme-color-second;
-	padding: 10px 0px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	z-index: 10001;
+	position: fixed;
+	width: 100%;
+	top: 0px;
+	left: 0px;
 	.game-board-guessing-word-container {
 		.game-board-guessing-word {
 			margin-bottom: 7px;

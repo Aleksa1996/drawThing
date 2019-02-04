@@ -1,7 +1,11 @@
 .page-game {
-	background: $mytheme-color-first;
+	background: url('/img/pattern_bg_4.png');
+	background-size: contain;
+	background-attachment: fixed;
+
 	color: #fff;
+	padding-top: 65px;
 	.game-board-container {
-		min-height: calc(100vh - 78px);
+		min-height: 100vh;
 	}
 }
