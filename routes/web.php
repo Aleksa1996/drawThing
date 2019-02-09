@@ -12,7 +12,7 @@
  */
 
 Route::get('/{any?}', function () {
-    var_dump('OPALAAAA!');
+    // var_dump('OPALAAAA!');
     return view('welcome');
 })->where('any', '.*');
 

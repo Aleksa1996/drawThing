@@ -28,4 +28,6 @@ Route::group(['middleware' => 'api'], function ($router) {
     });
 
     Route::get('/blog', 'BlogController@index');
+
+    Route::post('/blob', 'BlogController@blob');
 });

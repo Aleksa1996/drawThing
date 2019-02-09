@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Game;
 
 use Illuminate\Http\Request;
-use App\Blog;
+use App\Http\Controllers\Controller;
 
-class BlogController extends Controller
+class GameController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::all();
-        return response()->json(['blogs' => $blogs]);
+        //
     }
 
     /**

@@ -272,6 +272,7 @@ try {
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
+  window.io = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
   $(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
@@ -1465,8 +1466,13 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-draggable */ "./node_modules/react-draggable/dist/react-draggable.js");
-/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_draggable__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-draggable */ "./node_modules/react-draggable/dist/react-draggable.js");
+/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_draggable__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../GameCanvas/SketchPad/SketchPadTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPadTools/index.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1488,43 +1494,76 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
+
 var GameTools =
 /*#__PURE__*/
 function (_Component) {
   _inherits(GameTools, _Component);
 
-  function GameTools() {
-    var _getPrototypeOf2;
-
-    var _temp, _this;
+  function GameTools(props) {
+    var _this;
 
     _classCallCheck(this, GameTools);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GameTools).call(this, props));
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(GameTools)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
-      show: false
-    }, _this.handleShow = function (e) {
+    _this.handleShow = function (e) {
       _this.setState(function (prevState) {
         return {
           show: !prevState.show
         };
       });
-    }, _temp));
+    };
+
+    _this.handleToolLocally = function (e) {
+      var _e$target = e.target,
+          type = _e$target.name,
+          value = _e$target.value;
+      if (type == 'size') value = parseInt(value);
+
+      _this.props.handleTool({
+        type: type,
+        value: value
+      });
+    };
+
+    _this.state = {
+      show: props.show,
+      defaultPosition: props.defaultPosition
+    };
+    _this.toolsMap = [{
+      toolText: [_GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_PENCIL"]],
+      tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Pencil"]
+    }, {
+      toolText: [_GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_LINE"]],
+      tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Line"]
+    }, {
+      toolText: [_GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_RECTANGLE"]],
+      tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Rectangle"]
+    }, {
+      toolText: [_GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_ELLIPSE"]],
+      tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Ellipse"]
+    }];
+    return _this;
   }
 
   _createClass(GameTools, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_draggable__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      var _this$state = this.state,
+          defaultPosition = _this$state.defaultPosition,
+          show = _this$state.show;
+      var _this$props = this.props,
+          tool = _this$props.tool,
+          size = _this$props.size,
+          color = _this$props.color,
+          fillColor = _this$props.fillColor;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_draggable__WEBPACK_IMPORTED_MODULE_2___default.a, {
         axis: "both",
         handle: ".game-tools-handle",
-        defaultPosition: {
-          x: -1,
-          y: -9
-        },
+        defaultPosition: defaultPosition,
         position: null,
         scale: 1 // onStart={this.handleStart}
         // onDrag={this.handleDrag}
@@ -1544,53 +1583,104 @@ function (_Component) {
         "aria-hidden": "true"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         onClick: this.handleShow,
-        className: "fa ".concat(this.state.show ? 'fa-eye-slash' : 'fa-eye', " "),
+        className: "fa ".concat(show ? 'fa-eye-slash' : 'fa-eye', " "),
         "aria-hidden": "true",
         style: {
           cursor: 'pointer'
         }
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         style: {
-          display: this.state.show ? 'block' : 'none'
+          display: show ? 'block' : 'none'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "tool_pencil"
+        htmlFor: "tool"
       }, "Drawing tool"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        onChange: this.handleToolLocally,
+        value: tool,
         className: "custom-select",
-        id: "tool_pencil"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Pencil"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Rectangle"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Circle"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        name: "tool",
+        id: "tool"
+      }, this.toolsMap.map(function (tm) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: tm.toolText,
+          value: tm.toolText
+        }, Object(lodash__WEBPACK_IMPORTED_MODULE_4__["capitalize"])(tm.toolText));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "tool_weight"
+        htmlFor: "size"
       }, "Weight"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleToolLocally,
         type: "range",
         className: "custom-range",
-        id: "tool_weight"
+        name: "size",
+        id: "size",
+        value: size
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "tool_color"
       }, "Color"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleToolLocally,
         type: "color",
+        value: color,
         className: "form-control",
-        id: "tool_color"
+        name: "color",
+        id: "color"
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "form-group"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        htmlFor: "tool_background"
-      }, "Background"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        htmlFor: "fillColor"
+      }, "Fill color"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: this.handleToolLocally,
         type: "color",
+        value: fillColor,
         className: "form-control",
-        id: "tool_background"
-      })))));
+        name: "fillColor",
+        id: "fillColor"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game-tools-buttons"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.handleToolLocally,
+        type: "button",
+        className: "mybtn2",
+        name: "eraser",
+        value: "eraser"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-eraser mr-2",
+        "aria-hidden": "true"
+      }), "Eraser"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.handleToolLocally,
+        type: "button",
+        className: "mybtn2",
+        name: "clear",
+        value: "clear"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-times mr-2",
+        "aria-hidden": "true"
+      }), "Clear all")))));
     }
   }]);
 
   return GameTools;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
+GameTools.propTypes = {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool,
+  defaultPosition: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.shape({
+    x: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number,
+    y: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
+  })
+};
+GameTools.defaultProps = {
+  show: false,
+  defaultPosition: {
+    x: 0,
+    y: 0
+  }
+};
 /* harmony default export */ __webpack_exports__["default"] = (GameTools);
 
 /***/ }),
@@ -1667,15 +1757,32 @@ function (_Component) {
 
     return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(SketchPad)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.tool = null, _this.interval = null, _this.state = {}, _this.initTool = function (tool) {
       _this.tool = _this.props.toolsMap[tool](_this.ctx);
+    }, _this.clear = function () {
+      _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
     }, _this.onMouseDown = function (e) {
       var _this$tool;
 
-      var data = (_this$tool = _this.tool).onMouseDown.apply(_this$tool, _toConsumableArray(_this.getCursorPosition(e)).concat([_this.props.color, _this.props.size, _this.props.fillColor]));
+      var _this$props = _this.props,
+          color = _this$props.color,
+          size = _this$props.size,
+          fillColor = _this$props.fillColor,
+          onItemStart = _this$props.onItemStart,
+          onDebouncedItemChange = _this$props.onDebouncedItemChange,
+          debounceTime = _this$props.debounceTime;
 
-      data && data[0] && _this.props.onItemStart && _this.props.onItemStart.apply(null, data);
+      if (_this.props.eraser) {
+        _this.initTool(_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_PENCIL"]);
 
-      if (_this.props.onDebouncedItemChange) {
-        _this.interval = setInterval(_this.onDebouncedMove, _this.props.debounceTime);
+        color = '#ffffff';
+        size = 20;
+      }
+
+      var data = (_this$tool = _this.tool).onMouseDown.apply(_this$tool, _toConsumableArray(_this.getCursorPosition(e)).concat([color, size, fillColor]));
+
+      data && data[0] && onItemStart && onItemStart.apply(null, data);
+
+      if (onDebouncedItemChange) {
+        _this.interval = setInterval(_this.onDebouncedMove, debounceTime);
       }
     }, _this.onDebouncedMove = function () {
       if (typeof _this.tool.onDebouncedMouseMove == 'function' && _this.props.onDebouncedItemChange) {
@@ -1721,25 +1828,31 @@ function (_Component) {
 
       var tool = _ref.tool,
           items = _ref.items;
-      items.filter(function (item) {
-        return _this2.props.items.indexOf(item) === -1;
-      }).forEach(function (item) {
-        _this2.initTool(item.tool);
 
-        _this2.tool.draw(item, _this2.props.animate);
-      });
-      this.initTool(tool);
+      if (this.props.items.length !== 0) {
+        items.filter(function (item) {
+          return _this2.props.items.indexOf(item) === -1;
+        }).forEach(function (item) {
+          _this2.initTool(item.tool);
+
+          _this2.tool.draw(item, _this2.props.animate);
+        });
+      } else {
+        this.clear();
+      }
+
+      this.initTool(this.props.tool);
     }
   }, {
     key: "render",
     value: function render() {
       var _this3 = this;
 
-      var _this$props = this.props,
-          width = _this$props.width,
-          height = _this$props.height,
-          canvasClassName = _this$props.canvasClassName,
-          children = _this$props.children;
+      var _this$props2 = this.props,
+          width = _this$props2.width,
+          height = _this$props2.height,
+          canvasClassName = _this$props2.canvasClassName,
+          children = _this$props2.children;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("canvas", {
         ref: function ref(canvas) {
           _this3.canvasRef = canvas;
@@ -1758,7 +1871,7 @@ function (_Component) {
   return SketchPad;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-SketchPad.protoTypes = {
+SketchPad.propTypes = {
   width: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number,
   height: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number,
   items: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.array.isRequired,
@@ -1789,7 +1902,8 @@ SketchPad.defaultProps = {
   debounceTime: 1000,
   animate: true,
   tool: _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_PENCIL"],
-  toolsMap: toolsMap
+  toolsMap: toolsMap,
+  eraser: false
 };
 
 
@@ -2491,6 +2605,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameCanvas/SketchPad/SketchPadTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPadTools/index.jsx");
 /* harmony import */ var _GameStartForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GameStartForm */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartForm.jsx");
 /* harmony import */ var _GameStartRules__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GameStartRules */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx");
+/* harmony import */ var _GameCanvas_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GameCanvas/GameTools/GameTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/GameTools/GameTools.jsx");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -2521,32 +2636,30 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var GameStart =
 /*#__PURE__*/
 function (_Component) {
   _inherits(GameStart, _Component);
 
-  function GameStart() {
-    var _getPrototypeOf2;
-
-    var _temp, _this;
+  function GameStart(props) {
+    var _this;
 
     _classCallCheck(this, GameStart);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(GameStart)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GameStart).call(this, props));
+    _this.state = {
       sketchForm: {
         tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_2__["TOOL_PENCIL"],
         size: 2,
-        color: '#000000',
-        fillColor: '',
+        color: '#151515',
+        fillColor: '#fdffff',
         items: [],
         width: 300,
         height: 300,
-        animate: true
+        animate: true,
+        valid: false,
+        eraser: false
       },
       usernameForm: {
         username: '',
@@ -2554,13 +2667,29 @@ function (_Component) {
         valid: false,
         pristine: true
       }
-    }, _this.handleSubmit = function (e) {
+    };
+
+    _this.createImage = function () {// this.sketchpadRef.current.canvas.toBlob(blob => {
+      // 	const fd = new FormData();
+      // 	fd.append('blob', blob);
+      // 	Axios.post(`http://drawthing.com/api/blob`, fd)
+      // 		.then(res => {
+      // 			console.log(res);
+      // 		})
+      // 		.catch(err => {
+      // 			console.log(err);
+      // 		});
+      // });
+    };
+
+    _this.handleSubmit = function (e) {
       e.preventDefault();
       var _this$state$usernameF = _this.state.usernameForm,
           username = _this$state$usernameF.username,
-          valid = _this$state$usernameF.valid;
+          usernameFormValid = _this$state$usernameF.valid;
+      var sketchFormValid = _this.state.sketchForm.valid;
 
-      if (!valid) {
+      if (!usernameFormValid) {
         _this.setState(function (prevState) {
           return {
             usernameForm: _objectSpread({}, prevState.usernameForm, {
@@ -2570,19 +2699,26 @@ function (_Component) {
         });
 
         return;
-      }
+      } else if (!sketchFormValid) return;
 
       var startType = e.target.value;
-      console.log(_this.state);
-    }, _this.onCompleteDrawing = function (item) {
+
+      _this.createImage(); // console.log(this.state);
+
+    };
+
+    _this.onCompleteDrawing = function (item) {
       _this.setState(function (prevState) {
         return {
           sketchForm: _objectSpread({}, prevState.sketchForm, {
-            items: prevState.sketchForm.items.concat([item])
+            items: prevState.sketchForm.items.concat([item]),
+            valid: true
           })
         };
       });
-    }, _this.handleChangeUsername = function (e) {
+    };
+
+    _this.handleChangeUsername = function (e) {
       var username = e.target.value;
 
       _this.setState(function (prevState) {
@@ -2593,41 +2729,98 @@ function (_Component) {
           })
         };
       });
-    }, _this.handleFocusUsername = function (e) {
+    };
+
+    _this.handleFocusUsername = function (e) {
       var type = e.type;
 
       _this.setState(function (prevState) {
         return {
           usernameForm: _objectSpread({}, prevState.usernameForm, {
             focused: type === 'focus',
-            pristine: type === 'blur' ? false : prevState.usernameForm.pristine && true
+            pristine: type === 'blur' ? false : prevState.usernameForm.pristine
           })
         };
       });
-    }, _temp));
+    };
+
+    _this.handleTool = function (e) {
+      if (e.type == 'eraser') {
+        _this.setState(function (prevState) {
+          return {
+            sketchForm: _objectSpread({}, prevState.sketchForm, {
+              eraser: !prevState.sketchForm.eraser
+            })
+          };
+        });
+      } else if (e.type == 'clear') {
+        _this.setState(function (prevState) {
+          return {
+            sketchForm: _objectSpread({}, prevState.sketchForm, {
+              items: []
+            })
+          };
+        });
+      } else {
+        _this.setState(function (prevState) {
+          return {
+            sketchForm: _objectSpread({}, prevState.sketchForm, _defineProperty({}, e.type, e.value))
+          };
+        });
+      }
+    };
+
+    _this.sketchpadRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    return _this;
   }
 
   _createClass(GameStart, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {// const socket = io('http://drawthing.com/', { transports: ['websocket'] });
+      // socket.on('error', error => {
+      // 	console.log(error);
+      // });
+      // socket.on('hello', data => {
+      // 	console.log(data);
+      // });
+      // socket.emit('hello', 'world');
+      // console.log(this.sketchpadRef.current.canvas);
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this$state = this.state,
+          sketchForm = _this$state.sketchForm,
+          usernameForm = _this$state.usernameForm;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-start-container container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({
+        defaultPosition: {
+          x: 555,
+          y: 0
+        },
+        show: true,
+        handleTool: this.handleTool
+      }, this.state.sketchForm)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-start-card rounded shadow"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "game-start-heading"
       }, "Start new game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-start-canvas-container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({}, this.state.sketchForm, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({}, sketchForm, {
         onCompleteItem: this.onCompleteDrawing,
-        canvasClassName: "game-start-canvas rounded"
+        canvasClassName: "game-start-canvas rounded",
+        ref: this.sketchpadRef
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
-        className: "help-text d-block text-center"
-      }, "Draw your avatar"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartForm__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+        className: "help-text d-block text-center ".concat(sketchForm.valid ? '' : 'text-danger')
+      }, sketchForm.valid ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-exclamation-circle mr-2",
+        "aria-hidden": "true"
+      }), "draw your avatar"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartForm__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
         handleSubmit: this.handleSubmit,
         handleChangeUsername: this.handleChangeUsername,
         handleFocusUsername: this.handleFocusUsername
-      }, this.state.usernameForm))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartRules__WEBPACK_IMPORTED_MODULE_4__["default"], null));
+      }, usernameForm))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartRules__WEBPACK_IMPORTED_MODULE_4__["default"], null));
     }
   }]);
 
@@ -3748,6 +3941,17 @@ var validate = function validate(formFields) {
 __webpack_require__(/*! D:\Desktop-D\ZAVRSNI_RAD\drawThing\resources\assets\js\client.js */"./resources/assets/js/client.js");
 module.exports = __webpack_require__(/*! D:\Desktop-D\ZAVRSNI_RAD\drawThing\resources\assets\sass\app.scss */"./resources/assets/sass/app.scss");
 
+
+/***/ }),
+
+/***/ 1:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 

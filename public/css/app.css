@@ -13612,7 +13612,18 @@ body {
 }
 
 .game-tools-container form {
-  padding: 15px 15px 5px;
+  padding: 15px 15px 10px;
+}
+
+.game-tools-container .game-tools-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-tools-container .game-tools-buttons .mybtn2 {
+  width: 150px;
+  padding: 10px 13px;
 }
 
 .page-start-game {

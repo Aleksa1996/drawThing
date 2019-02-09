@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
-import { Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE } from './SketchPadTools';
+import {
+	Pencil,
+	TOOL_PENCIL,
+	Line,
+	TOOL_LINE,
+	Ellipse,
+	TOOL_ELLIPSE,
+	Rectangle,
+	TOOL_RECTANGLE
+} from './SketchPadTools';
 
 export const toolsMap = {
 	[TOOL_PENCIL]: Pencil,
@@ -11,7 +20,7 @@ export const toolsMap = {
 };
 
 export default class SketchPad extends Component {
-	static protoTypes = {
+	static propTypes = {
 		width: PropTypes.number,
 		height: PropTypes.number,
 		items: PropTypes.array.isRequired,
@@ -39,7 +48,8 @@ export default class SketchPad extends Component {
 		debounceTime: 1000,
 		animate: true,
 		tool: TOOL_PENCIL,
-		toolsMap
+		toolsMap,
+		eraser: false
 	};
 
 	tool = null;
@@ -53,41 +63,82 @@ export default class SketchPad extends Component {
 	}
 
 	componentDidUpdate({ tool, items }) {
-		items
-			.filter(item => this.props.items.indexOf(item) === -1)
-			.forEach(item => {
-				this.initTool(item.tool);
-				this.tool.draw(item, this.props.animate);
-			});
-		this.initTool(tool);
+		if (this.props.items.length !== 0) {
+			items
+				.filter(item => this.props.items.indexOf(item) === -1)
+				.forEach(item => {
+					this.initTool(item.tool);
+					this.tool.draw(item, this.props.animate);
+				});
+		} else {
+			this.clear();
+		}
+
+		this.initTool(this.props.tool);
 	}
 
 	initTool = tool => {
 		this.tool = this.props.toolsMap[tool](this.ctx);
 	};
 
+	clear = () => {
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	};
+
 	onMouseDown = e => {
-		const data = this.tool.onMouseDown(...this.getCursorPosition(e), this.props.color, this.props.size, this.props.fillColor);
-		data && data[0] && this.props.onItemStart && this.props.onItemStart.apply(null, data);
-		if (this.props.onDebouncedItemChange) {
-			this.interval = setInterval(this.onDebouncedMove, this.props.debounceTime);
+		let {
+			color,
+			size,
+			fillColor,
+			onItemStart,
+			onDebouncedItemChange,
+			debounceTime
+		} = this.props;
+
+		if (this.props.eraser) {
+			this.initTool(TOOL_PENCIL);
+			color = '#ffffff';
+			size = 20;
+		}
+
+		const data = this.tool.onMouseDown(
+			...this.getCursorPosition(e),
+			color,
+			size,
+			fillColor
+		);
+		data && data[0] && onItemStart && onItemStart.apply(null, data);
+		if (onDebouncedItemChange) {
+			this.interval = setInterval(this.onDebouncedMove, debounceTime);
 		}
 	};
 
 	onDebouncedMove = () => {
-		if (typeof this.tool.onDebouncedMouseMove == 'function' && this.props.onDebouncedItemChange) {
-			this.props.onDebouncedItemChange.apply(null, this.tool.onDebouncedMouseMove());
+		if (
+			typeof this.tool.onDebouncedMouseMove == 'function' &&
+			this.props.onDebouncedItemChange
+		) {
+			this.props.onDebouncedItemChange.apply(
+				null,
+				this.tool.onDebouncedMouseMove()
+			);
 		}
 	};
 
 	onMouseMove = e => {
 		const data = this.tool.onMouseMove(...this.getCursorPosition(e));
-		data && data[0] && this.props.onEveryItemChange && this.props.onEveryItemChange.apply(null, data);
+		data &&
+			data[0] &&
+			this.props.onEveryItemChange &&
+			this.props.onEveryItemChange.apply(null, data);
 	};
 
 	onMouseUp = e => {
 		const data = this.tool.onMouseUp(...this.getCursorPosition(e));
-		data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
+		data &&
+			data[0] &&
+			this.props.onCompleteItem &&
+			this.props.onCompleteItem.apply(null, data);
 		if (this.props.onDebouncedItemChange) {
 			clearInterval(this.interval);
 			this.interval = null;

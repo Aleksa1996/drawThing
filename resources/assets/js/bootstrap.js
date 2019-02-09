@@ -9,6 +9,8 @@ try {
 
 	require('bootstrap');
 
+	window.io = require('socket.io-client');
+
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});

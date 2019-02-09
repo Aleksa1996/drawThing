@@ -31,6 +31,15 @@
 	}
 
 	form {
-		padding: 15px 15px 5px;
+		padding: 15px 15px 10px;
+	}
+	.game-tools-buttons {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.mybtn2 {
+			width: 150px;
+			padding: 10px 13px;
+		}
 	}
 }
