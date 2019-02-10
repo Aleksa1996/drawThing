@@ -7,10 +7,14 @@ import api from '../api';
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
 import commonReducer from './reducers/commonReducer';
-import todoReducer from './reducers/todoReducer';
+import gameStartReducer from './reducers/gameStartReducer';
 //Reducer imports end
 
-const isServer = !(typeof window !== 'undefined' && window.document && window.document.createElement);
+const isServer = !(
+	typeof window !== 'undefined' &&
+	window.document &&
+	window.document.createElement
+);
 
 const composeEnhancers =
 	process.env.NODE_ENV === 'production'
@@ -27,7 +31,7 @@ const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
 	commonReducer: commonReducer,
-	todoReducer: todoReducer
+	gameStartReducer: gameStartReducer
 });
 
 let serverState = {};
@@ -39,6 +43,10 @@ if (!isServer) {
 }
 
 const middleware = [thunk.withExtraArgument(api), routerMiddleware(history)];
-const store = createStore(rootReducer, serverState, composeEnhancers(applyMiddleware(...middleware)));
+const store = createStore(
+	rootReducer,
+	serverState,
+	composeEnhancers(applyMiddleware(...middleware))
+);
 
 export { store, history };

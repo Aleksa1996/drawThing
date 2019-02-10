@@ -76,7 +76,8 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
         <body>
             <div id="react-app">${reactDom}</div>
             <script>
-                window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)}
+				window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)};
+				window.context = {"__global__":${JSON.stringify(context.__global__)}};
             </script>
             ${js_bundles.join('\n')}
         </body>

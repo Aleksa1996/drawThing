@@ -82,4 +82,19 @@ class GameController extends Controller
     {
         //
     }
+
+    public function createRoom(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required|min:3|max:16',
+            'avatar' => 'required|file|image'
+        ]);
+
+        $avatarPath = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
+
+        return response()->json(['gameStartData' => [
+            'username' => $request->username,
+            'avatar' => asset($avatarPath)
+        ]]);
+    }
 }

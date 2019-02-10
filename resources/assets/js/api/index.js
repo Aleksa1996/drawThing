@@ -1,7 +1,7 @@
-import * as todo from './todo';
+import * as game from './game';
 
 const api = {
-	todo: todo
+	game: game
 };
 
 export default api;

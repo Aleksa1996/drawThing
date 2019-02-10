@@ -1,40 +1,42 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { createRoom, resetGameStartFormErrors } from '../../../../actions';
 
-import SketchPad from '../GameCanvas/SketchPad/SketchPad';
-import { TOOL_PENCIL } from '../GameCanvas/SketchPad/SketchPadTools';
-
-import GameStartForm from './GameStartForm';
-
+import GameStartUsername from './GameStartUsername';
+import GameStartAvatar from './GameStartAvatar';
 import GameStartRules from './GameStartRules';
 
-import GameTools from '../GameCanvas/GameTools/GameTools';
+import { forOwn as _forOwn } from 'lodash';
 
 class GameStart extends Component {
 	constructor(props) {
 		super(props);
-		this.sketchpadRef = React.createRef();
-	}
 
-	state = {
-		sketchForm: {
-			tool: TOOL_PENCIL,
-			size: 2,
-			color: '#151515',
-			fillColor: '#fdffff',
-			items: [],
-			width: 300,
-			height: 300,
-			animate: true,
-			valid: false,
-			eraser: false
-		},
-		usernameForm: {
-			username: '',
-			focused: false,
-			valid: false,
-			pristine: true
-		}
-	};
+		this.sketchpadRef = React.createRef();
+
+		this.state = {
+			avatarForm: {
+				width: 300,
+				height: 300,
+				tool: 'pencil',
+				size: 5,
+				color: '#151515',
+				fillColor: '#fdffff',
+				items: [],
+				animate: false,
+				eraser: false,
+				gtDefaultPosition: { x: -24, y: -155 },
+				gtShow: false,
+				valid: false
+			},
+			usernameForm: {
+				username: '',
+				focused: false,
+				valid: false,
+				pristine: true
+			}
+		};
+	}
 
 	componentDidMount() {
 		// const socket = io('http://drawthing.com/', { transports: ['websocket'] });
@@ -46,49 +48,51 @@ class GameStart extends Component {
 		// });
 		// socket.emit('hello', 'world');
 		// console.log(this.sketchpadRef.current.canvas);
+		console.log(this.props);
 	}
 
-	createImage = () => {
-		// this.sketchpadRef.current.canvas.toBlob(blob => {
-		// 	const fd = new FormData();
-		// 	fd.append('blob', blob);
-		// 	Axios.post(`http://drawthing.com/api/blob`, fd)
-		// 		.then(res => {
-		// 			console.log(res);
-		// 		})
-		// 		.catch(err => {
-		// 			console.log(err);
-		// 		});
-		// });
-	};
+	createAvatarImage = () =>
+		new Promise((resolve, reject) => {
+			this.sketchpadRef.current.canvas.toBlob(blob => {
+				resolve(blob);
+			});
+		});
 
-	handleSubmit = e => {
+	handleSubmit = async e => {
 		e.preventDefault();
 		const { username, valid: usernameFormValid } = this.state.usernameForm;
-		const { valid: sketchFormValid } = this.state.sketchForm;
+		const { valid: avatarFormValid } = this.state.avatarForm;
+		const { value: startType } = e.target;
 
 		if (!usernameFormValid) {
 			this.setState(prevState => ({
 				usernameForm: { ...prevState.usernameForm, pristine: false }
 			}));
 			return;
-		} else if (!sketchFormValid) return;
+		} else if (!avatarFormValid) return;
 
-		const startType = e.target.value;
+		const avatar = await this.createAvatarImage();
 
-		this.createImage();
+		const data = {
+			username,
+			avatar,
+			startType
+		};
 
-		// console.log(this.state);
+		this.props.createRoom(data);
 	};
 
 	onCompleteDrawing = item => {
-		this.setState(prevState => ({
-			sketchForm: {
-				...prevState.sketchForm,
-				items: prevState.sketchForm.items.concat([item]),
-				valid: true
-			}
-		}));
+		this.setState(
+			prevState => ({
+				avatarForm: {
+					...prevState.avatarForm,
+					items: prevState.avatarForm.items.concat([item]),
+					valid: true
+				}
+			}),
+			this.props.resetGameStartFormErrors
+		);
 	};
 
 	handleChangeUsername = e => {
@@ -96,13 +100,16 @@ class GameStart extends Component {
 			target: { value: username }
 		} = e;
 
-		this.setState(prevState => ({
-			usernameForm: {
-				...prevState.usernameForm,
-				username,
-				valid: username.length > 3
-			}
-		}));
+		this.setState(
+			prevState => ({
+				usernameForm: {
+					...prevState.usernameForm,
+					username,
+					valid: username.length > 3
+				}
+			}),
+			this.props.resetGameStartFormErrors
+		);
 	};
 
 	handleFocusUsername = e => {
@@ -117,69 +124,27 @@ class GameStart extends Component {
 		}));
 	};
 
-	handleTool = e => {
-		if (e.type == 'eraser') {
-			this.setState(prevState => ({
-				sketchForm: {
-					...prevState.sketchForm,
-					eraser: !prevState.sketchForm.eraser
-				}
-			}));
-		} else if (e.type == 'clear') {
-			this.setState(prevState => ({
-				sketchForm: { ...prevState.sketchForm, items: [] }
-			}));
-		} else {
-			this.setState(prevState => ({
-				sketchForm: {
-					...prevState.sketchForm,
-					[e.type]: e.value
-				}
-			}));
-		}
-	};
-
 	render() {
-		const { sketchForm, usernameForm } = this.state;
+		const { avatarForm, usernameForm } = this.state;
+		const { formErrors } = this.props.gameStart;
 		return (
 			<div className="game-start-container container">
-				{/* <GameTools defaultPosition={{ x: 0, y: -60 }} /> */}
-				<GameTools
-					defaultPosition={{ x: 555, y: 0 }}
-					show={true}
-					handleTool={this.handleTool}
-					{...this.state.sketchForm}
-				/>
-
 				<div className="game-start-card rounded shadow">
 					<h1 className="game-start-heading">Start new game</h1>
-					<div className="game-start-canvas-container">
-						<SketchPad
-							{...sketchForm}
-							onCompleteItem={this.onCompleteDrawing}
-							canvasClassName="game-start-canvas rounded"
-							ref={this.sketchpadRef}
-						>
-							<small
-								className={`help-text d-block text-center ${
-									sketchForm.valid ? '' : 'text-danger'
-								}`}
-							>
-								{sketchForm.valid ? null : (
-									<i
-										className="fa fa-exclamation-circle mr-2"
-										aria-hidden="true"
-									/>
-								)}
-								draw your avatar
-							</small>
-						</SketchPad>
-					</div>
-					<GameStartForm
+
+					<GameStartAvatar
+						{...avatarForm}
+						sketchpadRef={this.sketchpadRef}
+						onCompleteDrawing={this.onCompleteDrawing}
+						formErrors={formErrors}
+					/>
+
+					<GameStartUsername
+						{...usernameForm}
 						handleSubmit={this.handleSubmit}
 						handleChangeUsername={this.handleChangeUsername}
 						handleFocusUsername={this.handleFocusUsername}
-						{...usernameForm}
+						formErrors={formErrors}
 					/>
 				</div>
 				<GameStartRules />
@@ -188,4 +153,7 @@ class GameStart extends Component {
 	}
 }
 
-export default GameStart;
+export default connect(
+	state => ({ gameStart: state.gameStartReducer }),
+	{ createRoom, resetGameStartFormErrors }
+)(GameStart);

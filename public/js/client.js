@@ -151,44 +151,127 @@ var Router = function Router(props) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/actions/todoActions.js":
-/*!****************************************************!*\
-  !*** ./resources/assets/js/actions/todoActions.js ***!
-  \****************************************************/
-/*! exports provided: fetchTodos, fetchTodosSuccess, fetchTodosFailure */
+/***/ "./resources/assets/js/actions/commonActions.js":
+/*!******************************************************!*\
+  !*** ./resources/assets/js/actions/commonActions.js ***!
+  \******************************************************/
+/*! exports provided: commonAction, commonThunkAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchTodos", function() { return fetchTodos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchTodosSuccess", function() { return fetchTodosSuccess; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchTodosFailure", function() { return fetchTodosFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "commonAction", function() { return commonAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "commonThunkAction", function() { return commonThunkAction; });
+var commonAction = function commonAction() {
+  return {
+    type: '',
+    payload: ''
+  };
+};
+var commonThunkAction = function commonThunkAction() {
+  return function (dispatch, getState) {};
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/actions/gameStartActions.js":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/actions/gameStartActions.js ***!
+  \*********************************************************/
+/*! exports provided: createRoom, createRoomSuccess, createRoomFailure, randomRoomSuccess, randomRoomFailure, resetGameStartFormErrors */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoom", function() { return createRoom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoomSuccess", function() { return createRoomSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoomFailure", function() { return createRoomFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomRoomSuccess", function() { return randomRoomSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomRoomFailure", function() { return randomRoomFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetGameStartFormErrors", function() { return resetGameStartFormErrors; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 
-var fetchTodos = function fetchTodos() {
+var createRoom = function createRoom(data) {
   return function (dispatch, getState, api) {
     dispatch({
-      type: _types__WEBPACK_IMPORTED_MODULE_0__["FETCHING_TODOS"]
+      type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATING_ROOM"]
     });
-    return api.todo.get().then(function (response) {
-      dispatch(fetchTodosSuccess(response.data));
+    var fData = new FormData();
+    fData.append('username', data.username);
+    fData.append('avatar', data.avatar);
+    return api.game.createRoom(fData).then(function (response) {
+      console.log(response);
+      dispatch(createRoomSuccess(response.data));
     }).catch(function (error) {
-      dispatch(fetchTodosFailure(error));
+      console.log(error.response);
+      dispatch(createRoomFailure(error.response.data.error));
     });
   };
-};
-var fetchTodosSuccess = function fetchTodosSuccess(todos) {
+}; // export const randomRoom = () => (dispatch, getState, api) => {
+//     RANDOMING_ROOM
+// };
+
+var createRoomSuccess = function createRoomSuccess(userData) {
   return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["FETCH_TODOS_SUCCESS"],
-    payload: todos
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATE_ROOM_SUCCESS"],
+    payload: userData
   };
 };
-var fetchTodosFailure = function fetchTodosFailure(error) {
+var createRoomFailure = function createRoomFailure(error) {
   return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["FETCH_TODOS_FAILURE"],
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATE_ROOM_FAILURE"],
     payload: error
   };
 };
+var randomRoomSuccess = function randomRoomSuccess(userData) {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["RANDOM_ROOM_SUCCESS"],
+    payload: userData
+  };
+};
+var randomRoomFailure = function randomRoomFailure(error) {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["RANDOM_ROOM_FAILURE"],
+    payload: error
+  };
+};
+var resetGameStartFormErrors = function resetGameStartFormErrors() {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["GAME_START_FORM_ERROR_RESET"]
+  };
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/actions/index.js":
+/*!**********************************************!*\
+  !*** ./resources/assets/js/actions/index.js ***!
+  \**********************************************/
+/*! exports provided: commonAction, commonThunkAction, createRoom, createRoomSuccess, createRoomFailure, randomRoomSuccess, randomRoomFailure, resetGameStartFormErrors */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _commonActions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./commonActions */ "./resources/assets/js/actions/commonActions.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "commonAction", function() { return _commonActions__WEBPACK_IMPORTED_MODULE_0__["commonAction"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "commonThunkAction", function() { return _commonActions__WEBPACK_IMPORTED_MODULE_0__["commonThunkAction"]; });
+
+/* harmony import */ var _gameStartActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gameStartActions */ "./resources/assets/js/actions/gameStartActions.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createRoom", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["createRoom"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createRoomSuccess", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["createRoomSuccess"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createRoomFailure", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["createRoomFailure"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "randomRoomSuccess", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["randomRoomSuccess"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "randomRoomFailure", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["randomRoomFailure"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "resetGameStartFormErrors", function() { return _gameStartActions__WEBPACK_IMPORTED_MODULE_1__["resetGameStartFormErrors"]; });
+
+
+
 
 /***/ }),
 
@@ -196,17 +279,50 @@ var fetchTodosFailure = function fetchTodosFailure(error) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: FETCHING_TODOS, FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE */
+/*! exports provided: CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, RANDOMING_ROOM, RANDOM_ROOM_SUCCESS, RANDOM_ROOM_FAILURE, GAME_START_FORM_ERROR_RESET */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCHING_TODOS", function() { return FETCHING_TODOS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_TODOS_SUCCESS", function() { return FETCH_TODOS_SUCCESS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_TODOS_FAILURE", function() { return FETCH_TODOS_FAILURE; });
-var FETCHING_TODOS = 'FETCHING_TODOS';
-var FETCH_TODOS_SUCCESS = 'FETCH_TODOS_SUCCESS';
-var FETCH_TODOS_FAILURE = 'FETCH_TODOS_FAILURE';
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_ROOM", function() { return CREATING_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_ROOM_SUCCESS", function() { return CREATE_ROOM_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_ROOM_FAILURE", function() { return CREATE_ROOM_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RANDOMING_ROOM", function() { return RANDOMING_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RANDOM_ROOM_SUCCESS", function() { return RANDOM_ROOM_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RANDOM_ROOM_FAILURE", function() { return RANDOM_ROOM_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_START_FORM_ERROR_RESET", function() { return GAME_START_FORM_ERROR_RESET; });
+var CREATING_ROOM = 'CREATING_ROOM';
+var CREATE_ROOM_SUCCESS = 'CREATE_ROOM_SUCCESS';
+var CREATE_ROOM_FAILURE = 'CREATE_ROOM_FAILURE';
+var RANDOMING_ROOM = 'RANDOMING_ROOM';
+var RANDOM_ROOM_SUCCESS = 'RANDOM_ROOM_SUCCESS';
+var RANDOM_ROOM_FAILURE = 'RANDOM_ROOM_FAILURE';
+var GAME_START_FORM_ERROR_RESET = 'GAME_START_FORM_ERROR_RESET';
+
+/***/ }),
+
+/***/ "./resources/assets/js/api/game.js":
+/*!*****************************************!*\
+  !*** ./resources/assets/js/api/game.js ***!
+  \*****************************************/
+/*! exports provided: createRoom, find */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoom", function() { return createRoom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "find", function() { return find; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../globals */ "./resources/assets/js/globals.js");
+
+
+var createRoom = function createRoom(data) {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_globals__WEBPACK_IMPORTED_MODULE_1__["default"].url.host, "/api/game/createRoom"), data);
+};
+var find = function find() {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://jsonplaceholder.typicode.com/albums/1/photos");
+};
 
 /***/ }),
 
@@ -219,39 +335,12 @@ var FETCH_TODOS_FAILURE = 'FETCH_TODOS_FAILURE';
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./todo */ "./resources/assets/js/api/todo.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./resources/assets/js/api/game.js");
 
 var api = {
-  todo: _todo__WEBPACK_IMPORTED_MODULE_0__
+  game: _game__WEBPACK_IMPORTED_MODULE_0__
 };
 /* harmony default export */ __webpack_exports__["default"] = (api);
-
-/***/ }),
-
-/***/ "./resources/assets/js/api/todo.js":
-/*!*****************************************!*\
-  !*** ./resources/assets/js/api/todo.js ***!
-  \*****************************************/
-/*! exports provided: get, find */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "find", function() { return find; });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
- // import fetch from 'isomorphic-fetch';
-
-var self = 'http://drawthing.com'; // export const get = () => axios.get(`${self}/api/blog`);
-// export const get = () => fetch('https://jsonplaceholder.typicode.com/todos?_limit=5').then(res => res.json());
-
-var get = function get() {
-  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://jsonplaceholder.typicode.com/todos?_limit=5');
-};
-var find = function find() {
-  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://jsonplaceholder.typicode.com/albums/1/photos");
-};
 
 /***/ }),
 
@@ -958,9 +1047,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _actions_todoActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../actions/todoActions */ "./resources/assets/js/actions/todoActions.js");
-/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
-/* harmony import */ var _ContactForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ContactForm */ "./resources/assets/js/components/Pages/Contact/ContactForm.jsx");
+/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var _ContactForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ContactForm */ "./resources/assets/js/components/Pages/Contact/ContactForm.jsx");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -978,7 +1066,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -1009,7 +1096,7 @@ function (_Component) {
   _createClass(Contact, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Contact me - Drawthing",
         className: "page-contact"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -1058,7 +1145,7 @@ function (_Component) {
         id: "page-contact-form"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "bg-white rounded shadow py-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ContactForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ContactForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
         handleSubmitContactForm: this.handleSubmitContactForm
       }))))))));
     }
@@ -1068,13 +1155,10 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // Contact.serverFetch = fetchTodos;
 
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(function (state) {
-  return {
-    todos: state.todoReducer.todos
-  };
-}, {
-  fetchTodos: _actions_todoActions__WEBPACK_IMPORTED_MODULE_2__["fetchTodos"]
-})(Contact));
+/* harmony default export */ __webpack_exports__["default"] = (Contact); // export default connect(
+// 	state => ({ todos: state.todoReducer.todos }),
+// 	{ fetchTodos }
+// )(Contact);
 
 /***/ }),
 
@@ -1519,12 +1603,12 @@ function (_Component) {
 
     _this.handleToolLocally = function (e) {
       var _e$target = e.target,
-          type = _e$target.name,
+          name = _e$target.name,
           value = _e$target.value;
-      if (type == 'size') value = parseInt(value);
+      if (name == 'size') value = parseInt(value);
 
       _this.props.handleTool({
-        type: type,
+        name: name,
         value: value
       });
     };
@@ -1703,6 +1787,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SketchPadTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPadTools/index.jsx");
+/* harmony import */ var _GameTools_GameTools__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../GameTools/GameTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/GameTools/GameTools.jsx");
 var _toolsMap;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1737,6 +1822,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var toolsMap = (_toolsMap = {}, _defineProperty(_toolsMap, _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_PENCIL"], _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Pencil"]), _defineProperty(_toolsMap, _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_LINE"], _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Line"]), _defineProperty(_toolsMap, _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_RECTANGLE"], _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Rectangle"]), _defineProperty(_toolsMap, _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_ELLIPSE"], _SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["Ellipse"]), _toolsMap);
 
 var SketchPad =
@@ -1744,60 +1830,68 @@ var SketchPad =
 function (_Component) {
   _inherits(SketchPad, _Component);
 
-  function SketchPad() {
-    var _getPrototypeOf2;
-
-    var _temp, _this;
+  function SketchPad(props) {
+    var _this;
 
     _classCallCheck(this, SketchPad);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SketchPad).call(this, props));
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(SketchPad)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.tool = null, _this.interval = null, _this.state = {}, _this.initTool = function (tool) {
-      _this.tool = _this.props.toolsMap[tool](_this.ctx);
-    }, _this.clear = function () {
+    _this.initTool = function (tool) {
+      _this.toolObj = _this.props.toolsMap[tool](_this.ctx);
+    };
+
+    _this.clear = function () {
       _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
-    }, _this.onMouseDown = function (e) {
-      var _this$tool;
+    };
+
+    _this.onMouseDown = function (e) {
+      var _this$toolObj;
 
       var _this$props = _this.props,
-          color = _this$props.color,
-          size = _this$props.size,
-          fillColor = _this$props.fillColor,
           onItemStart = _this$props.onItemStart,
           onDebouncedItemChange = _this$props.onDebouncedItemChange,
           debounceTime = _this$props.debounceTime;
+      var _this$state = _this.state,
+          color = _this$state.color,
+          size = _this$state.size,
+          fillColor = _this$state.fillColor,
+          eraser = _this$state.eraser;
 
-      if (_this.props.eraser) {
+      if (eraser) {
         _this.initTool(_SketchPadTools__WEBPACK_IMPORTED_MODULE_3__["TOOL_PENCIL"]);
 
         color = '#ffffff';
         size = 20;
       }
 
-      var data = (_this$tool = _this.tool).onMouseDown.apply(_this$tool, _toConsumableArray(_this.getCursorPosition(e)).concat([color, size, fillColor]));
+      var data = (_this$toolObj = _this.toolObj).onMouseDown.apply(_this$toolObj, _toConsumableArray(_this.getCursorPosition(e)).concat([color, size, fillColor]));
 
       data && data[0] && onItemStart && onItemStart.apply(null, data);
 
       if (onDebouncedItemChange) {
         _this.interval = setInterval(_this.onDebouncedMove, debounceTime);
       }
-    }, _this.onDebouncedMove = function () {
-      if (typeof _this.tool.onDebouncedMouseMove == 'function' && _this.props.onDebouncedItemChange) {
-        _this.props.onDebouncedItemChange.apply(null, _this.tool.onDebouncedMouseMove());
-      }
-    }, _this.onMouseMove = function (e) {
-      var _this$tool2;
+    };
 
-      var data = (_this$tool2 = _this.tool).onMouseMove.apply(_this$tool2, _toConsumableArray(_this.getCursorPosition(e)));
+    _this.onDebouncedMove = function () {
+      if (typeof _this.toolObj.onDebouncedMouseMove == 'function' && _this.props.onDebouncedItemChange) {
+        _this.props.onDebouncedItemChange.apply(null, _this.toolObj.onDebouncedMouseMove());
+      }
+    };
+
+    _this.onMouseMove = function (e) {
+      var _this$toolObj2;
+
+      var data = (_this$toolObj2 = _this.toolObj).onMouseMove.apply(_this$toolObj2, _toConsumableArray(_this.getCursorPosition(e)));
 
       data && data[0] && _this.props.onEveryItemChange && _this.props.onEveryItemChange.apply(null, data);
-    }, _this.onMouseUp = function (e) {
-      var _this$tool3;
+    };
 
-      var data = (_this$tool3 = _this.tool).onMouseUp.apply(_this$tool3, _toConsumableArray(_this.getCursorPosition(e)));
+    _this.onMouseUp = function (e) {
+      var _this$toolObj3;
+
+      var data = (_this$toolObj3 = _this.toolObj).onMouseUp.apply(_this$toolObj3, _toConsumableArray(_this.getCursorPosition(e)));
 
       data && data[0] && _this.props.onCompleteItem && _this.props.onCompleteItem.apply(null, data);
 
@@ -1805,13 +1899,43 @@ function (_Component) {
         clearInterval(_this.interval);
         _this.interval = null;
       }
-    }, _this.getCursorPosition = function (e) {
+    };
+
+    _this.getCursorPosition = function (e) {
       var _this$canvas$getBound = _this.canvas.getBoundingClientRect(),
           top = _this$canvas$getBound.top,
           left = _this$canvas$getBound.left;
 
       return [e.clientX - left, e.clientY - top];
-    }, _temp));
+    };
+
+    _this.handleTool = function (_ref) {
+      var name = _ref.name,
+          value = _ref.value;
+
+      if (name == 'eraser') {
+        _this.setState(function (prevState) {
+          return {
+            eraser: !prevState.eraser
+          };
+        });
+      } else if (name == 'clear') {
+        _this.clear();
+      } else {
+        _this.setState(_defineProperty({}, name, value));
+      }
+    };
+
+    _this.state = {
+      tool: props.tool,
+      size: props.size,
+      color: props.color,
+      fillColor: props.fillColor,
+      eraser: false
+    };
+    _this.toolObj = null;
+    _this.nterval = null;
+    return _this;
   }
 
   _createClass(SketchPad, [{
@@ -1819,15 +1943,15 @@ function (_Component) {
     value: function componentDidMount() {
       this.canvas = Object(react_dom__WEBPACK_IMPORTED_MODULE_2__["findDOMNode"])(this.canvasRef);
       this.ctx = this.canvas.getContext('2d');
-      this.initTool(this.props.tool);
+      this.initTool(this.state.tool);
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(_ref) {
+    value: function componentDidUpdate(_ref2) {
       var _this2 = this;
 
-      var tool = _ref.tool,
-          items = _ref.items;
+      var tool = _ref2.tool,
+          items = _ref2.items;
 
       if (this.props.items.length !== 0) {
         items.filter(function (item) {
@@ -1835,13 +1959,11 @@ function (_Component) {
         }).forEach(function (item) {
           _this2.initTool(item.tool);
 
-          _this2.tool.draw(item, _this2.props.animate);
+          _this2.toolObj.draw(item, _this2.props.animate);
         });
-      } else {
-        this.clear();
       }
 
-      this.initTool(this.props.tool);
+      this.initTool(this.state.tool);
     }
   }, {
     key: "render",
@@ -1852,8 +1974,23 @@ function (_Component) {
           width = _this$props2.width,
           height = _this$props2.height,
           canvasClassName = _this$props2.canvasClassName,
-          children = _this$props2.children;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("canvas", {
+          children = _this$props2.children,
+          gtShow = _this$props2.gtShow,
+          gtDefaultPosition = _this$props2.gtDefaultPosition;
+      var _this$state2 = this.state,
+          tool = _this$state2.tool,
+          size = _this$state2.size,
+          color = _this$state2.color,
+          fillColor = _this$state2.fillColor;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        defaultPosition: gtDefaultPosition,
+        show: gtShow,
+        handleTool: this.handleTool,
+        tool: tool,
+        size: size,
+        color: color,
+        fillColor: fillColor
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("canvas", {
         ref: function ref(canvas) {
           _this3.canvasRef = canvas;
         },
@@ -2599,13 +2736,19 @@ function (_Component) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameCanvas/SketchPad/SketchPad */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPad.jsx");
-/* harmony import */ var _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../GameCanvas/SketchPad/SketchPadTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPadTools/index.jsx");
-/* harmony import */ var _GameStartForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GameStartForm */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartForm.jsx");
-/* harmony import */ var _GameStartRules__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GameStartRules */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx");
-/* harmony import */ var _GameCanvas_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../GameCanvas/GameTools/GameTools */ "./resources/assets/js/components/Pages/Game/GameCanvas/GameTools/GameTools.jsx");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../actions */ "./resources/assets/js/actions/index.js");
+/* harmony import */ var _GameStartUsername__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GameStartUsername */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartUsername.jsx");
+/* harmony import */ var _GameStartAvatar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GameStartAvatar */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartAvatar.jsx");
+/* harmony import */ var _GameStartRules__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./GameStartRules */ "./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -2613,6 +2756,10 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2637,6 +2784,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var GameStart =
 /*#__PURE__*/
 function (_Component) {
@@ -2648,74 +2796,91 @@ function (_Component) {
     _classCallCheck(this, GameStart);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(GameStart).call(this, props));
-    _this.state = {
-      sketchForm: {
-        tool: _GameCanvas_SketchPad_SketchPadTools__WEBPACK_IMPORTED_MODULE_2__["TOOL_PENCIL"],
-        size: 2,
-        color: '#151515',
-        fillColor: '#fdffff',
-        items: [],
-        width: 300,
-        height: 300,
-        animate: true,
-        valid: false,
-        eraser: false
-      },
-      usernameForm: {
-        username: '',
-        focused: false,
-        valid: false,
-        pristine: true
-      }
-    };
 
-    _this.createImage = function () {// this.sketchpadRef.current.canvas.toBlob(blob => {
-      // 	const fd = new FormData();
-      // 	fd.append('blob', blob);
-      // 	Axios.post(`http://drawthing.com/api/blob`, fd)
-      // 		.then(res => {
-      // 			console.log(res);
-      // 		})
-      // 		.catch(err => {
-      // 			console.log(err);
-      // 		});
-      // });
-    };
-
-    _this.handleSubmit = function (e) {
-      e.preventDefault();
-      var _this$state$usernameF = _this.state.usernameForm,
-          username = _this$state$usernameF.username,
-          usernameFormValid = _this$state$usernameF.valid;
-      var sketchFormValid = _this.state.sketchForm.valid;
-
-      if (!usernameFormValid) {
-        _this.setState(function (prevState) {
-          return {
-            usernameForm: _objectSpread({}, prevState.usernameForm, {
-              pristine: false
-            })
-          };
+    _this.createAvatarImage = function () {
+      return new Promise(function (resolve, reject) {
+        _this.sketchpadRef.current.canvas.toBlob(function (blob) {
+          resolve(blob);
         });
-
-        return;
-      } else if (!sketchFormValid) return;
-
-      var startType = e.target.value;
-
-      _this.createImage(); // console.log(this.state);
-
+      });
     };
+
+    _this.handleSubmit =
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(e) {
+        var _this$state$usernameF, username, usernameFormValid, avatarFormValid, startType, avatar, data;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                e.preventDefault();
+                _this$state$usernameF = _this.state.usernameForm, username = _this$state$usernameF.username, usernameFormValid = _this$state$usernameF.valid;
+                avatarFormValid = _this.state.avatarForm.valid;
+                startType = e.target.value;
+
+                if (usernameFormValid) {
+                  _context.next = 9;
+                  break;
+                }
+
+                _this.setState(function (prevState) {
+                  return {
+                    usernameForm: _objectSpread({}, prevState.usernameForm, {
+                      pristine: false
+                    })
+                  };
+                });
+
+                return _context.abrupt("return");
+
+              case 9:
+                if (avatarFormValid) {
+                  _context.next = 11;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 11:
+                _context.next = 13;
+                return _this.createAvatarImage();
+
+              case 13:
+                avatar = _context.sent;
+                data = {
+                  username: username,
+                  avatar: avatar,
+                  startType: startType
+                };
+
+                _this.props.createRoom(data);
+
+              case 16:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }();
 
     _this.onCompleteDrawing = function (item) {
       _this.setState(function (prevState) {
         return {
-          sketchForm: _objectSpread({}, prevState.sketchForm, {
-            items: prevState.sketchForm.items.concat([item]),
+          avatarForm: _objectSpread({}, prevState.avatarForm, {
+            items: prevState.avatarForm.items.concat([item]),
             valid: true
           })
         };
-      });
+      }, _this.props.resetGameStartFormErrors);
     };
 
     _this.handleChangeUsername = function (e) {
@@ -2728,7 +2893,7 @@ function (_Component) {
             valid: username.length > 3
           })
         };
-      });
+      }, _this.props.resetGameStartFormErrors);
     };
 
     _this.handleFocusUsername = function (e) {
@@ -2744,39 +2909,39 @@ function (_Component) {
       });
     };
 
-    _this.handleTool = function (e) {
-      if (e.type == 'eraser') {
-        _this.setState(function (prevState) {
-          return {
-            sketchForm: _objectSpread({}, prevState.sketchForm, {
-              eraser: !prevState.sketchForm.eraser
-            })
-          };
-        });
-      } else if (e.type == 'clear') {
-        _this.setState(function (prevState) {
-          return {
-            sketchForm: _objectSpread({}, prevState.sketchForm, {
-              items: []
-            })
-          };
-        });
-      } else {
-        _this.setState(function (prevState) {
-          return {
-            sketchForm: _objectSpread({}, prevState.sketchForm, _defineProperty({}, e.type, e.value))
-          };
-        });
+    _this.sketchpadRef = react__WEBPACK_IMPORTED_MODULE_1___default.a.createRef();
+    _this.state = {
+      avatarForm: {
+        width: 300,
+        height: 300,
+        tool: 'pencil',
+        size: 5,
+        color: '#151515',
+        fillColor: '#fdffff',
+        items: [],
+        animate: false,
+        eraser: false,
+        gtDefaultPosition: {
+          x: -24,
+          y: -155
+        },
+        gtShow: false,
+        valid: false
+      },
+      usernameForm: {
+        username: '',
+        focused: false,
+        valid: false,
+        pristine: true
       }
     };
-
-    _this.sketchpadRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     return _this;
   }
 
   _createClass(GameStart, [{
     key: "componentDidMount",
-    value: function componentDidMount() {// const socket = io('http://drawthing.com/', { transports: ['websocket'] });
+    value: function componentDidMount() {
+      // const socket = io('http://drawthing.com/', { transports: ['websocket'] });
       // socket.on('error', error => {
       // 	console.log(error);
       // });
@@ -2785,56 +2950,125 @@ function (_Component) {
       // });
       // socket.emit('hello', 'world');
       // console.log(this.sketchpadRef.current.canvas);
+      console.log(this.props);
     }
   }, {
     key: "render",
     value: function render() {
       var _this$state = this.state,
-          sketchForm = _this$state.sketchForm,
+          avatarForm = _this$state.avatarForm,
           usernameForm = _this$state.usernameForm;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      var formErrors = this.props.gameStart.formErrors;
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "game-start-container container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({
-        defaultPosition: {
-          x: 555,
-          y: 0
-        },
-        show: true,
-        handleTool: this.handleTool
-      }, this.state.sketchForm)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "game-start-card rounded shadow"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", {
         className: "game-start-heading"
-      }, "Start new game"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "game-start-canvas-container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({}, sketchForm, {
-        onCompleteItem: this.onCompleteDrawing,
-        canvasClassName: "game-start-canvas rounded",
-        ref: this.sketchpadRef
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
-        className: "help-text d-block text-center ".concat(sketchForm.valid ? '' : 'text-danger')
-      }, sketchForm.valid ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-exclamation-circle mr-2",
-        "aria-hidden": "true"
-      }), "draw your avatar"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartForm__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+      }, "Start new game"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_GameStartAvatar__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, avatarForm, {
+        sketchpadRef: this.sketchpadRef,
+        onCompleteDrawing: this.onCompleteDrawing,
+        formErrors: formErrors
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_GameStartUsername__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, usernameForm, {
         handleSubmit: this.handleSubmit,
         handleChangeUsername: this.handleChangeUsername,
-        handleFocusUsername: this.handleFocusUsername
-      }, usernameForm))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameStartRules__WEBPACK_IMPORTED_MODULE_4__["default"], null));
+        handleFocusUsername: this.handleFocusUsername,
+        formErrors: formErrors
+      }))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_GameStartRules__WEBPACK_IMPORTED_MODULE_6__["default"], null));
     }
   }]);
 
   return GameStart;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (GameStart);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(function (state) {
+  return {
+    gameStart: state.gameStartReducer
+  };
+}, {
+  createRoom: _actions__WEBPACK_IMPORTED_MODULE_3__["createRoom"],
+  resetGameStartFormErrors: _actions__WEBPACK_IMPORTED_MODULE_3__["resetGameStartFormErrors"]
+})(GameStart));
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/Pages/Game/GameStart/GameStartForm.jsx":
-/*!*******************************************************************************!*\
-  !*** ./resources/assets/js/components/Pages/Game/GameStart/GameStartForm.jsx ***!
-  \*******************************************************************************/
+/***/ "./resources/assets/js/components/Pages/Game/GameStart/GameStartAvatar.jsx":
+/*!*********************************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/Game/GameStart/GameStartAvatar.jsx ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameCanvas/SketchPad/SketchPad */ "./resources/assets/js/components/Pages/Game/GameCanvas/SketchPad/SketchPad.jsx");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+
+
+
+var GameStartAvatar = function GameStartAvatar(_ref) {
+  var onCompleteDrawing = _ref.onCompleteDrawing,
+      sketchpadRef = _ref.sketchpadRef,
+      valid = _ref.valid,
+      formErrors = _ref.formErrors,
+      avatarForm = _objectWithoutProperties(_ref, ["onCompleteDrawing", "sketchpadRef", "valid", "formErrors"]);
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "game-start-canvas-container"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_SketchPad_SketchPad__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({}, avatarForm, {
+    onCompleteItem: onCompleteDrawing,
+    canvasClassName: "game-start-canvas rounded",
+    ref: sketchpadRef
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+    className: "help-text d-block text-center ".concat(!formErrors.avatar && valid ? '' : 'text-danger')
+  }, !formErrors.avatar && valid ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fa fa-exclamation-circle mr-2",
+    "aria-hidden": "true"
+  }), formErrors.avatar && valid ? formErrors.avatar : 'Draw your avatar')));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (GameStartAvatar);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx":
+/*!********************************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var GameStartRules = function GameStartRules(props) {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "game-start-rules-container"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+    className: "game-start-rules-heading"
+  }, "Game Rules"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "game-start-rules-text"
+  }, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 2"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 4"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 5")));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (GameStartRules);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/Game/GameStart/GameStartUsername.jsx":
+/*!***********************************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/Game/GameStart/GameStartUsername.jsx ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2846,14 +3080,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var GameStartForm = function GameStartForm(_ref) {
+var GameStartUsername = function GameStartUsername(_ref) {
   var username = _ref.username,
       focused = _ref.focused,
       valid = _ref.valid,
       pristine = _ref.pristine,
       handleChangeUsername = _ref.handleChangeUsername,
       handleSubmit = _ref.handleSubmit,
-      handleFocusUsername = _ref.handleFocusUsername;
+      handleFocusUsername = _ref.handleFocusUsername,
+      formErrors = _ref.formErrors;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-start-username-form-container"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
@@ -2881,7 +3116,12 @@ var GameStartForm = function GameStartForm(_ref) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-exclamation-circle",
     "aria-hidden": "true"
-  }), " \xA0username must be min 3 characters!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), " \xA0 Username must be min 3 characters!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "invalid-feedback text-left ".concat(formErrors.username && valid ? 'd-block' : '')
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fa fa-exclamation-circle",
+    "aria-hidden": "true"
+  }), " \xA0", formErrors.username)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-start-buttons"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/",
@@ -2910,34 +3150,7 @@ var GameStartForm = function GameStartForm(_ref) {
   }), "Random room"))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (GameStartForm);
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx":
-/*!********************************************************************************!*\
-  !*** ./resources/assets/js/components/Pages/Game/GameStart/GameStartRules.jsx ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-
-var GameStartRules = function GameStartRules(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "game-start-rules-container"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: "game-start-rules-heading"
-  }, "Game Rules"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "game-start-rules-text"
-  }, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 2"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 4"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 5")));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (GameStartRules);
+/* harmony default export */ __webpack_exports__["default"] = (GameStartUsername);
 
 /***/ }),
 
@@ -3262,6 +3475,29 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Page);
+
+/***/ }),
+
+/***/ "./resources/assets/js/globals.js":
+/*!****************************************!*\
+  !*** ./resources/assets/js/globals.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var global = _objectSpread({}, context.__global__);
+
+if (typeof window !== 'undefined') {
+  delete window.context;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (global);
 
 /***/ }),
 
@@ -3599,10 +3835,10 @@ var selector = function selector(state) {};
 
 /***/ }),
 
-/***/ "./resources/assets/js/store/reducers/todoReducer.js":
-/*!***********************************************************!*\
-  !*** ./resources/assets/js/store/reducers/todoReducer.js ***!
-  \***********************************************************/
+/***/ "./resources/assets/js/store/reducers/gameStartReducer.js":
+/*!****************************************************************!*\
+  !*** ./resources/assets/js/store/reducers/gameStartReducer.js ***!
+  \****************************************************************/
 /*! exports provided: default, selector */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3610,14 +3846,25 @@ var selector = function selector(state) {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+
 var initialState = {
-  todos: [],
-  fetched: 0
+  formErrors: {
+    avatar: null,
+    username: null
+  },
+  valid: true,
+  creatingRoom: false,
+  userData: {
+    username: '',
+    avatar: ''
+  }
 };
 
 var reducer = function reducer() {
@@ -3625,17 +3872,39 @@ var reducer = function reducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCHING_TODOS"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CREATING_ROOM"]:
       {
         return _objectSpread({}, state, {
-          fetched: state.fetched + 1
+          creatingRoom: true
         });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_TODOS_SUCCESS"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CREATE_ROOM_SUCCESS"]:
       {
         return _objectSpread({}, state, {
-          todos: action.payload
+          userData: action.payload,
+          valid: true
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CREATE_ROOM_FAILURE"]:
+      {
+        return _objectSpread({}, state, {
+          formErrors: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["mapValues"])(action.payload, function (v) {
+            return v[0] || null;
+          }),
+          valid: false
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GAME_START_FORM_ERROR_RESET"]:
+      {
+        return _objectSpread({}, state, {
+          formErrors: {
+            avatar: null,
+            username: null
+          },
+          valid: true
         });
       }
 
@@ -3669,7 +3938,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! history */ "./node_modules/history/es/index.js");
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../api */ "./resources/assets/js/api/index.js");
 /* harmony import */ var _reducers_commonReducer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./reducers/commonReducer */ "./resources/assets/js/store/reducers/commonReducer.js");
-/* harmony import */ var _reducers_todoReducer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./reducers/todoReducer */ "./resources/assets/js/store/reducers/todoReducer.js");
+/* harmony import */ var _reducers_gameStartReducer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./reducers/gameStartReducer */ "./resources/assets/js/store/reducers/gameStartReducer.js");
 
 
 
@@ -3691,7 +3960,7 @@ var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])(
   router: Object(connected_react_router__WEBPACK_IMPORTED_MODULE_2__["connectRouter"])(history),
   form: redux_form__WEBPACK_IMPORTED_MODULE_1__["reducer"],
   commonReducer: _reducers_commonReducer__WEBPACK_IMPORTED_MODULE_6__["default"],
-  todoReducer: _reducers_todoReducer__WEBPACK_IMPORTED_MODULE_7__["default"]
+  gameStartReducer: _reducers_gameStartReducer__WEBPACK_IMPORTED_MODULE_7__["default"]
 });
 var serverState = {};
 

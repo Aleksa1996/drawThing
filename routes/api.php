@@ -27,7 +27,9 @@ Route::group(['middleware' => 'api'], function ($router) {
         Route::post('me', 'Auth\AuthController@me');
     });
 
-    Route::get('/blog', 'BlogController@index');
+    Route::group(['prefix' => 'game'], function () {
 
-    Route::post('/blob', 'BlogController@blob');
+        Route::post('createRoom', 'Game\GameController@createRoom');
+
+    });
 });

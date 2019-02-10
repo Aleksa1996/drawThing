@@ -51,11 +51,11 @@ class GameTools extends Component {
 	};
 
 	handleToolLocally = e => {
-		let { name: type, value: value } = e.target;
+		let { name, value } = e.target;
 
-		if (type == 'size') value = parseInt(value);
+		if (name == 'size') value = parseInt(value);
 
-		this.props.handleTool({ type, value });
+		this.props.handleTool({ name, value });
 	};
 
 	render() {
@@ -91,7 +91,13 @@ class GameTools extends Component {
 					<form style={{ display: show ? 'block' : 'none' }}>
 						<div className="form-group">
 							<label htmlFor="tool">Drawing tool</label>
-							<select onChange={this.handleToolLocally} value={tool} className="custom-select" name="tool" id="tool">
+							<select
+								onChange={this.handleToolLocally}
+								value={tool}
+								className="custom-select"
+								name="tool"
+								id="tool"
+							>
 								{this.toolsMap.map(tm => (
 									<option key={tm.toolText} value={tm.toolText}>
 										{_capitalize(tm.toolText)}
@@ -102,7 +108,14 @@ class GameTools extends Component {
 
 						<div className="form-group">
 							<label htmlFor="size">Weight</label>
-							<input onChange={this.handleToolLocally} type="range" className="custom-range" name="size" id="size" value={size} />
+							<input
+								onChange={this.handleToolLocally}
+								type="range"
+								className="custom-range"
+								name="size"
+								id="size"
+								value={size}
+							/>
 						</div>
 
 						<div className="form-group">
@@ -130,11 +143,23 @@ class GameTools extends Component {
 						</div>
 
 						<div className="game-tools-buttons">
-							<button onClick={this.handleToolLocally} type="button" className="mybtn2" name="eraser" value="eraser">
+							<button
+								onClick={this.handleToolLocally}
+								type="button"
+								className="mybtn2"
+								name="eraser"
+								value="eraser"
+							>
 								<i className="fa fa-eraser mr-2" aria-hidden="true" />
 								Eraser
 							</button>
-							<button onClick={this.handleToolLocally} type="button" className="mybtn2" name="clear" value="clear">
+							<button
+								onClick={this.handleToolLocally}
+								type="button"
+								className="mybtn2"
+								name="clear"
+								value="clear"
+							>
 								<i className="fa fa-times mr-2" aria-hidden="true" />
 								Clear all
 							</button>

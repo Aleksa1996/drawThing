@@ -12,6 +12,8 @@ import {
 	TOOL_RECTANGLE
 } from './SketchPadTools';
 
+import GameTools from '../GameTools/GameTools';
+
 export const toolsMap = {
 	[TOOL_PENCIL]: Pencil,
 	[TOOL_LINE]: Line,
@@ -52,14 +54,25 @@ export default class SketchPad extends Component {
 		eraser: false
 	};
 
-	tool = null;
-	interval = null;
-	state = {};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			tool: props.tool,
+			size: props.size,
+			color: props.color,
+			fillColor: props.fillColor,
+			eraser: false
+		};
+
+		this.toolObj = null;
+		this.nterval = null;
+	}
 
 	componentDidMount() {
 		this.canvas = findDOMNode(this.canvasRef);
 		this.ctx = this.canvas.getContext('2d');
-		this.initTool(this.props.tool);
+		this.initTool(this.state.tool);
 	}
 
 	componentDidUpdate({ tool, items }) {
@@ -68,17 +81,15 @@ export default class SketchPad extends Component {
 				.filter(item => this.props.items.indexOf(item) === -1)
 				.forEach(item => {
 					this.initTool(item.tool);
-					this.tool.draw(item, this.props.animate);
+					this.toolObj.draw(item, this.props.animate);
 				});
-		} else {
-			this.clear();
 		}
 
-		this.initTool(this.props.tool);
+		this.initTool(this.state.tool);
 	}
 
 	initTool = tool => {
-		this.tool = this.props.toolsMap[tool](this.ctx);
+		this.toolObj = this.props.toolsMap[tool](this.ctx);
 	};
 
 	clear = () => {
@@ -86,27 +97,16 @@ export default class SketchPad extends Component {
 	};
 
 	onMouseDown = e => {
-		let {
-			color,
-			size,
-			fillColor,
-			onItemStart,
-			onDebouncedItemChange,
-			debounceTime
-		} = this.props;
+		const { onItemStart, onDebouncedItemChange, debounceTime } = this.props;
+		let { color, size, fillColor, eraser } = this.state;
 
-		if (this.props.eraser) {
+		if (eraser) {
 			this.initTool(TOOL_PENCIL);
 			color = '#ffffff';
 			size = 20;
 		}
 
-		const data = this.tool.onMouseDown(
-			...this.getCursorPosition(e),
-			color,
-			size,
-			fillColor
-		);
+		const data = this.toolObj.onMouseDown(...this.getCursorPosition(e), color, size, fillColor);
 		data && data[0] && onItemStart && onItemStart.apply(null, data);
 		if (onDebouncedItemChange) {
 			this.interval = setInterval(this.onDebouncedMove, debounceTime);
@@ -115,18 +115,15 @@ export default class SketchPad extends Component {
 
 	onDebouncedMove = () => {
 		if (
-			typeof this.tool.onDebouncedMouseMove == 'function' &&
+			typeof this.toolObj.onDebouncedMouseMove == 'function' &&
 			this.props.onDebouncedItemChange
 		) {
-			this.props.onDebouncedItemChange.apply(
-				null,
-				this.tool.onDebouncedMouseMove()
-			);
+			this.props.onDebouncedItemChange.apply(null, this.toolObj.onDebouncedMouseMove());
 		}
 	};
 
 	onMouseMove = e => {
-		const data = this.tool.onMouseMove(...this.getCursorPosition(e));
+		const data = this.toolObj.onMouseMove(...this.getCursorPosition(e));
 		data &&
 			data[0] &&
 			this.props.onEveryItemChange &&
@@ -134,11 +131,8 @@ export default class SketchPad extends Component {
 	};
 
 	onMouseUp = e => {
-		const data = this.tool.onMouseUp(...this.getCursorPosition(e));
-		data &&
-			data[0] &&
-			this.props.onCompleteItem &&
-			this.props.onCompleteItem.apply(null, data);
+		const data = this.toolObj.onMouseUp(...this.getCursorPosition(e));
+		data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
 		if (this.props.onDebouncedItemChange) {
 			clearInterval(this.interval);
 			this.interval = null;
@@ -150,10 +144,30 @@ export default class SketchPad extends Component {
 		return [e.clientX - left, e.clientY - top];
 	};
 
+	handleTool = ({ name, value }) => {
+		if (name == 'eraser') {
+			this.setState(prevState => ({ eraser: !prevState.eraser }));
+		} else if (name == 'clear') {
+			this.clear();
+		} else {
+			this.setState({ [name]: value });
+		}
+	};
+
 	render() {
-		const { width, height, canvasClassName, children } = this.props;
+		const { width, height, canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
+		const { tool, size, color, fillColor } = this.state;
 		return (
 			<React.Fragment>
+				<GameTools
+					defaultPosition={gtDefaultPosition}
+					show={gtShow}
+					handleTool={this.handleTool}
+					tool={tool}
+					size={size}
+					color={color}
+					fillColor={fillColor}
+				/>
 				<canvas
 					ref={canvas => {
 						this.canvasRef = canvas;
