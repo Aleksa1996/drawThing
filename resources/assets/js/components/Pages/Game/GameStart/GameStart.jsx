@@ -7,6 +7,7 @@ import GameStartAvatar from './GameStartAvatar';
 import GameStartRules from './GameStartRules';
 
 import { forOwn as _forOwn } from 'lodash';
+import GameCreatedRoom from './GameCreatedRoom/GameCreatedRoom';
 
 class GameStart extends Component {
 	constructor(props) {
@@ -36,19 +37,6 @@ class GameStart extends Component {
 				pristine: true
 			}
 		};
-	}
-
-	componentDidMount() {
-		// const socket = io('http://drawthing.com/', { transports: ['websocket'] });
-		// socket.on('error', error => {
-		// 	console.log(error);
-		// });
-		// socket.on('hello', data => {
-		// 	console.log(data);
-		// });
-		// socket.emit('hello', 'world');
-		// console.log(this.sketchpadRef.current.canvas);
-		console.log(this.props);
 	}
 
 	createAvatarImage = () =>
@@ -126,27 +114,35 @@ class GameStart extends Component {
 
 	render() {
 		const { avatarForm, usernameForm } = this.state;
-		const { formErrors } = this.props.gameStart;
+		const { formErrors, createdRoom } = this.props.gameStart;
+		console.log(this.props.gameStart);
 		return (
 			<div className="game-start-container container">
 				<div className="game-start-card rounded shadow">
-					<h1 className="game-start-heading">Start new game</h1>
+					{createdRoom ? (
+						<GameCreatedRoom />
+					) : (
+						<React.Fragment>
+							<h1 className="game-start-heading">Start new game</h1>
 
-					<GameStartAvatar
-						{...avatarForm}
-						sketchpadRef={this.sketchpadRef}
-						onCompleteDrawing={this.onCompleteDrawing}
-						formErrors={formErrors}
-					/>
+							<GameStartAvatar
+								{...avatarForm}
+								sketchpadRef={this.sketchpadRef}
+								onCompleteDrawing={this.onCompleteDrawing}
+								formErrors={formErrors}
+							/>
 
-					<GameStartUsername
-						{...usernameForm}
-						handleSubmit={this.handleSubmit}
-						handleChangeUsername={this.handleChangeUsername}
-						handleFocusUsername={this.handleFocusUsername}
-						formErrors={formErrors}
-					/>
+							<GameStartUsername
+								{...usernameForm}
+								handleSubmit={this.handleSubmit}
+								handleChangeUsername={this.handleChangeUsername}
+								handleFocusUsername={this.handleFocusUsername}
+								formErrors={formErrors}
+							/>
+						</React.Fragment>
+					)}
 				</div>
+
 				<GameStartRules />
 			</div>
 		);

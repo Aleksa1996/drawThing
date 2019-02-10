@@ -14,27 +14,12 @@ use SwooleTW\Http\Websocket\Facades\Websocket;
 
 Websocket::on('connect', function ($websocket, Request $request) {
     // called while socket on connect
-    var_dump('dadasda');
+    var_dump('connected');
 });
 
 Websocket::on('disconnect', function ($websocket) {
     // called while socket on disconnect
-    var_dump('dasdadad');
+    var_dump('disconnected');
 });
 
-Websocket::on('sayHello', function ($websocket, $data) {
-    var_dump($data);
-    $websocket->emit('sayHello', $data);
-});
-
-Websocket::on('hello', function ($websocket, $data) {
-    var_dump($data);
-    $websocket->emit('hello', $data);
-});
-
-
-Websocket::on('world', function ($websocket, $data) {
-    var_dump($data);
-    $websocket->emit('world', $data);
-});
-// Websocket::on('test', 'ExampleController@method');
+Websocket::on('CREATE_ROOM', '\App\Http\Controllers\Game\GameController@createRoom_ws');

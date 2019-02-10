@@ -13693,6 +13693,88 @@ body {
   padding: 15px 15px;
 }
 
+.page-start-game .game-start-container .game-start-card .game-created-container {
+  color: #25313d;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-title {
+  text-align: center;
+  color: #37ca8a;
+  font-size: 2rem;
+  padding: 5px 0px 15px;
+  border-bottom: 2px solid #e6e6e6;
+  text-transform: uppercase;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 20px 0px 25px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input {
+  width: 80%;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input input {
+  cursor: text;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input input:hover {
+  cursor: text;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input .helper-text {
+  color: #37ca8a;
+  padding-left: 2px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .mybtn2 {
+  padding: 5px 25px;
+  width: 67px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list {
+  padding: 0px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar {
+  display: block;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar img {
+  width: 50px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar .game-creater-user-leader {
+  position: absolute;
+  right: -7px;
+  top: 0px;
+  color: #37ca8a;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-username {
+  width: 270px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-kick .mybtn2 {
+  padding: 5px 25px;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-chat-container .game-board-chat-body {
+  max-height: 200px !important;
+}
+
 .page-start-game .game-start-container .game-start-rules-container {
   background: #25313d;
   color: #fff;

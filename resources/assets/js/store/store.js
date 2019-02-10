@@ -4,10 +4,17 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import api from '../api';
+
+import createWSMiddleware from './middlewares/websocketMiddleware';
+import crashReporter from './middlewares/crashReporter';
+
+import globals from '../globals';
+
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
 import commonReducer from './reducers/commonReducer';
 import gameStartReducer from './reducers/gameStartReducer';
+import gameReducer from './reducers/gameReducer';
 //Reducer imports end
 
 const isServer = !(
@@ -31,7 +38,8 @@ const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
 	commonReducer: commonReducer,
-	gameStartReducer: gameStartReducer
+	gameStartReducer: gameStartReducer,
+	gameReducer: gameReducer
 });
 
 let serverState = {};
@@ -42,7 +50,12 @@ if (!isServer) {
 	delete window.__PRELOADED_STATE__;
 }
 
-const middleware = [thunk.withExtraArgument(api), routerMiddleware(history)];
+const middleware = [
+	thunk.withExtraArgument(api),
+	routerMiddleware(history),
+	createWSMiddleware({ game: globals.url.host }),
+	crashReporter //ALWAYS KEEP IT ON END TO REPORT ALL
+];
 const store = createStore(
 	rootReducer,
 	serverState,

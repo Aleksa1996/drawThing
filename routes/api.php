@@ -29,7 +29,7 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     Route::group(['prefix' => 'game'], function () {
 
-        Route::post('createRoom', 'Game\GameController@createRoom');
+        Route::post('validateUser', 'Game\GameController@validateUser');
 
     });
 });

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Game;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use SwooleTW\Http\Websocket\Facades\Websocket;
+
 class GameController extends Controller
 {
     /**
@@ -83,7 +85,7 @@ class GameController extends Controller
         //
     }
 
-    public function createRoom(Request $request)
+    public function validateUser(Request $request)
     {
         $validatedData = $request->validate([
             'username' => 'required|min:3|max:16',
@@ -92,9 +94,18 @@ class GameController extends Controller
 
         $avatarPath = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
 
-        return response()->json(['gameStartData' => [
+        return response()->json([
             'username' => $request->username,
             'avatar' => asset($avatarPath)
-        ]]);
+        ], 201);
+    }
+
+
+    public function createRoom_ws($websocket, $data)
+    {
+        var_dump('usao');
+        $roomId = uniqid('room_', true);
+        $websocket->join($roomId);
+        $websocket->emit('ROOM_UPDATE', ['room' => ['id' => $roomId]]);
     }
 }
