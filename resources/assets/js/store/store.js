@@ -6,7 +6,9 @@ import { createBrowserHistory, createMemoryHistory } from 'history';
 import api from '../api';
 
 import createWSMiddleware from './middlewares/websocketMiddleware';
-import crashReporter from './middlewares/crashReporter';
+import { sockets } from '../store/middlewares/websocketMiddleware';
+
+import crashReporterMiddleware from './middlewares/crashReporterMiddleware';
 
 import globals from '../globals';
 
@@ -51,10 +53,10 @@ if (!isServer) {
 }
 
 const middleware = [
-	thunk.withExtraArgument(api),
+	thunk.withExtraArgument({ api, sockets }),
 	routerMiddleware(history),
 	createWSMiddleware({ game: globals.url.host }),
-	crashReporter //ALWAYS KEEP IT ON END TO REPORT ALL
+	crashReporterMiddleware //ALWAYS KEEP IT ON END TO REPORT ALL
 ];
 const store = createStore(
 	rootReducer,

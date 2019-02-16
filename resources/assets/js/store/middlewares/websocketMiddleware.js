@@ -7,7 +7,7 @@ import {
 } from '../../actions/types';
 
 let config = {};
-const sockets = {};
+export const sockets = {};
 
 function connect(url, socketID) {
 	sockets[socketID] = {
@@ -24,7 +24,7 @@ function subscribe(socketID, event, customActionType, dispatch) {
 	const actionType =
 		typeof customActionType == 'undefined' || !customActionType ? event : customActionType;
 
-	const listener = data => dispatch({ type: actionType, data });
+	const listener = data => dispatch({ type: actionType, payload: data });
 
 	sockets[socketID].listener = listener;
 	sockets[socketID].connection.on(event, listener);

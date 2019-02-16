@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createRoom, resetGameStartFormErrors } from '../../../../actions';
+import { createPlayer, resetGameStartFormErrors } from '../../../../actions';
 
 import GameStartUsername from './GameStartUsername';
 import GameStartAvatar from './GameStartAvatar';
@@ -67,7 +67,7 @@ class GameStart extends Component {
 			startType
 		};
 
-		this.props.createRoom(data);
+		this.props.createPlayer(data);
 	};
 
 	onCompleteDrawing = item => {
@@ -114,13 +114,12 @@ class GameStart extends Component {
 
 	render() {
 		const { avatarForm, usernameForm } = this.state;
-		const { formErrors, createdRoom } = this.props.gameStart;
-		console.log(this.props.gameStart);
+		const { room, player, formErrors } = this.props.gameStart;
 		return (
 			<div className="game-start-container container">
 				<div className="game-start-card rounded shadow">
-					{createdRoom ? (
-						<GameCreatedRoom />
+					{player.created && player.connectedToRoom && room.created ? (
+						<GameCreatedRoom player={player} room={room} />
 					) : (
 						<React.Fragment>
 							<h1 className="game-start-heading">Start new game</h1>
@@ -151,5 +150,5 @@ class GameStart extends Component {
 
 export default connect(
 	state => ({ gameStart: state.gameStartReducer }),
-	{ createRoom, resetGameStartFormErrors }
+	{ createPlayer, resetGameStartFormErrors }
 )(GameStart);

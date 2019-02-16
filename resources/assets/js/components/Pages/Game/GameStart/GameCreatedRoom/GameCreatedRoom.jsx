@@ -1,7 +1,7 @@
 import React from 'react';
 import GameCreatedChat from './GameCreatedChat';
 
-const GameCreatedRoom = props => {
+const GameCreatedRoom = ({ player, room }) => {
 	return (
 		<div className="game-created-container">
 			<h1 className="game-created-title">Successfully created room</h1>
@@ -20,17 +20,18 @@ const GameCreatedRoom = props => {
 				</button>
 			</div>
 			<ul className="game-created-user-list">
-				{[1, 2, 3, 4, 5].map(t => (
-					<li key={t} className="game-created-user-list-item">
+				{room.players.map(p => (
+					<li key={p} className="game-created-user-list-item">
 						<span className="game-created-user-avatar shadow">
-							<img src="/img/avatar/agf146R43RvWhtz68ELjeKaM6uV4tbOv1dL8XlTZ.png" alt="" />
+							{/* /img/avatar/agf146R43RvWhtz68ELjeKaM6uV4tbOv1dL8XlTZ.png */}
+							<img src={p.avatar} alt={p.username} />
 							<i
 								className="fa fa-star game-creater-user-leader"
 								aria-hidden="true"
 								title="Room leader"
 							/>
 						</span>
-						<span className="game-created-user-username">Username</span>
+						<span className="game-created-user-username">{p.username}</span>
 						<span className="game-created-user-kick">
 							<button className="mybtn2" title="Kick">
 								<i className="fa fa-times" aria-hidden="true" />

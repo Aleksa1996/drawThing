@@ -1,4 +1,4 @@
-const crashReporter = store => next => action => {
+const crashReporterMiddleware = store => next => action => {
 	try {
 		return next(action);
 	} catch (err) {
@@ -13,4 +13,4 @@ const crashReporter = store => next => action => {
 	}
 };
 
-export default crashReporter;
+export default crashReporterMiddleware;

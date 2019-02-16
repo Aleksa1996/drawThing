@@ -1,92 +1,150 @@
 import {
+	CREATING_PLAYER,
+	CREATE_PLAYER_SUCCESS,
+	CREATE_PLAYER_FAILURE,
+	//
+	CONNECTING_ROOM,
+	CONNECT_ROOM_SUCCESS,
+	CONNECT_ROOM_FAILURE,
+	//
 	CREATING_ROOM,
 	CREATE_ROOM_SUCCESS,
 	CREATE_ROOM_FAILURE,
-	RANDOMING_ROOM,
-	RANDOM_ROOM_SUCCESS,
-	RANDOM_ROOM_FAILURE,
-	GAME_START_FORM_ERROR_RESET,
-	ROOM_CONNECTING,
-	ROOM_CONNECT_SUCCESS,
-	ROOM_CONNECT_FAILURE
+	//
+	GAME_START_FORM_ERROR_RESET
 } from '../../actions/types';
 
 import { assign as fp_assign } from 'lodash/fp';
 
 import { mapValues as _mapValues } from 'lodash';
 
+import LocalStorage from '../../utils/classes/LocalStorage';
+
 const initialState = {
-	formErrors: { avatar: null, username: null },
-	creatingRoom: false,
-	createdRoom: false,
-	connectingRoom: false,
-	user: {
-		username: '',
-		avatar: '',
-		socket: null
+	formErrors: { avatar: null, username: null, generalError: '' },
+	//
+	player: {
+		id: null,
+		username: null,
+		avatar: null,
+		password: null,
+
+		creating: false,
+		created: false,
+
+		connectingToRoom: false,
+		connectedToRoom: false
 	},
+	//
 	room: {
-		users: [
+		id: null,
+		uuid: null,
+		created_at: null,
+
+		creating: false,
+		created: false,
+		//
+		players: [
 			{
-				username: '',
-				avatar: ''
+				id: null,
+				username: null,
+				avatar: null
 			}
-		],
-		chat: {
-			messages: []
-		}
+		]
 	}
 };
 
-const reducer = (state = initialState, action) => {
-	switch (action.type) {
-		case CREATING_ROOM: {
-			return { ...state, creatingRoom: true, createdRoom: false };
+const reducer = (state = initialState, { type, payload }) => {
+	switch (type) {
+		case '@@INIT': {
+			return { ...state, player: fp_assign(state.player, LocalStorage.get('player')) };
 		}
-		case CREATE_ROOM_SUCCESS: {
-			return {
-				...state,
-				user: fp_assign(state.user, action.payload),
-				creatingRoom: false,
-				createdRoom: true
-			};
-		}
-		case CREATE_ROOM_FAILURE: {
-			return {
-				...state,
-				formErrors: _mapValues(action.payload, v => v[0] || null),
-				creatingRoom: false,
-				createdRoom: false
-			};
-		}
+
 		case GAME_START_FORM_ERROR_RESET: {
 			return { ...state, formErrors: { avatar: null, username: null } };
 		}
 
-		case ROOM_CONNECTING: {
-			return { ...state, connectingRoom: true };
+		case CREATING_PLAYER: {
+			return { ...state, player: fp_assign(state.player, { creating: true }) };
 		}
 
-		case ROOM_CONNECT_SUCCESS: {
+		case CREATE_PLAYER_SUCCESS: {
+			const player = fp_assign(state.player, {
+				id: payload.id,
+				creating: false,
+				created: true,
+				username: payload.username,
+				avatar: payload.avatar,
+				password: payload.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.id
+			});
+
+			LocalStorage.save('player', player);
+
 			return {
 				...state,
-				user: fp_assign(state.user, { socket: action.payload }),
-				connectingRoom: false
+				player
 			};
 		}
 
-		case ROOM_CONNECT_FAILURE: {
-			return { ...state, user: action.payload, connectingRoom: false };
+		case CREATE_PLAYER_FAILURE: {
+			return {
+				...state,
+				formErrors: _mapValues(payload, v => v[0] || null),
+				player: fp_assign(state.player, {
+					creating: false,
+					created: false,
+					username: '',
+					avatar: ''
+				})
+			};
 		}
 
-		case 'ROOM_UPDATE': {
-			console.log(action);
+		case CONNECTING_ROOM: {
+			return { ...state, player: fp_assign(state.player, { connectingToRoom: true }) };
 		}
-		case 'ROOM_ERROR': {
-			console.log(action);
+
+		case CONNECT_ROOM_SUCCESS: {
+			return {
+				...state,
+				player: fp_assign(state.player, { connectingToRoom: false, connectedToRoom: true })
+			};
 		}
+
+		case CONNECT_ROOM_FAILURE: {
+			return {
+				...state,
+				player: fp_assign(state.player, { connectingToRoom: false, connectedToRoom: false })
+			};
+		}
+
+		case CREATING_ROOM: {
+			return { ...state, room: fp_assign(state.room, { creating: true }) };
+		}
+
+		case CREATE_ROOM_SUCCESS: {
+			return {
+				...state,
+				room: fp_assign(state.room, {
+					creating: false,
+					created: true,
+					...payload.room
+				})
+			};
+		}
+
+		case CREATE_ROOM_FAILURE: {
+			return {
+				...state,
+				room: fp_assign(state.room, {
+					creating: false,
+					created: false,
+					generalError: payload.message
+				})
+			};
+		}
+
 		default:
-			return { ...state };
+			return fp_assign(state, {});
 	}
 };
 

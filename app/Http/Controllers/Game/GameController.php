@@ -2,10 +2,21 @@
 
 namespace App\Http\Controllers\Game;
 
+use Validator;
+
+use App\Models\Game;
+use App\Models\Room;
+use App\Models\Player;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Resources\Room as RoomResource;
+
 use SwooleTW\Http\Websocket\Facades\Websocket;
+use App\Http\Resources\Player as PlayerResource;
+use SwooleTW\Http\Websocket\Facades\Room as WSRoom;
+
 
 class GameController extends Controller
 {
@@ -85,27 +96,92 @@ class GameController extends Controller
         //
     }
 
-    public function validateUser(Request $request)
+    public function createPlayer(Request $request)
     {
         $validatedData = $request->validate([
             'username' => 'required|min:3|max:16',
             'avatar' => 'required|file|image'
         ]);
 
-        $avatarPath = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
+        try {
+            // upload image
+            $avatarPath = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
 
-        return response()->json([
-            'username' => $request->username,
-            'avatar' => asset($avatarPath)
-        ], 201);
+            // creating new player
+            $player = new Player();
+            $player->username = $validatedData['username'];
+            $player->avatar = $avatarPath;
+            $player->score = 0;
+            $player->save();
+            // Generating password with id
+            $player->password = $validatedData['username'] . '_' . $player->id;
+            $player->save();
+
+            // Response Player resource
+            return response()->json(new PlayerResource($player), 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
 
     public function createRoom_ws($websocket, $data)
     {
-        var_dump('usao');
-        $roomId = uniqid('room_', true);
-        $websocket->join($roomId);
-        $websocket->emit('ROOM_UPDATE', ['room' => ['id' => $roomId]]);
+        try {
+            // validate recived data
+            $validator = Validator::make($data['player'], [
+                'id' => 'required|numeric|min:1',
+                'username' => 'required|exists:players,username',
+                'password' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                throw new \Exception('Id, username and password are required!');
+            }
+
+            // get current player
+            $playerData = $data['player'];
+            $player = Player::where([
+                ['id', '=', $playerData['id']],
+                ['username', '=', $playerData['username']],
+                ['password', '=', $playerData['password']]
+            ])->first();
+
+            if (empty($player)) {
+                throw new \Exception('Wrong credentials!');
+            }
+
+            // creating new room
+            $room = new Room();
+            $room->uuid = uniqid('room_', true);
+            $room->active = true;
+            $room->created_by = $playerData['id'];
+            $room->save();
+
+            // creating new game
+            $game = new Game();
+            $game->room_id = $room->id;
+            $game->save();
+
+            // appending websocket fd to player
+            $player->fd = $websocket->getSender();
+            $player->game_id = $game->id;
+            $player->save();
+
+            // joining player in created room
+            $websocket->join($room->uuid);
+
+            // eager load players in room
+            $room->loadMissing('players');
+            $websocket->emit('CREATE_ROOM_SUCCESS', ['room' => new RoomResource($room)]);
+
+        } catch (\Exception $e) {
+            $websocket->emit('CREATE_ROOM_FAILURE', [
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }
