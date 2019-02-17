@@ -15,7 +15,10 @@ import globals from '../globals';
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
 import commonReducer from './reducers/commonReducer';
-import gameStartReducer from './reducers/gameStartReducer';
+
+import playerReducer from './reducers/playerReducer';
+import roomReducer from './reducers/roomReducer';
+import chatReducer from './reducers/chatReducer';
 import gameReducer from './reducers/gameReducer';
 //Reducer imports end
 
@@ -39,9 +42,12 @@ const history = isServer
 const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
-	commonReducer: commonReducer,
-	gameStartReducer: gameStartReducer,
-	gameReducer: gameReducer
+	common: commonReducer,
+	// gameStartReducer
+	player: playerReducer,
+	room: roomReducer,
+	chat: chatReducer,
+	game: gameReducer
 });
 
 let serverState = {};

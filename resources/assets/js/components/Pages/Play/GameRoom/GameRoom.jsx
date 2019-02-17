@@ -1,7 +1,7 @@
 import React from 'react';
-import GameCreatedChat from './GameCreatedChat';
+import GameRoomChat from './GameRoomChat';
 
-const GameCreatedRoom = ({ player, room }) => {
+const GameRoom = ({ player, room, chat, handleChatSend }) => {
 	return (
 		<div className="game-created-container">
 			<h1 className="game-created-title">Successfully created room</h1>
@@ -41,7 +41,7 @@ const GameCreatedRoom = ({ player, room }) => {
 				))}
 			</ul>
 			<div className="game-created-chat-container">
-				<GameCreatedChat />
+				<GameRoomChat room={room} chat={chat} handleChatSend={handleChatSend} />
 			</div>
 			<div className="text-center">
 				<button className="mybtn2">
@@ -53,4 +53,4 @@ const GameCreatedRoom = ({ player, room }) => {
 	);
 };
 
-export default GameCreatedRoom;
+export default GameRoom;

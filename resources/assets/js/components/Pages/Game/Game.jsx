@@ -10,21 +10,9 @@ import GameChat from './GameChat/GameChat';
 
 import GameTools from './GameCanvas/GameTools/GameTools';
 
-import GameStart from './GameStart/GameStart';
-
 class Game extends Component {
 	state = {};
 	render() {
-		let isLogged = false;
-
-		if (!isLogged) {
-			return (
-				<Page title="Play game - Drawthing" className="container-fluid page-start-game">
-					<GameStart />
-				</Page>
-			);
-		}
-
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-game">
 				<GameLayout>
@@ -34,7 +22,6 @@ class Game extends Component {
 						<GameCanvas />
 						<GameChat />
 					</div>
-					<GameTools />
 				</GameLayout>
 			</Page>
 		);

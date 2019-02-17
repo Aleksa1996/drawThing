@@ -184,4 +184,18 @@ class GameController extends Controller
             ]);
         }
     }
+
+    public function sendMessageRoom_ws($websocket, $data)
+    {
+        try {
+            // { id: 1, text: '', player_id: 0 }
+            $message = ['message' => ['id' => uniqid('message', true), 'text' => $data['message']['text'], 'player_id' => $data['player']['id']]];
+            // $websocket->broadcast()->to($data['room']['uuid'])->emit('MESSAGE_ROOM_RECEIVE', $message);
+            $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
+        } catch (\Exception $e) {
+            $websocket->emit('SEND_MESSAGE_ROOM_FAILURE', [
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

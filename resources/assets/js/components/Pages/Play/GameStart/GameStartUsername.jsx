@@ -9,7 +9,7 @@ const GameStartUsername = ({
 	handleChangeUsername,
 	handleSubmit,
 	handleFocusUsername,
-	formErrors
+	errors
 }) => {
 	return (
 		<div className="game-start-username-form-container">
@@ -40,12 +40,10 @@ const GameStartUsername = ({
 					</div>
 
 					<div
-						className={`invalid-feedback text-left ${
-							formErrors.username && valid ? 'd-block' : ''
-						}`}
+						className={`invalid-feedback text-left ${errors.username && valid ? 'd-block' : ''}`}
 					>
 						<i className="fa fa-exclamation-circle" aria-hidden="true" /> &nbsp;
-						{formErrors.username}
+						{errors.username}
 					</div>
 				</div>
 

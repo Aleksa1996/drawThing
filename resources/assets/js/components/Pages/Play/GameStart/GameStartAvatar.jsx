@@ -1,8 +1,8 @@
 import React from 'react';
 
-import SketchPad from '../GameCanvas/SketchPad/SketchPad';
+import SketchPad from '../../Game/GameCanvas/SketchPad/SketchPad';
 
-const GameStartAvatar = ({ onCompleteDrawing, sketchpadRef, valid, formErrors, ...avatarForm }) => {
+const GameStartAvatar = ({ onCompleteDrawing, sketchpadRef, valid, errors, ...avatarForm }) => {
 	return (
 		<div className="game-start-canvas-container">
 			<SketchPad
@@ -13,13 +13,13 @@ const GameStartAvatar = ({ onCompleteDrawing, sketchpadRef, valid, formErrors, .
 			>
 				<small
 					className={`help-text d-block text-center ${
-						!formErrors.avatar && valid ? '' : 'text-danger'
+						!errors.avatar && valid ? '' : 'text-danger'
 					}`}
 				>
-					{!formErrors.avatar && valid ? null : (
+					{!errors.avatar && valid ? null : (
 						<i className="fa fa-exclamation-circle mr-2" aria-hidden="true" />
 					)}
-					{formErrors.avatar && valid ? formErrors.avatar : 'Draw your avatar'}
+					{errors.avatar && valid ? errors.avatar : 'Draw your avatar'}
 				</small>
 			</SketchPad>
 		</div>
