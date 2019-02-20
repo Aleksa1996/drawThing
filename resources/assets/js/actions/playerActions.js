@@ -1,8 +1,5 @@
 import { CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE } from './types';
-
-import { ws_connect, ws_subscribe, ws_emit } from './websocketActions';
-
-import { connectRoom } from '../actions/roomActions';
+import { createRoom } from './roomActions';
 
 export const createPlayer = data => (dispatch, getState, { api, sockets }) => {
 	dispatch({ type: CREATING_PLAYER });
@@ -13,7 +10,7 @@ export const createPlayer = data => (dispatch, getState, { api, sockets }) => {
 
 	return api.game.createPlayer(fData).then(response => {
 		dispatch(createPlayerSuccess(response.data));
-		dispatch(connectRoom());
+		dispatch(createRoom());
 	});
 };
 

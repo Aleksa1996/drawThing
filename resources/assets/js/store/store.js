@@ -14,8 +14,8 @@ import globals from '../globals';
 
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
+import socketReducer from './reducers/socketReducer';
 import commonReducer from './reducers/commonReducer';
-
 import playerReducer from './reducers/playerReducer';
 import roomReducer from './reducers/roomReducer';
 import chatReducer from './reducers/chatReducer';
@@ -44,6 +44,7 @@ const rootReducer = combineReducers({
 	form: formReducer,
 	common: commonReducer,
 	// gameStartReducer
+	socket: socketReducer,
 	player: playerReducer,
 	room: roomReducer,
 	chat: chatReducer,

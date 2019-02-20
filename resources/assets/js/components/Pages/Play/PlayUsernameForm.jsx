@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const GameStartUsername = ({
+const PlayUsernameForm = ({
 	username,
 	focused,
 	valid,
@@ -78,4 +78,4 @@ const GameStartUsername = ({
 	);
 };
 
-export default GameStartUsername;
+export default PlayUsernameForm;

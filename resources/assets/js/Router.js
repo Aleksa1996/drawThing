@@ -26,6 +26,7 @@ import About from './components/Pages/About/About';
 import Contact from './components/Pages/Contact/Contact';
 import Game from './components/Pages/Game/Game';
 import Play from './components/Pages/Play/Play';
+import Room from './components/Pages/Room/Room';
 
 export const routes = [
 	{
@@ -56,6 +57,12 @@ export const routes = [
 		id: v4(),
 		path: '/play',
 		component: Play,
+		exact: true
+	},
+	{
+		id: v4(),
+		path: '/room',
+		component: Room,
 		exact: true
 	}
 ];

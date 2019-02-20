@@ -1,8 +1,7 @@
 import React from 'react';
+import SketchPad from '../Game/GameCanvas/SketchPad/SketchPad';
 
-import SketchPad from '../../Game/GameCanvas/SketchPad/SketchPad';
-
-const GameStartAvatar = ({ onCompleteDrawing, sketchpadRef, valid, errors, ...avatarForm }) => {
+const PlayAvatarForm = ({ onCompleteDrawing, sketchpadRef, valid, errors, ...avatarForm }) => {
 	return (
 		<div className="game-start-canvas-container">
 			<SketchPad
@@ -26,4 +25,4 @@ const GameStartAvatar = ({ onCompleteDrawing, sketchpadRef, valid, errors, ...av
 	);
 };
 
-export default GameStartAvatar;
+export default PlayAvatarForm;

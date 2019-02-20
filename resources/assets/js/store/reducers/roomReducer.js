@@ -1,12 +1,4 @@
-import {
-	CONNECTING_ROOM,
-	CONNECT_ROOM_SUCCESS,
-	CONNECT_ROOM_FAILURE,
-	//
-	CREATING_ROOM,
-	CREATE_ROOM_SUCCESS,
-	CREATE_ROOM_FAILURE
-} from '../../actions/types';
+import { CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
 
@@ -14,10 +6,6 @@ const initialState = {
 	id: null,
 	uuid: null,
 	created_at: null,
-
-	connecting: false,
-	connected: false,
-	connectionError: null,
 
 	creating: false,
 	created: false,
@@ -28,22 +16,6 @@ const initialState = {
 
 const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case CONNECTING_ROOM: {
-			return updateRoom(state, { connecting: true });
-		}
-
-		case CONNECT_ROOM_SUCCESS: {
-			return updateRoom(state, { connecting: false, connected: true });
-		}
-
-		case CONNECT_ROOM_FAILURE: {
-			return updateRoom(state, {
-				connecting: false,
-				connected: false,
-				connectionError: payload.message
-			});
-		}
-
 		case CREATING_ROOM: {
 			return updateRoom(state, { creating: true });
 		}

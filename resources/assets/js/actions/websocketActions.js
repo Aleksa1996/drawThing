@@ -1,4 +1,12 @@
-import { CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS } from './types';
+import {
+	CONNECT_WS,
+	DISCONNECT_WS,
+	SUBSCRIBE_WS,
+	UNSUBSCRIBE_WS,
+	EMIT_WS,
+	CONNECT_SOCKET_SUCCESS,
+	CONNECT_SOCKET_FAILURE
+} from './types';
 
 export const ws_connect = socketID => ({ type: CONNECT_WS, socketID });
 
@@ -26,3 +34,11 @@ export const ws_emit = (socketID, event, data = {}) => ({
 	event,
 	data
 });
+
+export const ws_make_connection = socket => (dispatch, getState, { api, sockets }) => {
+	dispatch(ws_connect(socket));
+
+	dispatch(ws_subscribe(socket, 'connect', CONNECT_SOCKET_SUCCESS));
+	dispatch(ws_subscribe(socket, 'connect_error', CONNECT_SOCKET_FAILURE));
+	dispatch(ws_subscribe(socket, 'error', CONNECT_SOCKET_FAILURE));
+};

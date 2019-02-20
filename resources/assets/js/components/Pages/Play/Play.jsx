@@ -1,52 +1,159 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { createPlayer, sendMessageRoom, subscribeToRoomChat } from '../../../actions';
+import { createPlayer, ws_make_connection } from '../../../actions';
+import { push } from 'connected-react-router';
 
 import Page from '../Page';
+import PlayAvatarForm from './PlayAvatarForm';
+import PlayUsernameForm from './PlayUsernameForm';
+import PlayRules from './PlayRules';
 
-import GameStart from './GameStart/GameStart';
-import GameStartRules from './GameStart/GameStartRules';
-
-import GameRoom from './GameRoom/GameRoom';
+import { mapValues as _mapValues } from 'lodash';
+import { merge as _fp_merge } from 'lodash/fp';
 
 class Play extends Component {
 	constructor(props) {
 		super(props);
-		this.subscribedToRoomChat = false;
+
+		this.sketchpadRef = React.createRef();
+
+		this.state = {
+			avatarForm: {
+				width: 300,
+				height: 300,
+				tool: 'pencil',
+				size: 5,
+				color: '#151515',
+				fillColor: '#fdffff',
+				items: [],
+				animate: false,
+				eraser: false,
+				gtDefaultPosition: { x: -24, y: -155 },
+				gtShow: false,
+				valid: false
+			},
+			usernameForm: {
+				username: '',
+				focused: false,
+				valid: false,
+				pristine: true
+			},
+			errors: { avatar: null, username: null }
+		};
 	}
 
-	handleChatSend = e => {
-		e.preventDefault();
-		const message = e.target.elements['game-board-chat-input'].value;
+	componentDidMount() {
+		this.props.ws_make_connection('game');
+	}
 
-		if (!this.subscribedToRoomChat) {
-			this.props.subscribeToRoomChat();
-			this.subscribedToRoomChat = true;
+	componentDidUpdate(prevProps) {
+		const { id, creating, created, createError } = this.props.room;
+		if (prevProps.room.id != id && creating == false && created && createError == null) {
+			this.props.push('/room');
 		}
+	}
 
-		this.props.sendMessageRoom({ text: message });
-		e.target.reset();
+	handleSubmit = async e => {
+		const { username, valid: usernameFormValid } = this.state.usernameForm;
+		const { valid: avatarFormValid } = this.state.avatarForm;
+		const { value: startType } = e.target;
+
+		e.preventDefault();
+
+		if (!usernameFormValid) {
+			return this.setState(prevState =>
+				_fp_merge(prevState, { usernameForm: { pristine: false } })
+			);
+		} else if (!avatarFormValid) return;
+
+		const avatar = await this.createAvatarImage();
+
+		const data = {
+			username,
+			avatar,
+			startType
+		};
+
+		this.props.createPlayer(data).catch(error => {
+			console.log(error);
+
+			this.setState(prevState =>
+				_fp_merge(prevState, {
+					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
+				})
+			);
+		});
+	};
+
+	createAvatarImage = () =>
+		new Promise((resolve, reject) => {
+			this.sketchpadRef.current.canvas.toBlob(blob => {
+				resolve(blob);
+			});
+		});
+
+	onCompleteDrawing = item => {
+		this.setState(prevState =>
+			_fp_merge(prevState, {
+				avatarForm: { items: prevState.avatarForm.items.concat([item]), valid: true },
+				errors: { avatar: null }
+			})
+		);
+	};
+
+	handleChangeUsername = e => {
+		const {
+			target: { value: username }
+		} = e;
+
+		this.setState(prevState =>
+			_fp_merge(prevState, {
+				usernameForm: { username, valid: username.length > 3 },
+				errors: { username: null }
+			})
+		);
+	};
+
+	handleFocusUsername = e => {
+		const { type } = e;
+
+		this.setState(prevState =>
+			_fp_merge(prevState, {
+				usernameForm: {
+					focused: type === 'focus',
+					pristine: type === 'blur' ? false : prevState.usernameForm.pristine
+				}
+			})
+		);
 	};
 
 	render() {
-		const { player, room, chat, createPlayer } = this.props;
-		// console.log(player);
-		// console.log(room);
-		// console.log(chat);
-		let renderCmp = <GameStart createPlayer={createPlayer} />;
-
-		if (room.connected && room.created) {
-			renderCmp = (
-				<GameRoom player={player} room={room} chat={chat} handleChatSend={this.handleChatSend} />
-			);
-		}
+		const { avatarForm, usernameForm, errors } = this.state;
+		const { player } = this.props;
 
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-start-game">
 				<div className="game-start-container container">
-					<div className="game-start-card rounded shadow">{renderCmp}</div>
-					<GameStartRules />
+					<div className="game-start-card rounded shadow">
+						<h1 className="game-start-heading">Start new game</h1>
+
+						<PlayAvatarForm
+							{...avatarForm}
+							sketchpadRef={this.sketchpadRef}
+							onCompleteDrawing={this.onCompleteDrawing}
+							errors={errors}
+						/>
+
+						<PlayUsernameForm
+							{...usernameForm}
+							handleSubmit={this.handleSubmit}
+							handleChangeUsername={this.handleChangeUsername}
+							handleFocusUsername={this.handleFocusUsername}
+							errors={errors}
+						/>
+					</div>
+					<PlayRules />
 				</div>
 			</Page>
 		);
@@ -54,6 +161,6 @@ class Play extends Component {
 }
 
 export default connect(
-	state => ({ player: state.player, room: state.room, chat: state.chat }),
-	{ createPlayer, sendMessageRoom, subscribeToRoomChat }
+	state => ({ player: state.player, room: state.room }),
+	{ createPlayer, ws_make_connection, push }
 )(Play);

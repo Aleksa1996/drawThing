@@ -13720,6 +13720,16 @@ body {
   cursor: text;
 }
 
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input input::-moz-selection {
+  background: #37ca8a;
+  color: #fff;
+}
+
+.page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input input::selection {
+  background: #37ca8a;
+  color: #fff;
+}
+
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-join-link .game-created-join-link-input input:hover {
   cursor: text;
 }
@@ -13772,6 +13782,7 @@ body {
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-chat-container .game-board-chat-body {
   max-height: 200px !important;
+  min-height: 200px !important;
 }
 
 .page-start-game .game-start-container .game-start-rules-container {

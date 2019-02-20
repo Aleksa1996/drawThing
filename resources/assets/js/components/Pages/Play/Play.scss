@@ -79,6 +79,10 @@
 						width: 80%;
 						input {
 							cursor: text;
+							&::selection {
+								background: $mytheme-color-first;
+								color: #fff;
+							}
 							&:hover {
 								cursor: text;
 							}
@@ -129,6 +133,7 @@
 				.game-created-chat-container {
 					.game-board-chat-body {
 						max-height: 200px !important;
+						min-height: 200px !important;
 					}
 				}
 			}

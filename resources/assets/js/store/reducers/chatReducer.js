@@ -19,9 +19,7 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateChat(state, { sending: true });
 		}
 		case SEND_MESSAGE_ROOM_SUCCESS: {
-			// const newMessages = addMessage(state.messages, payload.message);
-			console.log(payload);
-			const newMessages = [...state.messages, payload.message];
+			const newMessages = addMessage(state.messages, payload.message);
 			return updateChat(state, { sending: false, messages: newMessages });
 		}
 		case SEND_MESSAGE_ROOM_FAILURE: {

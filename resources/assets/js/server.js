@@ -37,23 +37,26 @@ const dataRequirements = routes
 	.filter(comp => comp.serverFetch) // check if components have data requirement
 	.map(comp => store.dispatch(comp.serverFetch()));
 
-Promise.all(dataRequirements).then(() => {
-	//dataRequirements will be used somewhere to pass allong state
-	const jsx = (
-		<Provider store={store}>
-			<StaticRouter context={routerContext} location={context.url}>
-				<App />
-			</StaticRouter>
-		</Provider>
-	);
-	const reactDom = renderToString(jsx);
-	const reduxState = store.getState();
-	const helmetData = Helmet.renderStatic();
-	// enabling it again so we can output rendered html to PHP
-	___loggger___.enableLogger();
+Promise.all(dataRequirements)
+	.then(() => {
+		//dataRequirements will be used somewhere to pass allong state
+		const jsx = (
+			<Provider store={store}>
+				<StaticRouter context={routerContext} location={context.url}>
+					<App />
+				</StaticRouter>
+			</Provider>
+		);
 
-	dispatch(htmlTemplate(reactDom, reduxState, helmetData));
-});
+		const reactDom = renderToString(jsx);
+		const reduxState = store.getState();
+		const helmetData = Helmet.renderStatic();
+
+		// enabling it again so we can output rendered html to PHP
+		___loggger___.enableLogger();
+		dispatch(htmlTemplate(reactDom, reduxState, helmetData));
+	})
+	.catch(e => console.log(e));
 
 function htmlTemplate(reactDom, reduxState, helmetData) {
 	const js_bundles = context.js_bundle.map(b => `<script src="${b}"></script>`);
@@ -75,7 +78,7 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
 
         <body>
             <div id="react-app">${reactDom}</div>
-            <script>
+			<script>
 				window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)};
 				window.context = {"__global__":${JSON.stringify(context.__global__)}};
             </script>
