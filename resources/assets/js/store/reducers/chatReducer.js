@@ -10,8 +10,18 @@ import { assign as _fp_assign } from 'lodash/fp';
 const initialState = {
 	messages: [],
 	sending: false,
-
-	chatError: null
+	//
+	chatError: null,
+	//
+	emojis: [
+		{ text: '@emoji:fa-smile-o', class: 'fa-smile-o' },
+		{ text: '@emoji:fa-meh-o', class: 'fa-meh-o' },
+		{ text: '@emoji:fa-frown-o', class: 'fa-frown-o' },
+		{ text: '@emoji:fa-hand-peace-o', class: 'fa-hand-peace-o' },
+		{ text: '@emoji:fa-thumbs-o-up', class: 'fa-thumbs-o-up' },
+		{ text: '@emoji:fa-thumbs-o-down', class: 'fa-thumbs-o-down' },
+		{ text: '@emoji:fa-heart-o', class: 'fa-heart-o' }
+	]
 };
 
 const reducer = (state = initialState, { type, payload }) => {

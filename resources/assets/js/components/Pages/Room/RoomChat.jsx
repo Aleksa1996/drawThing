@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { v4 } from 'uuid';
+
+import { split as _split, find as _find } from 'lodash';
 
 const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) => {
 	return (
@@ -16,7 +19,23 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 										<span className="text-nowrap">{player.username}:</span>
 									</div>
 									<div className="game-board-chat-text rounded">
-										<p className="m-0">{m.text}</p>
+										<p className="m-0">
+											{_split(
+												chat.emojis.reduce(
+													(accumulator, currentValue) =>
+														accumulator.replace(currentValue.text, ` ${currentValue.text} `),
+													m.text
+												),
+												/\s+/g
+											).map(word => {
+												const found = _find(chat.emojis, v => v.text == word.trim());
+												return found ? (
+													<i key={v4()} className={`fa ${found.class} mx-2`} />
+												) : (
+													` ${word} `
+												);
+											})}
+										</p>
 									</div>
 								</div>
 							</div>
@@ -48,27 +67,11 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 							</a>
 							<div className="dropdown-menu dropdown-menu-right">
 								<ul>
-									<li>
-										<i className="fa fa-smile-o" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-meh-o" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-frown-o" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-hand-peace-o" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-thumbs-o-up" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-thumbs-o-down" aria-hidden="true" />
-									</li>
-									<li>
-										<i className="fa fa-heart-o" aria-hidden="true" />
-									</li>
+									{chat.emojis.map(emoji => (
+										<li key={v4()} onClick={e => handleChatSend(e, emoji.text)}>
+											<i className={`fa ${emoji.class}`} aria-hidden="true" />
+										</li>
+									))}
 								</ul>
 							</div>
 						</div>

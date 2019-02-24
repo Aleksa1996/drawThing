@@ -13753,6 +13753,7 @@ body {
   display: flex;
   justify-content: left;
   align-items: center;
+  margin: 10px 0px;
 }
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar {

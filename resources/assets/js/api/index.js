@@ -1,7 +1,9 @@
-import * as game from './game';
+import * as player from './player';
+import * as room from './room';
 
 const api = {
-	game: game
+	player,
+	room
 };
 
 export default api;

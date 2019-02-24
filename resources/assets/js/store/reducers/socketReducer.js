@@ -1,15 +1,17 @@
 import {
 	CONNECTING_SOCKET,
 	CONNECT_SOCKET_SUCCESS,
-	CONNECT_SOCKET_FAILURE
+	CONNECT_SOCKET_FAILURE,
+	CONNECT_SOCKET_DATA
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
 
 const initialState = {
 	socket: null,
+	fd: null,
 	created_at: null,
-
+	//
 	connecting: false,
 	connected: false,
 	connectionError: null
@@ -22,7 +24,11 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case CONNECT_SOCKET_SUCCESS: {
-			return updateSocketState(state, { connecting: false, connected: true });
+			return updateSocketState(state, {
+				connecting: false,
+				connected: true,
+				created_at: new Date()
+			});
 		}
 
 		case CONNECT_SOCKET_FAILURE: {
@@ -31,6 +37,10 @@ const reducer = (state = initialState, { type, payload }) => {
 				connected: false,
 				connectionError: payload.message
 			});
+		}
+
+		case CONNECT_SOCKET_DATA: {
+			return updateSocketState(state, { fd: payload.fd });
 		}
 		default:
 			return { ...state };

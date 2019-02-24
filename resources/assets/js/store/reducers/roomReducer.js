@@ -38,9 +38,9 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case CREATE_ROOM_FAILURE: {
-			return updateRoom(state, { creating: false, created: false, createError: payload.message });
+			return updateRoom(state, { creating: false, created: false, createError: payload });
 		}
-
+		//
 		case JOINING_ROOM: {
 			return updateRoom(state, { joining: true });
 		}
@@ -50,7 +50,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case JOIN_ROOM_FAILURE: {
-			return updateRoom(state, { joining: false, joined: false, joinError: payload.message });
+			return updateRoom(state, { joining: false, joined: false, joinError: payload });
 		}
 
 		case PLAYER_JOINED_ROOM: {

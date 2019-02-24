@@ -27,9 +27,23 @@ Route::group(['middleware' => 'api'], function ($router) {
         Route::post('me', 'Auth\AuthController@me');
     });
 
-    Route::group(['prefix' => 'game'], function () {
-
-        Route::post('createPlayer', 'Game\GameController@createPlayer');
-
+    Route::group(['prefix' => 'players'], function () {
+        Route::get('/', 'PlayerController@index');
+        Route::get('/{id}', 'PlayerController@show');
+        Route::post('/', 'PlayerController@store');
+        Route::put('/', 'PlayerController@update');
+        Route::delete('/', 'PlayerController@destroy');
     });
+
+    Route::group(['prefix' => 'rooms'], function () {
+        Route::get('/', 'RoomController@index');
+        Route::get('/{id}', 'RoomController@show');
+        Route::post('/', 'RoomController@store');
+        Route::put('/', 'RoomController@update');
+        Route::delete('/', 'RoomController@destroy');
+
+        Route::post('/join', 'RoomController@join');
+    });
+
+    // Route::group(['prefix' => 'game'], function () {});
 });

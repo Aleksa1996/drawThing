@@ -14,6 +14,7 @@ use SwooleTW\Http\Websocket\Facades\Websocket;
 
 Websocket::on('connect', function ($websocket, Request $request) {
     // called while socket on connect
+    $websocket->emit('CONNECT_SOCKET_DATA', ['fd' => $websocket->getSender()]);
     var_dump('connected');
 });
 
@@ -22,10 +23,4 @@ Websocket::on('disconnect', function ($websocket) {
     var_dump('disconnected');
 });
 
-Websocket::on('CREATE_ROOM', '\App\Http\Controllers\Game\GameController@createRoom_ws');
-
 Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\Game\GameController@sendMessageRoom_ws');
-
-
-Websocket::on('JOIN_ROOM', '\App\Http\Controllers\Game\GameController@joinRoom_ws');
-

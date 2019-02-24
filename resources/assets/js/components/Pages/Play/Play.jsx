@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { createPlayer, ws_make_connection } from '../../../actions';
+import { ws_make_connection, createPlayer, createRoom, joinRoom } from '../../../actions';
 import { push } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
 
@@ -20,6 +20,8 @@ class Play extends Component {
 
 		this.roomUUID = this.props.match.params.roomUUID;
 		this.hasRoomUUID = typeof this.roomUUID !== 'undefined' && this.roomUUID;
+
+		this.subscribeToSocketConnect = false;
 
 		this.state = {
 			avatarForm: {
@@ -42,12 +44,15 @@ class Play extends Component {
 				valid: false,
 				pristine: true
 			},
-			errors: { avatar: null, username: null }
+			errors: { avatar: null, username: null, general: null }
 		};
 	}
 
 	componentDidMount() {
-		this.props.ws_make_connection('game');
+		if (!this.subscribeToSocketConnect) {
+			this.props.ws_make_connection('game');
+			this.subscribeToSocketConnect = true;
+		}
 	}
 
 	componentDidUpdate(prevProps) {
@@ -76,18 +81,35 @@ class Play extends Component {
 
 		const data = {
 			username,
-			avatar,
-			startType,
-			routerMatch: this.props.match
+			avatar
 		};
 
-		this.props.createPlayer(data).catch(error => {
-			console.log(error);
+		this.props
+			.createPlayer(data)
+			.then(response => {
+				switch (startType) {
+					case 'create_room': {
+						this.props.createRoom();
+						break;
+					}
+					case 'random_room': {
+						break;
+					}
+					case 'join_room': {
+						this.props.joinRoom({ room: { uuid: this.props.match.params.roomUUID } });
+						break;
+					}
+					default:
+						break;
+				}
+			})
+			.catch(error => {
+				console.log(error);
 
-			this.setState(prevState => ({
-				errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
-			}));
-		});
+				this.setState(prevState => ({
+					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
+				}));
+			});
 	};
 
 	createAvatarImage = () =>
@@ -133,8 +155,7 @@ class Play extends Component {
 
 	render() {
 		const { avatarForm, usernameForm, errors } = this.state;
-		const { player } = this.props;
-		console.log(this.state);
+		const { player, room } = this.props;
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-start-game">
 				<div className="game-start-container container">
@@ -156,6 +177,12 @@ class Play extends Component {
 							errors={errors}
 							hasRoomUUID={this.hasRoomUUID}
 						/>
+						{errors.general && (
+							<small class="help-text d-block text-center text-danger">
+								<i class="fa fa-exclamation-circle mr-2" aria-hidden="true" />
+								{errors.general}
+							</small>
+						)}
 					</div>
 					<PlayRules />
 				</div>
@@ -165,6 +192,6 @@ class Play extends Component {
 }
 
 export default connect(
-	state => ({ player: state.player, room: state.room }),
-	{ createPlayer, ws_make_connection, push }
+	state => ({ player: state.player, room: state.room, socket: state.socket }),
+	{ ws_make_connection, createPlayer, createRoom, joinRoom, push }
 )(Play);

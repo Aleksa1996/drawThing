@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-	connectRoom,
-	sendMessageRoom,
-	subscribeToCreateRoom,
-	subscribeToRoomChat
-} from '../../../actions';
+import { connectRoom, sendMessageRoom, subscribeToRoomChat } from '../../../actions';
 import { push } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
@@ -27,7 +22,7 @@ class Room extends Component {
 	}
 
 	componentDidMount() {
-		const { room, push, socket, subscribeToCreateRoom, subscribeToRoomChat } = this.props;
+		const { room, push, socket, subscribeToRoomChat } = this.props;
 
 		const roomModel = new RoomModel(room);
 		try {
@@ -38,7 +33,7 @@ class Room extends Component {
 				this.subscribedToRoomChat = true;
 			}
 		} catch (e) {
-			this.props.push('/play');
+			push('/play');
 		}
 	}
 
@@ -48,12 +43,20 @@ class Room extends Component {
 		}
 	}
 
-	handleChatSend = e => {
+	handleChatSend = (e, additionalData = null) => {
 		e.preventDefault();
-		const message = e.target.elements['game-board-chat-input'].value;
+		let message = '';
+		// Message comes from text input
+		if (e.type == 'submit') {
+			message = e.target.elements['game-board-chat-input'].value;
+			e.target.reset();
+		}
+		// Message comes from emoji dropdown
+		else if (e.type == 'click' && additionalData) {
+			message = additionalData;
+		}
 
 		this.props.sendMessageRoom({ text: message });
-		e.target.reset();
 	};
 
 	scrollToBottom = () => {
@@ -117,5 +120,5 @@ class Room extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, chat: state.chat, socket: state.socket }),
-	{ connectRoom, sendMessageRoom, push, subscribeToCreateRoom, subscribeToRoomChat }
+	{ connectRoom, sendMessageRoom, push, subscribeToRoomChat }
 )(Room);

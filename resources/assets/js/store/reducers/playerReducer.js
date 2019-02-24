@@ -27,10 +27,11 @@ const reducer = (state = initialState, { type, payload }) => {
 		case CREATE_PLAYER_SUCCESS: {
 			const newPlayer = {
 				...state.player,
-				...payload,
+				...payload.player,
 				creating: false,
 				created: true,
-				password: payload.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.id
+				password:
+					payload.player.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.player.id
 			};
 
 			// save player in localstorage
