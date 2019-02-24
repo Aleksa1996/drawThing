@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "/js/client.js": "/js/client.js",
     "/css/app.css": "/css/app.css",
     "/js/client.js.map": "/js/client.js.map",
@@ -7,4 +8,14 @@
     "/js/manifest.js.map": "/js/manifest.js.map",
     "/js/vendor.js": "/js/vendor.js",
     "/js/vendor.js.map": "/js/vendor.js.map"
+=======
+    "/js/client.js": "/js/client.js?id=08b7f58e962f2f308130",
+    "/css/app.css": "/css/app.css?id=7f8a4123522aabda2322",
+    "/js/client.js.map": "/js/client.js.map?id=41b4fa9fdbfd69f2a949",
+    "/css/app.css.map": "/css/app.css.map?id=e317a448876e0f19bbf2",
+    "/js/manifest.js": "/js/manifest.js?id=52ecc173b17011b08872",
+    "/js/manifest.js.map": "/js/manifest.js.map?id=a50cb30582ea8753b66b",
+    "/js/vendor.js": "/js/vendor.js?id=c2f0e40b6a7b30ef8b41",
+    "/js/vendor.js.map": "/js/vendor.js.map?id=10744fbfd76c5baf944b"
+>>>>>>> develop
 }

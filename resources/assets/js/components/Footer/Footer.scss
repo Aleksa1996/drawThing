@@ -1,0 +1,30 @@
+.main-footer {
+	background: $mytheme-color-second;
+	color: #fff;
+	.text-left {
+		font-size: 14px;
+	}
+	a {
+		color: #fff;
+		&:hover {
+			@extend .my-transition-elastic;
+			color: $mytheme-color-first;
+		}
+	}
+	.main-footer-icons {
+		list-style: none;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin: 0px;
+		li {
+			a {
+				font-size: 20px;
+				color: #fff;
+				&:hover {
+					color: $mytheme-color-first;
+				}
+			}
+		}
+	}
+}

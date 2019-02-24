@@ -18,7 +18,8 @@ use SwooleTW\Http\Concerns\InteractsWithSwooleTable;
 
 class Manager
 {
-    use InteractsWithWebsocket,
+    use
+        InteractsWithWebsocket,
         InteractsWithSwooleTable,
         WithApplication;
 
@@ -204,7 +205,8 @@ class Manager
             } catch (Throwable $e) {
                 $this->logServerError($e);
             }
-        } finally {
+        }
+        finally {
             // disable and recycle sandbox resource
             $this->app['swoole.sandbox']->disable();
         }
@@ -385,6 +387,11 @@ class Manager
      */
     public function logServerError(Throwable $e)
     {
-        $this->container[ExceptionHandler::class]->report($e);
+        if ($e instanceof \Error) {
+            var_dump($e->getMessage());
+        } else {
+            $this->container[ExceptionHandler::class]->report($e);
+            var_dump($e->getMessage());
+        }
     }
 }

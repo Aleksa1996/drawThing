@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,12 +12,14 @@ let mix = require('laravel-mix');
  */
 
 mix.webpackConfig({
-	output: {
-		chunkFilename: 'js/[name].js'
-	},
+	// output: {
+	// 	chunkFilename: '[name].js'
+	// },
 	devtool: 'source-map'
+	// plugins: [new HardSourceWebpackPlugin()]
 });
 mix
 	.react('resources/assets/js/client.js', 'public/js')
 	.sass('resources/assets/sass/app.scss', 'public/css')
-	.version();
+	.version()
+	.extract();

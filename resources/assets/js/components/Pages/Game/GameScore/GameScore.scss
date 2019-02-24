@@ -1,0 +1,121 @@
+.game-board-container-left {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	height: 100%;
+	max-height: 730px;
+
+	.game-board-score {
+		background: #fff;
+		color: $mytheme-color-second;
+		height: inherit;
+		overflow: hidden;
+
+		.game-board-score-header {
+			background: $mytheme-color-fourth;
+			padding: 10px 10px;
+			font-size: 18px;
+			i {
+				margin-right: 15px;
+				font-size: 25px;
+			}
+		}
+
+		.game-board-score-list {
+			list-style-type: none;
+			margin: 0 auto;
+			padding: 5px 0px;
+
+			.game-board-score-row {
+				padding: 10px 15px;
+				display: flex;
+				justify-content: left;
+				align-items: center;
+				&:nth-child(even) {
+					background: $mytheme-color-fourth;
+				}
+
+				.game-board-score-avatar-container {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width: 30%;
+					.game-board-score-drawing {
+						width: 35px;
+						height: 35px;
+						display: inline-block;
+						font-size: 1.5rem;
+						margin-right: 10px;
+						text-align: left;
+						i {
+							position: relative;
+							animation-name: brush;
+							animation-duration: 1s;
+							animation-fill-mode: forwards;
+							animation-iteration-count: infinite;
+						}
+					}
+					.game-board-score-avatar {
+						width: 40px;
+						height: 40px;
+						position: relative;
+						display: inline-block;
+						border: 2px solid $mytheme-color-third;
+					}
+					.game-board-score-position {
+						color: #fff;
+						position: absolute;
+						top: -12px;
+						right: -12px;
+						background: $mytheme-color-first;
+						border-radius: 50%;
+						padding: 0px 5px;
+						font-size: 0.7rem;
+					}
+				}
+
+				.game-board-score-username {
+					width: 70%;
+					padding: 0px 10px;
+				}
+				.game-board-score-points {
+					display: block;
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+@keyframes brush {
+	0% {
+		transform: rotateZ(-12deg);
+	}
+
+	15% {
+		transform: rotateZ(-16deg);
+	}
+
+	30% {
+		transform: rotateZ(-19deg);
+	}
+
+	45% {
+		transform: rotateZ(-16deg);
+	}
+
+	60% {
+		transform: rotateZ(-12deg);
+	}
+
+	75% {
+		transform: rotateZ(-16deg);
+	}
+
+	85% {
+		transform: rotateZ(-19deg);
+	}
+
+	100% {
+		transform: rotateZ(-16deg);
+	}
+}

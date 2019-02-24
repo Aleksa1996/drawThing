@@ -1,8 +1,15 @@
 {!! ssr('js/server/server.js')
     // Share the packages with the server script through context
     ->context('csrf_token', csrf_token())
-    ->context('js_bundle', (string)mix('/js/client.js'))
+    ->context('js_bundle', [(string)mix('/js/manifest.js'), (string)mix('/js/vendor.js'), (string)mix('/js/client.js')])
     ->context('css_bundle', (string)mix('/css/app.css'))
+    ->context('__global__', ['url'=>[
+        'current' => url()->current(),
+        'full' => url()->full(),
+        'previous' => url()->previous(),
+        'current' => url()->current(),
+        'host' => request()->getSchemeAndHttpHost()
+    ]])
      // If ssr fails, we need a container to render the app client-side
     ->fallback('<div id="app"></div>')
     ->render()

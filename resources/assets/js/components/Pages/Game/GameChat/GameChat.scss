@@ -1,0 +1,118 @@
+.game-board-container-right {
+	height: 100%;
+	max-height: 730px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	color: $mytheme-color-second;
+
+	.game-board-chat {
+		background: #fff;
+		height: inherit;
+		overflow: hidden;
+
+		.game-board-chat-header {
+			background: $mytheme-color-fourth;
+			padding: 10px 10px;
+			font-size: 18px;
+			i {
+				margin-right: 15px;
+				font-size: 25px;
+			}
+		}
+
+		.game-board-chat-body {
+			background: #fff;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			overflow-y: scroll;
+			max-height: calc(100% - 95px - 58px);
+
+			.game-board-chat-message {
+				width: auto;
+				margin: 5px 0px 10px 20px;
+				padding: 5px 20px 5px 0px;
+
+				.game-board-chat-text {
+					padding: 10px 15px;
+					background: $mytheme-color-fourth;
+					p {
+						word-break: break-all;
+					}
+				}
+			}
+		}
+		.game-board-chat-footer {
+			width: 100%;
+			padding: 15px;
+			position: relative;
+			background: $mytheme-color-fourth;
+			border-top: 2px solid $mytheme-color-sixth;
+			#game-board-chat-input {
+				border-width: 2px;
+				height: 65px;
+				padding: 10px 70px 10px 10px;
+				background: #fff;
+				color: $mytheme-color-second;
+				overflow-x: scroll;
+				&:focus {
+					box-shadow: none;
+				}
+			}
+			.game-board-chat-emojis {
+				position: absolute;
+				right: 30px;
+				top: 50%;
+				transform: translateY(-50%);
+				font-size: 1.5rem;
+				&:hover {
+					cursor: pointer;
+				}
+				.dropdown {
+					a {
+						background: none;
+						color: #ced4da;
+						border: none;
+						font-size: 1.5rem;
+
+						&::after {
+							display: none;
+						}
+						&:focus {
+							box-shadow: none;
+							border: none;
+						}
+					}
+
+					.dropdown-menu {
+						width: 300px;
+						background: $mytheme-color-fourth;
+						ul {
+							display: flex;
+							justify-content: space-around;
+							align-items: center;
+							margin: 15px 0px;
+							padding: 0px;
+							width: 100%;
+							list-style: none;
+							perspective: 30px;
+							li {
+								font-size: 1.2rem;
+								border-radius: 50%;
+								background: #fff;
+								padding: 0px 7px;
+								@extend .my-transition-elastic;
+								-webkit-font-smoothing: subpixel-antialiased;
+								backface-visibility: hidden;
+								&:hover {
+									background: $mytheme-color-first;
+									color: #fff;
+									transform: scale(1.5, 1.5);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

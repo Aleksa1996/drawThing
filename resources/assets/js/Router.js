@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import asyncComponent from './hocs/asyncComponent';
+import { v4 } from 'uuid';
 
 // const HomeAsync = asyncComponent(() => import('./components/Pages/Home/Home'));
 // const AboutAsync = asyncComponent(() => import('./components/Pages/About/About'));
@@ -24,30 +25,44 @@ import Home from './components/Pages/Home/Home';
 import About from './components/Pages/About/About';
 import Contact from './components/Pages/Contact/Contact';
 import Game from './components/Pages/Game/Game';
+import Play from './components/Pages/Play/Play';
+import Room from './components/Pages/Room/Room';
 
 export const routes = [
 	{
-		id: '123',
+		id: v4(),
 		path: '/',
 		component: Home,
 		exact: true
 	},
 	{
-		id: '124',
+		id: v4(),
 		path: '/about',
 		component: About,
 		exact: true
 	},
 	{
-		id: '126',
+		id: v4(),
 		path: '/contact',
 		component: Contact,
 		exact: true
 	},
 	{
-		id: '127',
+		id: v4(),
 		path: '/game',
 		component: Game,
+		exact: true
+	},
+	{
+		id: v4(),
+		path: '/play/:roomUUID?',
+		component: Play,
+		exact: true
+	},
+	{
+		id: v4(),
+		path: '/room',
+		component: Room,
 		exact: true
 	}
 ];

@@ -1,4 +1,25 @@
-/* global context, dispatch */
+// Helper for disabling console log
+const ___loggger___ = (function() {
+	let oldConsoleLog = null;
+	let pub = {};
+
+	pub.enableLogger = function enableLogger() {
+		if (oldConsoleLog == null) return;
+
+		global['console']['log'] = oldConsoleLog;
+	};
+
+	pub.disableLogger = function disableLogger() {
+		oldConsoleLog = console.log;
+		global['console']['log'] = function() {};
+	};
+
+	return pub;
+})();
+// disabling console log while server side rendering
+___loggger___.disableLogger();
+
+/* globals:  [context, dispatch] */
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
@@ -16,23 +37,29 @@ const dataRequirements = routes
 	.filter(comp => comp.serverFetch) // check if components have data requirement
 	.map(comp => store.dispatch(comp.serverFetch()));
 
-Promise.all(dataRequirements).then(() => {
-	//dataRequirements will be used somewhere to pass allong state
-	const jsx = (
-		<Provider store={store}>
-			<StaticRouter context={routerContext} location={context.url}>
-				<App />
-			</StaticRouter>
-		</Provider>
-	);
-	const reactDom = renderToString(jsx);
-	const reduxState = store.getState();
-	const helmetData = Helmet.renderStatic();
+Promise.all(dataRequirements)
+	.then(() => {
+		//dataRequirements will be used somewhere to pass allong state
+		const jsx = (
+			<Provider store={store}>
+				<StaticRouter context={routerContext} location={context.url}>
+					<App />
+				</StaticRouter>
+			</Provider>
+		);
 
-	dispatch(htmlTemplate(reactDom, reduxState, helmetData));
-});
+		const reactDom = renderToString(jsx);
+		const reduxState = store.getState();
+		const helmetData = Helmet.renderStatic();
+
+		// enabling it again so we can output rendered html to PHP
+		___loggger___.enableLogger();
+		dispatch(htmlTemplate(reactDom, reduxState, helmetData));
+	})
+	.catch(e => console.log(e));
 
 function htmlTemplate(reactDom, reduxState, helmetData) {
+	const js_bundles = context.js_bundle.map(b => `<script src="${b}"></script>`);
 	return `
         <!DOCTYPE html>
         <html lang="en">
@@ -43,15 +70,19 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
             ${helmetData.title.toString()}
             ${helmetData.meta.toString()}
             <link rel="stylesheet" type="text/css" href="${context.css_bundle}" />
-            ${helmetData.link.toString()}
+			${helmetData.link.toString()}
+			<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+			<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
         </head>
 
         <body>
             <div id="react-app">${reactDom}</div>
-            <script>
-                window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)}
+			<script>
+				window.__PRELOADED_STATE__ = ${JSON.stringify(reduxState)};
+				window.context = {"__global__":${JSON.stringify(context.__global__)}};
             </script>
-            <script src="${context.js_bundle}"></script>
+            ${js_bundles.join('\n')}
         </body>
         </html>
     `;

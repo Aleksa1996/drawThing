@@ -4,13 +4,29 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import api from '../api';
+
+import createWSMiddleware from './middlewares/websocketMiddleware';
+import { sockets } from '../store/middlewares/websocketMiddleware';
+
+import crashReporterMiddleware from './middlewares/crashReporterMiddleware';
+
+import globals from '../globals';
+
 /*Do not remove comments below or modify them... it may break cli */
 //Reducer imports
+import socketReducer from './reducers/socketReducer';
 import commonReducer from './reducers/commonReducer';
-import blogReducer from './reducers/blogReducer';
+import playerReducer from './reducers/playerReducer';
+import roomReducer from './reducers/roomReducer';
+import chatReducer from './reducers/chatReducer';
+import gameReducer from './reducers/gameReducer';
 //Reducer imports end
 
-const isServer = !(typeof window !== 'undefined' && window.document && window.document.createElement);
+const isServer = !(
+	typeof window !== 'undefined' &&
+	window.document &&
+	window.document.createElement
+);
 
 const composeEnhancers =
 	process.env.NODE_ENV === 'production'
@@ -26,8 +42,13 @@ const history = isServer
 const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
-	commonReducer: commonReducer,
-	blogReducer: blogReducer
+	common: commonReducer,
+	// gameStartReducer
+	socket: socketReducer,
+	player: playerReducer,
+	room: roomReducer,
+	chat: chatReducer,
+	game: gameReducer
 });
 
 let serverState = {};
@@ -38,7 +59,16 @@ if (!isServer) {
 	delete window.__PRELOADED_STATE__;
 }
 
-const middleware = [thunk.withExtraArgument(api), routerMiddleware(history)];
-const store = createStore(rootReducer, serverState, composeEnhancers(applyMiddleware(...middleware)));
+const middleware = [
+	thunk.withExtraArgument({ api, sockets }),
+	routerMiddleware(history),
+	createWSMiddleware({ game: globals.url.host }),
+	crashReporterMiddleware //ALWAYS KEEP IT ON END TO REPORT ALL
+];
+const store = createStore(
+	rootReducer,
+	serverState,
+	composeEnhancers(applyMiddleware(...middleware))
+);
 
 export { store, history };

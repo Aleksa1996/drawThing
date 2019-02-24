@@ -9,6 +9,8 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+
+// THIS FILE IS NOT LONGER USED!
 if (process.env.TARGET == 'web') {
 	mix.webpackConfig({
 		output: {

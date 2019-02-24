@@ -1,5 +1,9 @@
 .main-nav {
 	font-size: 1.2rem;
+	height: 65px;
+	.navbar-brand {
+		color: #fff;
+	}
 
 	.nav-item {
 		position: relative;
@@ -7,23 +11,49 @@
 		&:hover {
 			.nav-link:before {
 				opacity: 1;
-				transition: opacity 0.3s, transform 0.3s;
-				transform: translateY(0px);
+				transition: all 0.3s;
+				width: 100%;
 			}
 		}
 
 		.nav-link {
+			color: #fff;
 			&::before {
 				position: absolute;
 				top: 100%;
-				left: 0;
+				left: 50%;
+				transform: translateX(-50%);
 				width: 100%;
 				height: 4px;
-				background: rgba(0, 0, 0, 0.1);
+				background: #fff;
 				content: '';
 				opacity: 0;
-				transform: translateY(10px);
+				width: 10%;
 			}
 		}
+	}
+}
+.main-nav-scrolled {
+	opacity: 0;
+	.navbar-brand {
+		color: $mytheme-color-second !important;
+		&:hover {
+			color: $mytheme-color-first !important;
+		}
+	}
+	.nav-link {
+		color: $mytheme-color-second !important;
+		&::before {
+			background: $mytheme-color-first !important;
+		}
+	}
+	animation: nav-slide 0.2s ease-in-out 0.4s forwards;
+	@extend .shadow;
+}
+
+@keyframes nav-slide {
+	100% {
+		opacity: 1;
+		background: #fff;
 	}
 }

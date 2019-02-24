@@ -1,0 +1,45 @@
+.game-tools-container {
+	width: 350px;
+	position: absolute;
+	z-index: 10000;
+	color: $mytheme-color-second;
+	background: #fff;
+
+	.game-tools-handle {
+		padding: 10px 10px;
+		cursor: move;
+		background: $mytheme-color-fourth;
+		&:hover {
+			cursor: move;
+		}
+		i.fa-wrench {
+			margin-right: 15px;
+			font-size: 25px;
+		}
+		span {
+			font-size: 18px;
+		}
+		.game-tools-header-icons {
+			i {
+				margin-left: 10px;
+				border: 1px solid #fff;
+				padding: 10px;
+				border-radius: 50%;
+				background: #fff;
+			}
+		}
+	}
+
+	form {
+		padding: 15px 15px 10px;
+	}
+	.game-tools-buttons {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.mybtn2 {
+			width: 150px;
+			padding: 10px 13px;
+		}
+	}
+}

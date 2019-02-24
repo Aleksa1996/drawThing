@@ -1,7 +1,9 @@
-import * as blog from './blog';
+import * as player from './player';
+import * as room from './room';
 
 const api = {
-	blog: blog
+	player,
+	room
 };
 
 export default api;
