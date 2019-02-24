@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { connectRoom, sendMessageRoom, subscribeToRoomChat } from '../../../actions';
+import {
+	sendMessageRoom,
+	kickPlayer,
+	subscribeToChatGlobalEvents,
+	subscribeToRoomGlobalEvents,
+	clearDataAfterKick
+} from '../../../actions';
 import { push } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
@@ -22,23 +28,39 @@ class Room extends Component {
 	}
 
 	componentDidMount() {
-		const { room, push, socket, subscribeToRoomChat } = this.props;
+		const {
+			room,
+			push,
+			socket,
+			subscribeToChatGlobalEvents,
+			subscribeToRoomGlobalEvents
+		} = this.props;
 
 		const roomModel = new RoomModel(room);
 		try {
-			if (!socket.connected) throw new Exception('Socket not connected');
+			if (!socket.connected) throw new Error('Socket not connected');
 
 			if (roomModel.isReady() && !this.subscribedToRoomChat) {
-				subscribeToRoomChat();
+				subscribeToChatGlobalEvents();
+				subscribeToRoomGlobalEvents();
 				this.subscribedToRoomChat = true;
 			}
 		} catch (e) {
+			console.log(e);
 			push('/play');
 		}
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.props.chat.messages.length != prevProps.chat.messages.length) {
+		if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
+			this.props.clearDataAfterKick();
+			this.props.push('/play');
+			return;
+		}
+		if (
+			this.props.chat.messages.length != prevProps.chat.messages.length &&
+			this.props.chat.messages.length > 0
+		) {
 			this.scrollToBottom();
 		}
 	}
@@ -61,13 +83,24 @@ class Room extends Component {
 
 	scrollToBottom = () => {
 		const { current: el } = this.chatBodyRef;
-		el.scrollTop = el.scrollHeight;
+
+		if (
+			typeof el !== 'undefined' &&
+			typeof el.scrollTop !== 'undefined' &&
+			typeof el.scrollHeight !== 'undefined'
+		) {
+			el.scrollTop = el.scrollHeight;
+		}
 	};
 
 	handleCopyToClipboard = e => {
 		this.joinLinkInputRef.current.select();
 		document.execCommand('copy');
 		e.target.focus();
+	};
+
+	handleKick = player_id => {
+		this.props.kickPlayer({ player_to_kick: player_id });
 	};
 
 	render() {
@@ -91,6 +124,7 @@ class Room extends Component {
 								room={roomModel}
 								isPlayerAdmin={isPlayerAdmin}
 								handleCopyToClipboard={this.handleCopyToClipboard}
+								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
 							/>
 							<div className="game-created-chat-container">
@@ -120,5 +154,12 @@ class Room extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, chat: state.chat, socket: state.socket }),
-	{ connectRoom, sendMessageRoom, push, subscribeToRoomChat }
+	{
+		sendMessageRoom,
+		push,
+		subscribeToChatGlobalEvents,
+		kickPlayer,
+		subscribeToRoomGlobalEvents,
+		clearDataAfterKick
+	}
 )(Room);

@@ -5,7 +5,9 @@ import {
 	JOINING_ROOM,
 	JOIN_ROOM_SUCCESS,
 	JOIN_ROOM_FAILURE,
-	PLAYER_JOINED_ROOM
+	PLAYER_JOINED_ROOM,
+	PLAYER_KICKED,
+	CLEAR_ROOM_DATA
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -23,6 +25,11 @@ const initialState = {
 	joining: false,
 	joined: false,
 	joinError: null,
+	//
+	lastKickedPlayer: {
+		// zero is because of componentDidUpdate : Room Maximum update depth exceeded
+		id: 0
+	},
 	//
 	players: []
 };
@@ -58,6 +65,15 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateRoom(state, { players: newPlayers });
 		}
 
+		case PLAYER_KICKED: {
+			const newPlayers = removePlayer(state.players, payload.player);
+			return updateRoom(state, { players: newPlayers, lastKickedPlayer: payload.player });
+		}
+
+		case CLEAR_ROOM_DATA: {
+			return { ...initialState };
+		}
+
 		default:
 			return { ...state };
 	}
@@ -75,4 +91,8 @@ export const updateRoom = (state, room) => {
 
 export const addPlayer = (players, player) => {
 	return players.concat([player]);
+};
+
+export const removePlayer = (players, player) => {
+	return players.filter(p => p.id != player.id);
 };

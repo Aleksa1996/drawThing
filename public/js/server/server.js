@@ -77596,21 +77596,36 @@ var Router = function Router(props) {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/chatActions.js ***!
   \****************************************************/
-/*! exports provided: sendMessageRoom, subscribeToRoomChat */
+/*! exports provided: subscribeToChatGlobalEvents, clearChatData, sendMessageRoom */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subscribeToChatGlobalEvents", function() { return subscribeToChatGlobalEvents; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearChatData", function() { return clearChatData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendMessageRoom", function() { return sendMessageRoom; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subscribeToRoomChat", function() { return subscribeToRoomChat; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var sendMessageRoom = function sendMessageRoom(data) {
+var subscribeToChatGlobalEvents = function subscribeToChatGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
         sockets = _ref.sockets;
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]));
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_FAILURE"]));
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_MESSAGE_ROOM"]));
+  };
+};
+var clearChatData = function clearChatData() {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_CHAT_DATA"]
+  };
+};
+var sendMessageRoom = function sendMessageRoom(data) {
+  return function (dispatch, getState, _ref2) {
+    var api = _ref2.api,
+        sockets = _ref2.sockets;
     dispatch({
       type: _types__WEBPACK_IMPORTED_MODULE_0__["SENDING_MESSAGE_ROOM"]
     });
@@ -77636,15 +77651,6 @@ var sendMessageRoom = function sendMessageRoom(data) {
       };
       dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', 'SEND_MESSAGE_ROOM', dataMessage));
     }
-  };
-};
-var subscribeToRoomChat = function subscribeToRoomChat() {
-  return function (dispatch, getState, _ref2) {
-    var api = _ref2.api,
-        sockets = _ref2.sockets;
-    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]));
-    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_FAILURE"]));
-    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_MESSAGE_ROOM"]));
   };
 }; // export const sendMessageRoomSuccessfull = userData => ({
 // 	type: CREATE_PLAYER_SUCCESS,
@@ -77732,9 +77738,11 @@ var commonThunkAction = function commonThunkAction() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _chatActions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatActions */ "./resources/assets/js/actions/chatActions.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sendMessageRoom", function() { return _chatActions__WEBPACK_IMPORTED_MODULE_0__["sendMessageRoom"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "subscribeToChatGlobalEvents", function() { return _chatActions__WEBPACK_IMPORTED_MODULE_0__["subscribeToChatGlobalEvents"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "subscribeToRoomChat", function() { return _chatActions__WEBPACK_IMPORTED_MODULE_0__["subscribeToRoomChat"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearChatData", function() { return _chatActions__WEBPACK_IMPORTED_MODULE_0__["clearChatData"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sendMessageRoom", function() { return _chatActions__WEBPACK_IMPORTED_MODULE_0__["sendMessageRoom"]; });
 
 /* harmony import */ var _commonActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./commonActions */ "./resources/assets/js/actions/commonActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "commonAction", function() { return _commonActions__WEBPACK_IMPORTED_MODULE_1__["commonAction"]; });
@@ -77743,13 +77751,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _gameActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./gameActions */ "./resources/assets/js/actions/gameActions.js");
 /* harmony import */ var _gameActions__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_gameActions__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _gameActions__WEBPACK_IMPORTED_MODULE_2__) if(["sendMessageRoom","subscribeToRoomChat","commonAction","commonThunkAction","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _gameActions__WEBPACK_IMPORTED_MODULE_2__) if(["subscribeToChatGlobalEvents","clearChatData","sendMessageRoom","commonAction","commonThunkAction","default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var _playerActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./playerActions */ "./resources/assets/js/actions/playerActions.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["clearPlayerData"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createPlayer", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["createPlayer"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createPlayerSuccess", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["createPlayerSuccess"]; });
 
 /* harmony import */ var _roomActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./roomActions */ "./resources/assets/js/actions/roomActions.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "subscribeToRoomGlobalEvents", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["subscribeToRoomGlobalEvents"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearRoomData", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["clearRoomData"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createRoom", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["createRoom"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createRoomSuccess", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["createRoomSuccess"]; });
@@ -77761,6 +77775,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "joinRoomSuccess", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["joinRoomSuccess"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "joinRoomFailure", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["joinRoomFailure"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "kickPlayer", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["kickPlayer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "kickPlayerSuccess", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["kickPlayerSuccess"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "kickPlayerFailure", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["kickPlayerFailure"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearDataAfterKick", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["clearDataAfterKick"]; });
 
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ws_connect", function() { return _websocketActions__WEBPACK_IMPORTED_MODULE_5__["ws_connect"]; });
@@ -77788,16 +77810,21 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************************!*\
   !*** ./resources/assets/js/actions/playerActions.js ***!
   \******************************************************/
-/*! exports provided: createPlayer, createPlayerSuccess */
+/*! exports provided: clearPlayerData, createPlayer, createPlayerSuccess */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return clearPlayerData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPlayer", function() { return createPlayer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPlayerSuccess", function() { return createPlayerSuccess; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
- // import { createRoom, joinRoom } from './roomActions';
 
+var clearPlayerData = function clearPlayerData() {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PLAYER_DATA"]
+  };
+};
 var createPlayer = function createPlayer(data) {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -77828,27 +77855,50 @@ var createPlayerSuccess = function createPlayerSuccess(userData) {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/roomActions.js ***!
   \****************************************************/
-/*! exports provided: createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure */
+/*! exports provided: subscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, clearDataAfterKick */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subscribeToRoomGlobalEvents", function() { return subscribeToRoomGlobalEvents; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearRoomData", function() { return clearRoomData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoom", function() { return createRoom; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoomSuccess", function() { return createRoomSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRoomFailure", function() { return createRoomFailure; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "joinRoom", function() { return joinRoom; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "joinRoomSuccess", function() { return joinRoomSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "joinRoomFailure", function() { return joinRoomFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kickPlayer", function() { return kickPlayer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kickPlayerSuccess", function() { return kickPlayerSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kickPlayerFailure", function() { return kickPlayerFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearDataAfterKick", function() { return clearDataAfterKick; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
+/* harmony import */ var _chatActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./chatActions */ "./resources/assets/js/actions/chatActions.js");
+/* harmony import */ var _playerActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./playerActions */ "./resources/assets/js/actions/playerActions.js");
 
- //ROOM CREATE
 
-var createRoom = function createRoom() {
-  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+
+var subscribeToRoomGlobalEvents = function subscribeToRoomGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
         sockets = _ref.sockets;
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"]));
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]));
+  };
+};
+var clearRoomData = function clearRoomData() {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROOM_DATA"]
+  };
+}; //ROOM CREATE
+
+var createRoom = function createRoom() {
+  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  return function (dispatch, getState, _ref2) {
+    var api = _ref2.api,
+        sockets = _ref2.sockets;
     dispatch({
       type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATING_ROOM"]
     });
@@ -77862,7 +77912,6 @@ var createRoom = function createRoom() {
     fData.append('password', password);
     return api.room.create(fData).then(function (response) {
       dispatch(createRoomSuccess(response.data));
-      dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"]));
       return response;
     }).catch(function (error) {
       console.log(error);
@@ -77885,9 +77934,9 @@ var createRoomFailure = function createRoomFailure(error) {
 };
 var joinRoom = function joinRoom() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  return function (dispatch, getState, _ref2) {
-    var api = _ref2.api,
-        sockets = _ref2.sockets;
+  return function (dispatch, getState, _ref3) {
+    var api = _ref3.api,
+        sockets = _ref3.sockets;
     dispatch({
       type: _types__WEBPACK_IMPORTED_MODULE_0__["JOINING_ROOM"]
     });
@@ -77907,7 +77956,6 @@ var joinRoom = function joinRoom() {
     };
     return api.room.join(fdata).then(function (response) {
       dispatch(joinRoomSuccess(response.data));
-      dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"]));
       return response;
     }).catch(function (error) {
       console.log(error);
@@ -77928,6 +77976,63 @@ var joinRoomFailure = function joinRoomFailure(error) {
     payload: error
   };
 };
+var kickPlayer = function kickPlayer() {
+  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  return function (dispatch, getState, _ref4) {
+    var api = _ref4.api,
+        sockets = _ref4.sockets;
+    dispatch({
+      type: _types__WEBPACK_IMPORTED_MODULE_0__["KICKING_PLAYER"]
+    });
+    var _getState$player3 = getState().player,
+        id = _getState$player3.id,
+        username = _getState$player3.username,
+        password = _getState$player3.password;
+    var uuid = getState().room.uuid;
+    var fdata = {
+      player: {
+        id: id,
+        username: username,
+        password: password
+      },
+      room: {
+        uuid: uuid
+      },
+      player_to_kick: {
+        id: data.player_to_kick
+      }
+    };
+    return api.room.kick(fdata).then(function (response) {
+      dispatch(kickPlayerSuccess(response.data));
+      return response;
+    }).catch(function (error) {
+      console.log(error);
+      console.log(error.response.data);
+      dispatch(kickPlayerFailure(error.response.data));
+    });
+  };
+};
+var kickPlayerSuccess = function kickPlayerSuccess(room) {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICK_SUCCESS"],
+    payload: room
+  };
+};
+var kickPlayerFailure = function kickPlayerFailure(error) {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICK_FAILURE"],
+    payload: error
+  };
+};
+var clearDataAfterKick = function clearDataAfterKick() {
+  return function (dispatch, getState, _ref5) {
+    var api = _ref5.api,
+        sockets = _ref5.sockets;
+    dispatch(clearRoomData());
+    dispatch(Object(_chatActions__WEBPACK_IMPORTED_MODULE_2__["clearChatData"])());
+    dispatch(Object(_playerActions__WEBPACK_IMPORTED_MODULE_3__["clearPlayerData"])());
+  };
+};
 
 /***/ }),
 
@@ -77935,7 +78040,7 @@ var joinRoomFailure = function joinRoomFailure(error) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -77952,9 +78057,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_PLAYER", function() { return CREATING_PLAYER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_PLAYER_SUCCESS", function() { return CREATE_PLAYER_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_PLAYER_FAILURE", function() { return CREATE_PLAYER_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_PLAYER_DATA", function() { return CLEAR_PLAYER_DATA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATING_ROOM", function() { return CREATING_ROOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_ROOM_SUCCESS", function() { return CREATE_ROOM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CREATE_ROOM_FAILURE", function() { return CREATE_ROOM_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_ROOM_DATA", function() { return CLEAR_ROOM_DATA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOINING_ROOM", function() { return JOINING_ROOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOIN_ROOM_SUCCESS", function() { return JOIN_ROOM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOIN_ROOM_FAILURE", function() { return JOIN_ROOM_FAILURE; });
@@ -77963,23 +78070,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEND_MESSAGE_ROOM_SUCCESS", function() { return SEND_MESSAGE_ROOM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEND_MESSAGE_ROOM_FAILURE", function() { return SEND_MESSAGE_ROOM_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_MESSAGE_ROOM", function() { return RECEIVE_MESSAGE_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_CHAT_DATA", function() { return CLEAR_CHAT_DATA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KICKING_PLAYER", function() { return KICKING_PLAYER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_SUCCESS", function() { return PLAYER_KICK_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_FAILURE", function() { return PLAYER_KICK_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICKED", function() { return PLAYER_KICKED; });
 var CONNECT_WS = 'CONNECT_WS';
 var DISCONNECT_WS = 'DISCONNECT_WS';
 var SUBSCRIBE_WS = 'SUBSCRIBE_WS';
 var UNSUBSCRIBE_WS = 'UNSUBSCRIBE_WS';
-var EMIT_WS = 'EMIT_WS';
+var EMIT_WS = 'EMIT_WS'; //
+
 var CONNECTING_SOCKET = 'CONNECTING_SOCKET';
 var CONNECT_SOCKET_SUCCESS = 'CONNECT_SOCKET_SUCCESS';
 var CONNECT_SOCKET_FAILURE = 'CONNECT_SOCKET_FAILURE';
-var CONNECT_SOCKET_DATA = 'CONNECT_SOCKET_DATA';
+var CONNECT_SOCKET_DATA = 'CONNECT_SOCKET_DATA'; //
+
 var CREATING_PLAYER = 'CREATING_PLAYER';
 var CREATE_PLAYER_SUCCESS = 'CREATE_PLAYER_SUCCESS';
 var CREATE_PLAYER_FAILURE = 'CREATE_PLAYER_FAILURE';
+var CLEAR_PLAYER_DATA = 'CLEAR_PLAYER_DATA'; //
+
 var CREATING_ROOM = 'CREATING_ROOM';
 var CREATE_ROOM_SUCCESS = 'CREATE_ROOM_SUCCESS';
-var CREATE_ROOM_FAILURE = 'CREATE_ROOM_FAILURE'; // export const RANDOMING_ROOM = 'RANDOMING_ROOM';
+var CREATE_ROOM_FAILURE = 'CREATE_ROOM_FAILURE';
+var CLEAR_ROOM_DATA = 'CLEAR_ROOM_DATA'; //
+// export const RANDOMING_ROOM = 'RANDOMING_ROOM';
 // export const RANDOM_ROOM_SUCCESS = 'RANDOM_ROOM_SUCCESS';
 // export const RANDOM_ROOM_FAILURE = 'RANDOM_ROOM_FAILURE';
+//
 
 var JOINING_ROOM = 'JOINING_ROOM';
 var JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
@@ -77991,6 +78110,12 @@ var SENDING_MESSAGE_ROOM = 'SENDING_MESSAGE_ROOM';
 var SEND_MESSAGE_ROOM_SUCCESS = 'SEND_MESSAGE_ROOM_SUCCESS';
 var SEND_MESSAGE_ROOM_FAILURE = 'SEND_MESSAGE_ROOM_FAILURE';
 var RECEIVE_MESSAGE_ROOM = 'RECEIVE_MESSAGE_ROOM';
+var CLEAR_CHAT_DATA = 'CLEAR_CHAT_DATA'; //
+
+var KICKING_PLAYER = 'KICKING_PLAYER';
+var PLAYER_KICK_SUCCESS = 'PLAYER_KICK_SUCCESS';
+var PLAYER_KICK_FAILURE = 'PLAYER_KICK_FAILURE';
+var PLAYER_KICKED = 'PLAYER_KICKED';
 
 /***/ }),
 
@@ -78108,13 +78233,14 @@ var create = function create(data) {
 /*!*****************************************!*\
   !*** ./resources/assets/js/api/room.js ***!
   \*****************************************/
-/*! exports provided: create, join */
+/*! exports provided: create, join, kick */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "join", function() { return join; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kick", function() { return kick; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../globals */ "./resources/assets/js/globals.js");
@@ -78127,6 +78253,10 @@ var create = function create() {
 var join = function join() {
   var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
   return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_globals__WEBPACK_IMPORTED_MODULE_1__["default"].url.host, "/api/rooms/join"), data);
+};
+var kick = function kick() {
+  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(_globals__WEBPACK_IMPORTED_MODULE_1__["default"].url.host, "/api/rooms/kick"), data);
 }; // export const find = () => axios.get(`https://jsonplaceholder.typicode.com/albums/1/photos`);
 
 /***/ }),
@@ -81368,7 +81498,10 @@ function (_Component) {
 
     _this.scrollToBottom = function () {
       var el = _this.chatBodyRef.current;
-      el.scrollTop = el.scrollHeight;
+
+      if (typeof el !== 'undefined' && typeof el.scrollTop !== 'undefined' && typeof el.scrollHeight !== 'undefined') {
+        el.scrollTop = el.scrollHeight;
+      }
     };
 
     _this.handleCopyToClipboard = function (e) {
@@ -81376,6 +81509,12 @@ function (_Component) {
 
       document.execCommand('copy');
       e.target.focus();
+    };
+
+    _this.handleKick = function (player_id) {
+      _this.props.kickPlayer({
+        player_to_kick: player_id
+      });
     };
 
     _this.chatBodyRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
@@ -81391,24 +81530,33 @@ function (_Component) {
           room = _this$props.room,
           push = _this$props.push,
           socket = _this$props.socket,
-          subscribeToRoomChat = _this$props.subscribeToRoomChat;
+          subscribeToChatGlobalEvents = _this$props.subscribeToChatGlobalEvents,
+          subscribeToRoomGlobalEvents = _this$props.subscribeToRoomGlobalEvents;
       var roomModel = new _utils_classes_Room__WEBPACK_IMPORTED_MODULE_4__["default"](room);
 
       try {
-        if (!socket.connected) throw new Exception('Socket not connected');
+        if (!socket.connected) throw new Error('Socket not connected');
 
         if (roomModel.isReady() && !this.subscribedToRoomChat) {
-          subscribeToRoomChat();
+          subscribeToChatGlobalEvents();
+          subscribeToRoomGlobalEvents();
           this.subscribedToRoomChat = true;
         }
       } catch (e) {
+        console.log(e);
         push('/play');
       }
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
-      if (this.props.chat.messages.length != prevProps.chat.messages.length) {
+      if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
+        this.props.clearDataAfterKick();
+        this.props.push('/play');
+        return;
+      }
+
+      if (this.props.chat.messages.length != prevProps.chat.messages.length && this.props.chat.messages.length > 0) {
         this.scrollToBottom();
       }
     }
@@ -81441,6 +81589,7 @@ function (_Component) {
         room: roomModel,
         isPlayerAdmin: isPlayerAdmin,
         handleCopyToClipboard: this.handleCopyToClipboard,
+        handleKick: this.handleKick,
         ref: this.joinLinkInputRef
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-created-chat-container"
@@ -81469,10 +81618,12 @@ function (_Component) {
     socket: state.socket
   };
 }, {
-  connectRoom: _actions__WEBPACK_IMPORTED_MODULE_2__["connectRoom"],
   sendMessageRoom: _actions__WEBPACK_IMPORTED_MODULE_2__["sendMessageRoom"],
   push: connected_react_router__WEBPACK_IMPORTED_MODULE_3__["push"],
-  subscribeToRoomChat: _actions__WEBPACK_IMPORTED_MODULE_2__["subscribeToRoomChat"]
+  subscribeToChatGlobalEvents: _actions__WEBPACK_IMPORTED_MODULE_2__["subscribeToChatGlobalEvents"],
+  kickPlayer: _actions__WEBPACK_IMPORTED_MODULE_2__["kickPlayer"],
+  subscribeToRoomGlobalEvents: _actions__WEBPACK_IMPORTED_MODULE_2__["subscribeToRoomGlobalEvents"],
+  clearDataAfterKick: _actions__WEBPACK_IMPORTED_MODULE_2__["clearDataAfterKick"]
 })(Room));
 
 /***/ }),
@@ -81598,7 +81749,8 @@ __webpack_require__.r(__webpack_exports__);
 var RoomPlayers = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function (_ref, joinLinkInputRef) {
   var room = _ref.room,
       handleCopyToClipboard = _ref.handleCopyToClipboard,
-      isPlayerAdmin = _ref.isPlayerAdmin;
+      isPlayerAdmin = _ref.isPlayerAdmin,
+      handleKick = _ref.handleKick;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-created-join-link"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -81631,13 +81783,16 @@ var RoomPlayers = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(functi
       src: p.avatar,
       alt: p.username,
       className: "rounded"
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    }), p.id == room.created_by && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-star game-creater-user-leader",
       "aria-hidden": "true",
       title: "Room leader"
     })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       className: "game-created-user-username mx-3"
-    }, p.username), isPlayerAdmin && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    }, p.username), isPlayerAdmin && p.id != room.created_by && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      onClick: function onClick(e) {
+        return handleKick(p.id);
+      },
       className: "game-created-user-kick ml-auto"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "mybtn2",
@@ -82285,6 +82440,11 @@ var reducer = function reducer() {
         });
       }
 
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_CHAT_DATA"]:
+      {
+        return _objectSpread({}, initialState);
+      }
+
     default:
       return _objectSpread({}, state);
   }
@@ -82392,6 +82552,7 @@ var initialState = {
   username: null,
   avatar: null,
   password: null,
+  //
   creating: false,
   created: false
 };
@@ -82427,6 +82588,11 @@ var reducer = function reducer() {
         return updatePlayer(state, newPlayer);
       }
 
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PLAYER_DATA"]:
+      {
+        return _objectSpread({}, initialState);
+      }
+
     default:
       return _objectSpread({}, state);
   }
@@ -82446,7 +82612,7 @@ var updatePlayer = function updatePlayer(state, player) {
 /*!***********************************************************!*\
   !*** ./resources/assets/js/store/reducers/roomReducer.js ***!
   \***********************************************************/
-/*! exports provided: default, selector, updateRoom, addPlayer */
+/*! exports provided: default, selector, updateRoom, addPlayer, removePlayer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82454,6 +82620,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateRoom", function() { return updateRoom; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPlayer", function() { return addPlayer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removePlayer", function() { return removePlayer; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
@@ -82476,6 +82643,11 @@ var initialState = {
   joining: false,
   joined: false,
   joinError: null,
+  //
+  lastKickedPlayer: {
+    // zero is because of componentDidUpdate : Room Maximum update depth exceeded
+    id: 0
+  },
   //
   players: []
 };
@@ -82545,6 +82717,21 @@ var reducer = function reducer() {
         });
       }
 
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]:
+      {
+        var _newPlayers = removePlayer(state.players, payload.player);
+
+        return updateRoom(state, {
+          players: _newPlayers,
+          lastKickedPlayer: payload.player
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROOM_DATA"]:
+      {
+        return _objectSpread({}, initialState);
+      }
+
     default:
       return _objectSpread({}, state);
   }
@@ -82559,6 +82746,11 @@ var updateRoom = function updateRoom(state, room) {
 };
 var addPlayer = function addPlayer(players, player) {
   return players.concat([player]);
+};
+var removePlayer = function removePlayer(players, player) {
+  return players.filter(function (p) {
+    return p.id != player.id;
+  });
 };
 
 /***/ }),

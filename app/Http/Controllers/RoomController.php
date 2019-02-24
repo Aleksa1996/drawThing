@@ -167,4 +167,31 @@ class RoomController extends Controller
             ], 422);
         }
     }
+
+    public function kick(Request $request)
+    {
+        // validate recived data
+        $data = $request->validate([
+            'player.id' => 'required|numeric|min:1',
+            'player.username' => 'required|exists:players,username',
+            'player.password' => 'required',
+            'room.uuid' => 'required|string|min:1',
+            'player_to_kick.id' => 'required|numeric|min:1'
+        ]);
+        // var_dump($data);
+        try {
+            // find player that needs to be kicked
+            $playerToKick = Player::find($data['player_to_kick']['id']);
+            // sending notification that new  player has joined to room
+            Websocket::broadcast()->to($data['room']['uuid'])->emit('PLAYER_KICKED', ['player' => new PlayerResource($playerToKick)]);
+            // remove player from room
+            WebsocketRoom::delete($playerToKick->fd, $data['room']['uuid']);
+
+            return response()->json(['player' => new PlayerResource($playerToKick)], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
 }

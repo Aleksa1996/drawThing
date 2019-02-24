@@ -2,7 +2,8 @@ import {
 	SENDING_MESSAGE_ROOM,
 	SEND_MESSAGE_ROOM_SUCCESS,
 	SEND_MESSAGE_ROOM_FAILURE,
-	RECEIVE_MESSAGE_ROOM
+	RECEIVE_MESSAGE_ROOM,
+	CLEAR_CHAT_DATA
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -39,6 +40,10 @@ const reducer = (state = initialState, { type, payload }) => {
 		case RECEIVE_MESSAGE_ROOM: {
 			const newMessages = addMessage(state.messages, payload.message);
 			return updateChat(state, { messages: newMessages });
+		}
+
+		case CLEAR_CHAT_DATA: {
+			return { ...initialState };
 		}
 		default:
 			return { ...state };

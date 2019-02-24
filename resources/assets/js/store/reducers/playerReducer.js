@@ -1,4 +1,9 @@
-import { CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE } from '../../actions/types';
+import {
+	CREATING_PLAYER,
+	CREATE_PLAYER_SUCCESS,
+	CREATE_PLAYER_FAILURE,
+	CLEAR_PLAYER_DATA
+} from '../../actions/types';
 
 import LocalStorage from '../../utils/classes/LocalStorage';
 
@@ -9,7 +14,7 @@ const initialState = {
 	username: null,
 	avatar: null,
 	password: null,
-
+	//
 	creating: false,
 	created: false
 };
@@ -39,6 +44,11 @@ const reducer = (state = initialState, { type, payload }) => {
 
 			return updatePlayer(state, newPlayer);
 		}
+
+		case CLEAR_PLAYER_DATA: {
+			return { ...initialState };
+		}
+
 		default:
 			return { ...state };
 	}
