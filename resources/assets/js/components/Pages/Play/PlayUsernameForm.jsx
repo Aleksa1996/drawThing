@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import Button from '../../Form/Button';
+
 const PlayUsernameForm = ({
 	username,
 	focused,
@@ -9,7 +11,8 @@ const PlayUsernameForm = ({
 	handleChangeUsername,
 	handleSubmit,
 	handleFocusUsername,
-	errors
+	errors,
+	hasRoomUUID
 }) => {
 	return (
 		<div className="game-start-username-form-container">
@@ -52,26 +55,41 @@ const PlayUsernameForm = ({
 						<i className="fa fa-arrow-left mr-2" aria-hidden="true" />
 						Go back
 					</Link>
-					<button
-						onClick={handleSubmit}
-						type="button"
-						className="mybtn2"
-						name="create_room"
-						value="create_room"
-					>
-						<i className="fa fa-users mr-2" aria-hidden="true" />
-						Create room
-					</button>
-					<button
-						onClick={handleSubmit}
-						type="button"
-						className="mybtn2"
-						name="random_room"
-						value="random_room"
-					>
-						<i className="fa fa-random mr-2" aria-hidden="true" />
-						Random room
-					</button>
+					{hasRoomUUID ? (
+						<Button
+							onClick={handleSubmit}
+							type="button"
+							name="join_room"
+							value="join_room"
+							icon="fa-rocket"
+							className="mybtn2"
+						>
+							Join room
+						</Button>
+					) : (
+						<React.Fragment>
+							<Button
+								onClick={handleSubmit}
+								type="button"
+								className="mybtn2"
+								name="create_room"
+								value="create_room"
+								icon="fa-users"
+							>
+								Create room
+							</Button>
+							<Button
+								onClick={handleSubmit}
+								type="button"
+								className="mybtn2"
+								name="random_room"
+								value="random_room"
+								icon="fa-random"
+							>
+								Random room
+							</Button>
+						</React.Fragment>
+					)}
 				</div>
 			</form>
 		</div>

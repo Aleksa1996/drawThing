@@ -12,4 +12,9 @@ class Room extends Model
     {
         return $this->hasManyThrough('App\Models\Player', 'App\Models\Game');
     }
+
+    public function games()
+    {
+        return $this->hasMany('App\Models\Game');
+    }
 }

@@ -25,9 +25,11 @@ class Navigation extends Component {
 	render() {
 		let isHomePage = this.props.location.pathname == '/';
 		let isGamePage = this.props.location.pathname == '/game';
+		let isPlayPage = this.props.location.pathname == '/play';
+
 		let isScrolled = this.state.scrollTop >= 20;
 
-		if (isGamePage) return null;
+		if (isGamePage || isPlayPage) return null;
 
 		return (
 			<nav

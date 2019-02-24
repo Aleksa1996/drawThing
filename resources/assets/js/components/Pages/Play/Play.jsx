@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createPlayer, ws_make_connection } from '../../../actions';
 import { push } from 'connected-react-router';
+import RoomModel from '../../../utils/classes/Room';
 
 import Page from '../Page';
 import PlayAvatarForm from './PlayAvatarForm';
@@ -10,13 +11,15 @@ import PlayUsernameForm from './PlayUsernameForm';
 import PlayRules from './PlayRules';
 
 import { mapValues as _mapValues } from 'lodash';
-import { merge as _fp_merge } from 'lodash/fp';
 
 class Play extends Component {
 	constructor(props) {
 		super(props);
 
 		this.sketchpadRef = React.createRef();
+
+		this.roomUUID = this.props.match.params.roomUUID;
+		this.hasRoomUUID = typeof this.roomUUID !== 'undefined' && this.roomUUID;
 
 		this.state = {
 			avatarForm: {
@@ -48,9 +51,11 @@ class Play extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { id, creating, created, createError } = this.props.room;
-		if (prevProps.room.id != id && creating == false && created && createError == null) {
-			this.props.push('/room');
+		if (prevProps.room.id != this.props.room.id) {
+			const roomModel = new RoomModel(this.props.room);
+			if (roomModel.isReady()) {
+				this.props.push('/room');
+			}
 		}
 	}
 
@@ -62,9 +67,9 @@ class Play extends Component {
 		e.preventDefault();
 
 		if (!usernameFormValid) {
-			return this.setState(prevState =>
-				_fp_merge(prevState, { usernameForm: { pristine: false } })
-			);
+			return this.setState(({ usernameForm }) => ({
+				usernameForm: { ...usernameForm, pristine: false }
+			}));
 		} else if (!avatarFormValid) return;
 
 		const avatar = await this.createAvatarImage();
@@ -72,17 +77,16 @@ class Play extends Component {
 		const data = {
 			username,
 			avatar,
-			startType
+			startType,
+			routerMatch: this.props.match
 		};
 
 		this.props.createPlayer(data).catch(error => {
 			console.log(error);
 
-			this.setState(prevState =>
-				_fp_merge(prevState, {
-					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
-				})
-			);
+			this.setState(prevState => ({
+				errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
+			}));
 		});
 	};
 
@@ -94,12 +98,14 @@ class Play extends Component {
 		});
 
 	onCompleteDrawing = item => {
-		this.setState(prevState =>
-			_fp_merge(prevState, {
-				avatarForm: { items: prevState.avatarForm.items.concat([item]), valid: true },
-				errors: { avatar: null }
-			})
-		);
+		this.setState(({ avatarForm }) => ({
+			avatarForm: {
+				...avatarForm,
+				items: [...avatarForm.items, item],
+				valid: true
+			},
+			errors: { avatar: null }
+		}));
 	};
 
 	handleChangeUsername = e => {
@@ -107,31 +113,28 @@ class Play extends Component {
 			target: { value: username }
 		} = e;
 
-		this.setState(prevState =>
-			_fp_merge(prevState, {
-				usernameForm: { username, valid: username.length > 3 },
-				errors: { username: null }
-			})
-		);
+		this.setState(({ usernameForm }) => ({
+			usernameForm: { ...usernameForm, username, valid: username.length > 3 },
+			errors: { username: null }
+		}));
 	};
 
 	handleFocusUsername = e => {
 		const { type } = e;
 
-		this.setState(prevState =>
-			_fp_merge(prevState, {
-				usernameForm: {
-					focused: type === 'focus',
-					pristine: type === 'blur' ? false : prevState.usernameForm.pristine
-				}
-			})
-		);
+		this.setState(({ usernameForm }) => ({
+			usernameForm: {
+				...usernameForm,
+				focused: type === 'focus',
+				pristine: type === 'blur' ? false : usernameForm.pristine
+			}
+		}));
 	};
 
 	render() {
 		const { avatarForm, usernameForm, errors } = this.state;
 		const { player } = this.props;
-
+		console.log(this.state);
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-start-game">
 				<div className="game-start-container container">
@@ -151,6 +154,7 @@ class Play extends Component {
 							handleChangeUsername={this.handleChangeUsername}
 							handleFocusUsername={this.handleFocusUsername}
 							errors={errors}
+							hasRoomUUID={this.hasRoomUUID}
 						/>
 					</div>
 					<PlayRules />

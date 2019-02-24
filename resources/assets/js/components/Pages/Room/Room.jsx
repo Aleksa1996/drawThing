@@ -8,6 +8,8 @@ import {
 } from '../../../actions';
 import { push } from 'connected-react-router';
 
+import RoomModel from '../../../utils/classes/Room';
+
 import Page from '../Page';
 import PlayRules from '../Play/PlayRules';
 
@@ -20,19 +22,22 @@ class Room extends Component {
 	constructor(props) {
 		super(props);
 		this.chatBodyRef = React.createRef();
-		this.subscribedToRoomChat = false;
 		this.joinLinkInputRef = React.createRef();
+		this.subscribedToRoomChat = false;
 	}
 
 	componentDidMount() {
 		const { room, push, socket, subscribeToCreateRoom, subscribeToRoomChat } = this.props;
-		if (socket.connected && room.created && room.createError == null) {
-			if (!this.subscribedToRoomChat) {
-				subscribeToCreateRoom();
+
+		const roomModel = new RoomModel(room);
+		try {
+			if (!socket.connected) throw new Exception('Socket not connected');
+
+			if (roomModel.isReady() && !this.subscribedToRoomChat) {
 				subscribeToRoomChat();
 				this.subscribedToRoomChat = true;
 			}
-		} else {
+		} catch (e) {
 			this.props.push('/play');
 		}
 	}
@@ -64,8 +69,8 @@ class Room extends Component {
 
 	render() {
 		const { player, room, chat } = this.props;
-
-		if (!room.created || room.createError != null) {
+		const roomModel = new RoomModel(room);
+		if (!roomModel.isCreated() && !roomModel.isJoined()) {
 			return null;
 		}
 

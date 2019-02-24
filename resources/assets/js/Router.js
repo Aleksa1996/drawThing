@@ -55,7 +55,7 @@ export const routes = [
 	},
 	{
 		id: v4(),
-		path: '/play',
+		path: '/play/:roomUUID?',
 		component: Play,
 		exact: true
 	},

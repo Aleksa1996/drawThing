@@ -9,7 +9,7 @@ class Player extends Model
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = trim(preg_replace('/\s+/', ' ', strtolower($value)));
+        $this->attributes['password'] = trim(preg_replace('/\s+/', '', strtolower($value)));
     }
 
     public function games()

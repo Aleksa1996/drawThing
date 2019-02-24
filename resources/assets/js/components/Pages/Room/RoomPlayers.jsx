@@ -10,7 +10,7 @@ const RoomPlayers = React.forwardRef(({ room, handleCopyToClipboard }, joinLinkI
 					<input
 						className="form-control"
 						type="text"
-						value={globals.url.host + '/room/' + room.uuid}
+						value={globals.url.host + '/play/' + room.uuid}
 						ref={joinLinkInputRef}
 						readOnly
 					/>
@@ -22,7 +22,7 @@ const RoomPlayers = React.forwardRef(({ room, handleCopyToClipboard }, joinLinkI
 			</div>
 			<ul className="game-created-user-list">
 				{room.players.map(p => (
-					<li key={p} className="game-created-user-list-item">
+					<li key={p.id} className="game-created-user-list-item">
 						<span className="game-created-user-avatar shadow">
 							{/* /img/avatar/agf146R43RvWhtz68ELjeKaM6uV4tbOv1dL8XlTZ.png */}
 							<img src={p.avatar} alt={p.username} />

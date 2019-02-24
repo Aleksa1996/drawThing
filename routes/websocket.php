@@ -25,3 +25,7 @@ Websocket::on('disconnect', function ($websocket) {
 Websocket::on('CREATE_ROOM', '\App\Http\Controllers\Game\GameController@createRoom_ws');
 
 Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\Game\GameController@sendMessageRoom_ws');
+
+
+Websocket::on('JOIN_ROOM', '\App\Http\Controllers\Game\GameController@joinRoom_ws');
+

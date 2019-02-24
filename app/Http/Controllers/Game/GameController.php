@@ -16,6 +16,7 @@ use App\Http\Resources\Room as RoomResource;
 use SwooleTW\Http\Websocket\Facades\Websocket;
 use App\Http\Resources\Player as PlayerResource;
 use SwooleTW\Http\Websocket\Facades\Room as WSRoom;
+use PHPUnit\Framework\Constraint\Exception;
 
 
 class GameController extends Controller
@@ -119,7 +120,6 @@ class GameController extends Controller
 
             // Response Player resource
             return response()->json(new PlayerResource($player), 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -177,7 +177,6 @@ class GameController extends Controller
             // eager load players in room
             $room->loadMissing('players');
             $websocket->emit('CREATE_ROOM_SUCCESS', ['room' => new RoomResource($room)]);
-
         } catch (\Exception $e) {
             $websocket->emit('CREATE_ROOM_FAILURE', [
                 'message' => $e->getMessage()
@@ -188,12 +187,71 @@ class GameController extends Controller
     public function sendMessageRoom_ws($websocket, $data)
     {
         try {
-            // { id: 1, text: '', player_id: 0 }
-            $message = ['message' => ['id' => uniqid('message', true), 'text' => $data['message']['text'], 'player_id' => $data['player']['id']]];
-            // $websocket->broadcast()->to($data['room']['uuid'])->emit('MESSAGE_ROOM_RECEIVE', $message);
+            // validate recived data
+            // $validator = Validator::make($data, [
+            //     'id' => 'required|numeric|min:1',
+            //     'username' => 'required|exists:players,username',
+            //     'password' => 'required',
+            // ]);
+
+            // if ($validator->fails()) {
+            //     throw new \Exception('Id, username and password are required!');
+            // }
+            $message = ['message' => ['id' => uniqid('message_', true), 'text' => $data['message']['text'], 'player_id' => $data['player']['id']]];
             $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_MESSAGE_ROOM', $message);
         } catch (\Exception $e) {
             $websocket->emit('SEND_MESSAGE_ROOM_FAILURE', [
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function joinRoom_ws($websocket, $data)
+    {
+        try {
+            // validate recived data
+            $validator = Validator::make($data, [
+                'room.uuid' => 'required|string|min:1',
+                // 'username' => 'required|exists:players,username',
+                // 'password' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                throw new \Exception($validator->errors->first());
+            }
+
+            // joining player in created room
+            $room = Room::where('uuid', '=', $data['room']['uuid'])->first();
+
+            if (empty($room)) {
+                throw new \Exception('The Room you tried to join does not exists anymore!');
+            }
+
+            // get current player
+            $playerData = $data['player'];
+            $player = Player::where([
+                ['id', '=', $playerData['id']],
+                ['username', '=', $playerData['username']],
+                ['password', '=', $playerData['password']]
+            ])->first();
+
+            if (empty($player)) {
+                throw new \Exception('Wrong credentials!');
+            }
+
+            // appending websocket fd to player
+            $player->fd = $websocket->getSender();
+            $player->game_id = $room->games()->latest()->first()->id;
+            $player->save();
+
+            $websocket->join($room->uuid);
+
+            $room->loadMissing('players');
+            $websocket->emit('JOIN_ROOM_SUCCESS', ['room' => new RoomResource($room)]);
+            $websocket->broadcast()->to($room->uuid)->emit('PLAYER_JOINED_ROOM', ['player' => new PlayerResource($player)]);
+        } catch (\Exception $e) {
+            $websocket->emit('JOIN_ROOM_FAILURE', [
                 'message' => $e->getMessage()
             ]);
         }

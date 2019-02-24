@@ -16,9 +16,9 @@ const initialState = {
 
 const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case '@@INIT': {
-			return updatePlayer(state, LocalStorage.get('player'));
-		}
+		// case '@@INIT': {
+		// 	return updatePlayer(state, LocalStorage.get('player'));
+		// }
 
 		case CREATING_PLAYER: {
 			return updatePlayer(state, { creating: true });
@@ -34,7 +34,7 @@ const reducer = (state = initialState, { type, payload }) => {
 			};
 
 			// save player in localstorage
-			LocalStorage.save('player', newPlayer);
+			// LocalStorage.save('player', newPlayer);
 
 			return updatePlayer(state, newPlayer);
 		}

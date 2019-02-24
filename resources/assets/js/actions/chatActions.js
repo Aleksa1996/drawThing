@@ -1,7 +1,8 @@
 import {
 	SENDING_MESSAGE_ROOM,
 	SEND_MESSAGE_ROOM_SUCCESS,
-	SEND_MESSAGE_ROOM_FAILURE
+	SEND_MESSAGE_ROOM_FAILURE,
+	RECEIVE_MESSAGE_ROOM
 } from './types';
 
 import { ws_connect, ws_subscribe, ws_emit } from './websocketActions';
@@ -11,7 +12,7 @@ export const sendMessageRoom = data => (dispatch, getState, { api, sockets }) =>
 
 	if (sockets.game.connection.connected) {
 		const { id, username, password } = getState().player;
-		const { uuid } = getState().player;
+		const { uuid } = getState().room;
 		const dataMessage = {
 			message: { text: data.text },
 			player: {
@@ -31,6 +32,7 @@ export const sendMessageRoom = data => (dispatch, getState, { api, sockets }) =>
 export const subscribeToRoomChat = () => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_subscribe('game', SEND_MESSAGE_ROOM_SUCCESS));
 	dispatch(ws_subscribe('game', SEND_MESSAGE_ROOM_FAILURE));
+	dispatch(ws_subscribe('game', RECEIVE_MESSAGE_ROOM));
 };
 
 // export const sendMessageRoomSuccessfull = userData => ({
