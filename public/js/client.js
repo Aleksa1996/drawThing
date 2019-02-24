@@ -82,12 +82,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
 /* harmony import */ var _hocs_asyncComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hocs/asyncComponent */ "./resources/assets/js/hocs/asyncComponent.js");
-<<<<<<< HEAD
-/* harmony import */ var _components_Pages_Home_Home__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Pages/Home/Home */ "./resources/assets/js/components/Pages/Home/Home.jsx");
-/* harmony import */ var _components_Pages_About_About__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Pages/About/About */ "./resources/assets/js/components/Pages/About/About.jsx");
-/* harmony import */ var _components_Pages_Contact_Contact__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Pages/Contact/Contact */ "./resources/assets/js/components/Pages/Contact/Contact.jsx");
-/* harmony import */ var _components_Pages_Game_Game__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Pages/Game/Game */ "./resources/assets/js/components/Pages/Game/Game.jsx");
-=======
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(uuid__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _components_Pages_Home_Home__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Pages/Home/Home */ "./resources/assets/js/components/Pages/Home/Home.jsx");
@@ -97,7 +91,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Pages_Play_Play__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Pages/Play/Play */ "./resources/assets/js/components/Pages/Play/Play.jsx");
 /* harmony import */ var _components_Pages_Room_Room__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/Pages/Room/Room */ "./resources/assets/js/components/Pages/Room/Room.jsx");
 
->>>>>>> develop
 
 
  // const HomeAsync = asyncComponent(() => import('./components/Pages/Home/Home'));
@@ -121,27 +114,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-<<<<<<< HEAD
-var routes = [{
-  id: '123',
-  path: '/',
-  component: _components_Pages_Home_Home__WEBPACK_IMPORTED_MODULE_3__["default"],
-  exact: true
-}, {
-  id: '124',
-  path: '/about',
-  component: _components_Pages_About_About__WEBPACK_IMPORTED_MODULE_4__["default"],
-  exact: true
-}, {
-  id: '126',
-  path: '/contact',
-  component: _components_Pages_Contact_Contact__WEBPACK_IMPORTED_MODULE_5__["default"],
-  exact: true
-}, {
-  id: '127',
-  path: '/game',
-  component: _components_Pages_Game_Game__WEBPACK_IMPORTED_MODULE_6__["default"],
-=======
 
 
 var routes = [{
@@ -173,7 +145,6 @@ var routes = [{
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/room',
   component: _components_Pages_Room_Room__WEBPACK_IMPORTED_MODULE_9__["default"],
->>>>>>> develop
   exact: true
 }];
 
@@ -194,8 +165,6 @@ var Router = function Router(props) {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./resources/assets/js/actions/chatActions.js":
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/chatActions.js ***!
@@ -535,36 +504,15 @@ var joinRoomFailure = function joinRoomFailure(error) {
 
 /***/ }),
 
->>>>>>> develop
 /***/ "./resources/assets/js/actions/types.js":
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-<<<<<<< HEAD
-/*! exports provided: FETCHING_BLOGS, FETCH_BLOGS_SUCCESS, FETCH_BLOGS_FAILURE */
-=======
 /*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM */
->>>>>>> develop
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCHING_BLOGS", function() { return FETCHING_BLOGS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_BLOGS_SUCCESS", function() { return FETCH_BLOGS_SUCCESS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_BLOGS_FAILURE", function() { return FETCH_BLOGS_FAILURE; });
-var FETCHING_BLOGS = 'FETCHING_BLOGS';
-var FETCH_BLOGS_SUCCESS = 'FETCH_BLOGS_SUCCESS';
-var FETCH_BLOGS_FAILURE = 'FETCH_BLOGS_FAILURE';
-
-/***/ }),
-
-/***/ "./resources/assets/js/api/blog.js":
-/*!*****************************************!*\
-  !*** ./resources/assets/js/api/blog.js ***!
-  \*****************************************/
-/*! exports provided: get, find */
-=======
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CONNECT_WS", function() { return CONNECT_WS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DISCONNECT_WS", function() { return DISCONNECT_WS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUBSCRIBE_WS", function() { return SUBSCRIBE_WS; });
@@ -624,30 +572,10 @@ var RECEIVE_MESSAGE_ROOM = 'RECEIVE_MESSAGE_ROOM';
   !*** ./resources/assets/js/actions/websocketActions.js ***!
   \*********************************************************/
 /*! exports provided: ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, ws_make_connection */
->>>>>>> develop
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "find", function() { return find; });
-/* harmony import */ var isomorphic_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! isomorphic-fetch */ "./node_modules/isomorphic-fetch/fetch-npm-browserify.js");
-/* harmony import */ var isomorphic_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(isomorphic_fetch__WEBPACK_IMPORTED_MODULE_0__);
-// import axios from 'axios';
-
-var self = 'http://drawthing.com'; // export const get = () => axios.get(`${self}/api/blog`);
-
-var get = function get() {
-  return isomorphic_fetch__WEBPACK_IMPORTED_MODULE_0___default()('http://drawthing.com/api/blog').then(function (res) {
-    return res.json();
-  }).then(function (res) {
-    return res.blogs;
-  });
-};
-var find = function find() {
-  return axios.get("https://jsonplaceholder.typicode.com/albums/1/photos");
-=======
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ws_connect", function() { return ws_connect; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ws_disconnect", function() { return ws_disconnect; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ws_subscribe", function() { return ws_subscribe; });
@@ -703,7 +631,6 @@ var ws_make_connection = function ws_make_connection(socket) {
     dispatch(ws_subscribe(socket, 'connect_error', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_FAILURE"]));
     dispatch(ws_subscribe(socket, 'error', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_FAILURE"]));
   };
->>>>>>> develop
 };
 
 /***/ }),
@@ -717,12 +644,6 @@ var ws_make_connection = function ws_make_connection(socket) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
-/* harmony import */ var _blog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./blog */ "./resources/assets/js/api/blog.js");
-
-var api = {
-  blog: _blog__WEBPACK_IMPORTED_MODULE_0__
-=======
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./resources/assets/js/api/player.js");
 /* harmony import */ var _room__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./room */ "./resources/assets/js/api/room.js");
 
@@ -730,14 +651,11 @@ var api = {
 var api = {
   player: _player__WEBPACK_IMPORTED_MODULE_0__,
   room: _room__WEBPACK_IMPORTED_MODULE_1__
->>>>>>> develop
 };
 /* harmony default export */ __webpack_exports__["default"] = (api);
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./resources/assets/js/api/player.js":
 /*!*******************************************!*\
   !*** ./resources/assets/js/api/player.js ***!
@@ -786,7 +704,6 @@ var join = function join() {
 
 /***/ }),
 
->>>>>>> develop
 /***/ "./resources/assets/js/bootstrap.js":
 /*!******************************************!*\
   !*** ./resources/assets/js/bootstrap.js ***!
@@ -794,31 +711,20 @@ var join = function join() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
-window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-=======
->>>>>>> develop
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
  * code may be modified to fit the specific needs of your application.
  */
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 try {
   window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
-<<<<<<< HEAD
-=======
 
   window.io = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
   $(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
->>>>>>> develop
 } catch (e) {}
 
 /***/ }),
@@ -863,8 +769,6 @@ react_dom__WEBPACK_IMPORTED_MODULE_5___default.a.hydrate(app, document.getElemen
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
 /***/ "./resources/assets/js/components/Common/Dropdown/Dropdown.jsx":
 /*!*********************************************************************!*\
   !*** ./resources/assets/js/components/Common/Dropdown/Dropdown.jsx ***!
@@ -1073,7 +977,6 @@ var Button = function Button(_ref) {
 
 /***/ }),
 
->>>>>>> develop
 /***/ "./resources/assets/js/components/Layout/Layout.jsx":
 /*!**********************************************************!*\
   !*** ./resources/assets/js/components/Layout/Layout.jsx ***!
@@ -1086,13 +989,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Navigation_Navigation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Navigation/Navigation */ "./resources/assets/js/components/Navigation/Navigation.jsx");
-<<<<<<< HEAD
-/* harmony import */ var _Router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Router */ "./resources/assets/js/Router.js");
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-transition-group */ "./node_modules/react-transition-group/index.js");
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_transition_group__WEBPACK_IMPORTED_MODULE_3__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-=======
 /* harmony import */ var _Footer_Footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Footer/Footer */ "./resources/assets/js/components/Footer/Footer.jsx");
 /* harmony import */ var _Router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Router */ "./resources/assets/js/Router.js");
 /* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-transition-group */ "./node_modules/react-transition-group/index.js");
@@ -1101,7 +997,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
->>>>>>> develop
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1123,10 +1018,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 var Layout =
 /*#__PURE__*/
 function (_Component) {
@@ -1147,8 +1038,6 @@ function (_Component) {
   }
 
   _createClass(Layout, [{
-<<<<<<< HEAD
-=======
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState, snapshot) {
       if (this.props.location !== prevProps.location) {
@@ -1156,7 +1045,6 @@ function (_Component) {
       }
     }
   }, {
->>>>>>> develop
     key: "render",
     value: function render() {
       var currentKey = this.props.location.pathname.split('/')[1] || '/';
@@ -1164,27 +1052,15 @@ function (_Component) {
         enter: 300,
         exit: 200
       };
-<<<<<<< HEAD
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Navigation_Navigation__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "main-container",
-        className: "container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_3__["TransitionGroup"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_3__["CSSTransition"], {
-=======
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Navigation_Navigation__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({
         scrollTop: this.state.scrollTop
       }, this.props)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "main-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_4__["TransitionGroup"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_4__["CSSTransition"], {
->>>>>>> develop
         key: currentKey,
         classNames: "fade",
         timeout: timeout,
         appear: true
-<<<<<<< HEAD
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Router__WEBPACK_IMPORTED_MODULE_2__["default"], this.props)))));
-    }
-  }]);
-=======
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Router__WEBPACK_IMPORTED_MODULE_3__["default"], this.props)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], null));
     }
   }]);
@@ -5094,7 +4970,6 @@ var reducer = function reducer() {
 
         return updatePlayer(state, newPlayer);
       }
->>>>>>> develop
 
     default:
       return _objectSpread({}, state);
