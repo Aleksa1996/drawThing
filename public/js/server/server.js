@@ -81331,6 +81331,7 @@ function (_Component) {
           room = _this$props2.room,
           chat = _this$props2.chat;
       var roomModel = new _utils_classes_Room__WEBPACK_IMPORTED_MODULE_4__["default"](room);
+      var isPlayerAdmin = roomModel.isPlayerAdmin(player);
 
       if (!roomModel.isCreated() && !roomModel.isJoined()) {
         return null;
@@ -81347,18 +81348,19 @@ function (_Component) {
         className: "game-created-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "game-created-title"
-      }, "Successfully created room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomPlayers__WEBPACK_IMPORTED_MODULE_8__["default"], {
-        room: room,
-        ref: this.joinLinkInputRef,
-        handleCopyToClipboard: this.handleCopyToClipboard
+      }, roomModel.isCreated() && 'Successfully created room', roomModel.isJoined() && 'Successfully joined room'), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomPlayers__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        room: roomModel,
+        isPlayerAdmin: isPlayerAdmin,
+        handleCopyToClipboard: this.handleCopyToClipboard,
+        ref: this.joinLinkInputRef
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-created-chat-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomChat__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        room: room,
+        room: roomModel,
         chat: chat,
         handleChatSend: this.handleChatSend,
         ref: this.chatBodyRef
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      })), isPlayerAdmin && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_9__["default"], {
         icon: "fa-rocket",
@@ -81423,8 +81425,10 @@ var RoomChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "d-flex justify-content-start align-items-baseline flex-row"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "game-board-chat-user mr-3"
-    }, player.username), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "game-board-chat-user mr-2 text-nowrap"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "text-nowrap"
+    }, player.username, ":")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "game-board-chat-text rounded"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       className: "m-0"
@@ -81499,7 +81503,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var RoomPlayers = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function (_ref, joinLinkInputRef) {
   var room = _ref.room,
-      handleCopyToClipboard = _ref.handleCopyToClipboard;
+      handleCopyToClipboard = _ref.handleCopyToClipboard,
+      isPlayerAdmin = _ref.isPlayerAdmin;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-created-join-link"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -81527,18 +81532,19 @@ var RoomPlayers = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(functi
       key: p.id,
       className: "game-created-user-list-item"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-      className: "game-created-user-avatar shadow"
+      className: "game-created-user-avatar shadow mx-3"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: p.avatar,
-      alt: p.username
+      alt: p.username,
+      className: "rounded"
     }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-star game-creater-user-leader",
       "aria-hidden": "true",
       title: "Room leader"
     })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-      className: "game-created-user-username"
-    }, p.username), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-      className: "game-created-user-kick"
+      className: "game-created-user-username mx-3"
+    }, p.username), isPlayerAdmin && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "game-created-user-kick ml-auto"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "mybtn2",
       title: "Kick"
@@ -82343,6 +82349,7 @@ var initialState = {
   id: null,
   uuid: null,
   created_at: null,
+  created_by: null,
   //
   creating: false,
   created: false,
@@ -82823,6 +82830,8 @@ function (_Model) {
       return _this.joined && _this.joinError == null;
     }, _this.isReady = function () {
       return _this.isCreated() || _this.isJoined();
+    }, _this.isPlayerAdmin = function (player) {
+      return _this.created_by == player.id;
     }, _temp));
   }
 

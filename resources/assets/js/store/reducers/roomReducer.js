@@ -14,6 +14,7 @@ const initialState = {
 	id: null,
 	uuid: null,
 	created_at: null,
+	created_by: null,
 	//
 	creating: false,
 	created: false,

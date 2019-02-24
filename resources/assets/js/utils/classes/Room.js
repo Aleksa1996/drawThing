@@ -10,4 +10,6 @@ export default class Room extends Model {
 	};
 
 	isReady = () => this.isCreated() || this.isJoined();
+
+	isPlayerAdmin = player => this.created_by == player.id;
 }

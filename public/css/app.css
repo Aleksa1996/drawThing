@@ -13293,9 +13293,10 @@ body {
 .game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input {
   border-width: 2px;
   height: 65px;
-  padding: 10px;
+  padding: 10px 70px 10px 10px;
   background: #fff;
   color: #25313d;
+  overflow-x: scroll;
 }
 
 .game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input:focus {
@@ -13750,7 +13751,7 @@ body {
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
 }
 

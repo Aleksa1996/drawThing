@@ -70,6 +70,7 @@ class Room extends Component {
 	render() {
 		const { player, room, chat } = this.props;
 		const roomModel = new RoomModel(room);
+		const isPlayerAdmin = roomModel.isPlayerAdmin(player);
 		if (!roomModel.isCreated() && !roomModel.isJoined()) {
 			return null;
 		}
@@ -79,26 +80,32 @@ class Room extends Component {
 				<div className="game-start-container container">
 					<div className="game-start-card rounded shadow">
 						<div className="game-created-container">
-							<h1 className="game-created-title">Successfully created room</h1>
+							<h1 className="game-created-title">
+								{roomModel.isCreated() && 'Successfully created room'}
+								{roomModel.isJoined() && 'Successfully joined room'}
+							</h1>
 							<RoomPlayers
-								room={room}
-								ref={this.joinLinkInputRef}
+								room={roomModel}
+								isPlayerAdmin={isPlayerAdmin}
 								handleCopyToClipboard={this.handleCopyToClipboard}
+								ref={this.joinLinkInputRef}
 							/>
 							<div className="game-created-chat-container">
 								<RoomChat
-									room={room}
+									room={roomModel}
 									chat={chat}
 									handleChatSend={this.handleChatSend}
 									ref={this.chatBodyRef}
 								/>
 							</div>
 
-							<div className="text-center">
-								<Button icon="fa-rocket" className="mybtn2 my-auto">
-									Start game
-								</Button>
-							</div>
+							{isPlayerAdmin && (
+								<div className="text-center">
+									<Button icon="fa-rocket" className="mybtn2 my-auto">
+										Start game
+									</Button>
+								</div>
+							)}
 						</div>
 					</div>
 					<PlayRules />

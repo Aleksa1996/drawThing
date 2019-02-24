@@ -12,7 +12,9 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 						return (
 							<div key={m.id} className="game-board-chat-message">
 								<div className="d-flex justify-content-start align-items-baseline flex-row">
-									<div className="game-board-chat-user mr-3">{player.username}</div>
+									<div className="game-board-chat-user mr-2 text-nowrap">
+										<span className="text-nowrap">{player.username}:</span>
+									</div>
 									<div className="game-board-chat-text rounded">
 										<p className="m-0">{m.text}</p>
 									</div>

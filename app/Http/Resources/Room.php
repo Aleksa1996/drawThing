@@ -18,7 +18,8 @@ class Room extends Resource
             'id' => $this->id,
             'uuid' => $this->uuid,
             'players' => Player::collection($this->whenLoaded('players')),
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'created_by' => $this->created_by
         ];
     }
 }
