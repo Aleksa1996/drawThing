@@ -20,6 +20,7 @@ import playerReducer from './reducers/playerReducer';
 import roomReducer from './reducers/roomReducer';
 import chatReducer from './reducers/chatReducer';
 import gameReducer from './reducers/gameReducer';
+import modalReducer from './reducers/modalReducer';
 //Reducer imports end
 
 const isServer = !(
@@ -43,12 +44,12 @@ const rootReducer = combineReducers({
 	router: connectRouter(history),
 	form: formReducer,
 	common: commonReducer,
-	// gameStartReducer
 	socket: socketReducer,
 	player: playerReducer,
 	room: roomReducer,
 	chat: chatReducer,
-	game: gameReducer
+	game: gameReducer,
+	modal: modalReducer
 });
 
 let serverState = {};

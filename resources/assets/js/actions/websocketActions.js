@@ -23,7 +23,7 @@ export const ws_subscribe = (socketID, event, customActionType = null) => ({
 	customActionType
 });
 
-export const ws_unsubscribe = (socketID, event) => ({
+export const ws_unsubscribe = (socketID, event = []) => ({
 	type: UNSUBSCRIBE_WS,
 	socketID,
 	event

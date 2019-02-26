@@ -21,8 +21,6 @@ class Play extends Component {
 		this.roomUUID = this.props.match.params.roomUUID;
 		this.hasRoomUUID = typeof this.roomUUID !== 'undefined' && this.roomUUID;
 
-		this.subscribeToSocketConnect = false;
-
 		this.state = {
 			avatarForm: {
 				width: 300,
@@ -49,9 +47,8 @@ class Play extends Component {
 	}
 
 	componentDidMount() {
-		if (!this.subscribeToSocketConnect) {
+		if (!this.props.socket.fd && !this.props.socket.connected) {
 			this.props.ws_make_connection('game');
-			this.subscribeToSocketConnect = true;
 		}
 	}
 
@@ -67,7 +64,7 @@ class Play extends Component {
 	handleSubmit = async e => {
 		const { username, valid: usernameFormValid } = this.state.usernameForm;
 		const { valid: avatarFormValid } = this.state.avatarForm;
-		const { value: startType } = e.target;
+		const { value: startType } = e.currentTarget;
 
 		e.preventDefault();
 
@@ -84,7 +81,7 @@ class Play extends Component {
 			avatar
 		};
 
-		this.props
+		return this.props
 			.createPlayer(data)
 			.then(response => {
 				switch (startType) {
@@ -136,7 +133,7 @@ class Play extends Component {
 		} = e;
 
 		this.setState(({ usernameForm }) => ({
-			usernameForm: { ...usernameForm, username, valid: username.length > 3 },
+			usernameForm: { ...usernameForm, username, valid: username.length >= 3 },
 			errors: { username: null }
 		}));
 	};

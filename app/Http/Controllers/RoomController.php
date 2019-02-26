@@ -178,7 +178,7 @@ class RoomController extends Controller
             'room.uuid' => 'required|string|min:1',
             'player_to_kick.id' => 'required|numeric|min:1'
         ]);
-        // var_dump($data);
+
         try {
             // find player that needs to be kicked
             $playerToKick = Player::find($data['player_to_kick']['id']);
@@ -186,6 +186,8 @@ class RoomController extends Controller
             Websocket::broadcast()->to($data['room']['uuid'])->emit('PLAYER_KICKED', ['player' => new PlayerResource($playerToKick)]);
             // remove player from room
             WebsocketRoom::delete($playerToKick->fd, $data['room']['uuid']);
+
+            $playerToKick->delete();
 
             return response()->json(['player' => new PlayerResource($playerToKick)], 200);
         } catch (\Exception $e) {

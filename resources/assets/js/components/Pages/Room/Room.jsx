@@ -5,8 +5,11 @@ import {
 	kickPlayer,
 	subscribeToChatGlobalEvents,
 	subscribeToRoomGlobalEvents,
-	clearDataAfterKick
+	clearDataAfterKick,
+	showModal
 } from '../../../actions';
+
+import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
 import { push } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
@@ -38,8 +41,10 @@ class Room extends Component {
 
 		const roomModel = new RoomModel(room);
 		try {
+			// redirect if socket is not connected
 			if (!socket.connected) throw new Error('Socket not connected');
 
+			// listen for chat and room events when room is created or joined
 			if (roomModel.isReady() && !this.subscribedToRoomChat) {
 				subscribeToChatGlobalEvents();
 				subscribeToRoomGlobalEvents();
@@ -52,11 +57,20 @@ class Room extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
+		// redirect player to play page and clear data if he is kicked by admin
 		if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
 			this.props.clearDataAfterKick();
+			this.props.showModal({
+				modalType: INFO_MODAL,
+				modalProps: {
+					body: 'You were kicked from the room by admin'
+				}
+			});
 			this.props.push('/play');
 			return;
 		}
+
+		// chat always scroll on new message to see the latest one
 		if (
 			this.props.chat.messages.length != prevProps.chat.messages.length &&
 			this.props.chat.messages.length > 0
@@ -94,13 +108,20 @@ class Room extends Component {
 	};
 
 	handleCopyToClipboard = e => {
+		// copy to clipboard share link
 		this.joinLinkInputRef.current.select();
 		document.execCommand('copy');
 		e.target.focus();
 	};
 
-	handleKick = player_id => {
-		this.props.kickPlayer({ player_to_kick: player_id });
+	handleKick = playerId => {
+		//kick player from room by admin
+		this.props.showModal({
+			modalType: KICK_PLAYER_MODAL,
+			modalProps: {
+				playerId
+			}
+		});
 	};
 
 	render() {
@@ -160,6 +181,7 @@ export default connect(
 		subscribeToChatGlobalEvents,
 		kickPlayer,
 		subscribeToRoomGlobalEvents,
-		clearDataAfterKick
+		clearDataAfterKick,
+		showModal
 	}
 )(Room);

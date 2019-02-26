@@ -12,13 +12,17 @@ import {
 	PLAYER_KICKED,
 	CLEAR_ROOM_DATA
 } from './types';
-import { ws_connect, ws_subscribe, ws_emit } from './websocketActions';
-import { clearChatData } from './chatActions';
+import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
+import { clearChatData, unsubscribeToChatGlobalEvents } from './chatActions';
 import { clearPlayerData } from './playerActions';
 
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_subscribe('game', PLAYER_JOINED_ROOM));
 	dispatch(ws_subscribe('game', PLAYER_KICKED));
+};
+
+export const unsubscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
+	dispatch(ws_unsubscribe('game', [PLAYER_JOINED_ROOM, PLAYER_KICKED]));
 };
 
 export const clearRoomData = () => ({ type: CLEAR_ROOM_DATA });
@@ -81,7 +85,7 @@ export const joinRoom = (data = null) => (dispatch, getState, { api, sockets }) 
 export const joinRoomSuccess = room => ({ type: JOIN_ROOM_SUCCESS, payload: room });
 export const joinRoomFailure = error => ({ type: JOIN_ROOM_FAILURE, payload: error });
 
-export const kickPlayer = (data = null) => (dispatch, getState, { api, sockets }) => {
+export const kickPlayer = playerId => (dispatch, getState, { api, sockets }) => {
 	dispatch({ type: KICKING_PLAYER });
 	const { id, username, password } = getState().player;
 	const { uuid } = getState().room;
@@ -96,7 +100,7 @@ export const kickPlayer = (data = null) => (dispatch, getState, { api, sockets }
 			uuid
 		},
 		player_to_kick: {
-			id: data.player_to_kick
+			id: playerId
 		}
 	};
 
@@ -117,7 +121,12 @@ export const kickPlayerSuccess = room => ({ type: PLAYER_KICK_SUCCESS, payload: 
 export const kickPlayerFailure = error => ({ type: PLAYER_KICK_FAILURE, payload: error });
 
 export const clearDataAfterKick = () => (dispatch, getState, { api, sockets }) => {
+	// clear reducer state
 	dispatch(clearRoomData());
 	dispatch(clearChatData());
 	dispatch(clearPlayerData());
+
+	//unsubscribe chat and room events
+	dispatch(unsubscribeToRoomGlobalEvents());
+	dispatch(unsubscribeToChatGlobalEvents());
 };
