@@ -43,4 +43,5 @@ export const ws_make_connection = socket => (dispatch, getState, { api, sockets 
 	dispatch(ws_subscribe(socket, 'CONNECT_SOCKET_DATA', CONNECT_SOCKET_DATA));
 	dispatch(ws_subscribe(socket, 'connect_error', CONNECT_SOCKET_FAILURE));
 	dispatch(ws_subscribe(socket, 'error', CONNECT_SOCKET_FAILURE));
+	dispatch(ws_subscribe(socket, 'disconnect', CONNECT_SOCKET_FAILURE));
 };

@@ -6,6 +6,7 @@ import {
 	JOIN_ROOM_SUCCESS,
 	JOIN_ROOM_FAILURE,
 	PLAYER_JOINED_ROOM,
+	PLAYER_LEAVED_ROOM,
 	KICKING_PLAYER,
 	PLAYER_KICK_SUCCESS,
 	PLAYER_KICK_FAILURE,
@@ -19,6 +20,7 @@ import { clearPlayerData } from './playerActions';
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_subscribe('game', PLAYER_JOINED_ROOM));
 	dispatch(ws_subscribe('game', PLAYER_KICKED));
+	dispatch(ws_subscribe('game', PLAYER_LEAVED_ROOM));
 };
 
 export const unsubscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
@@ -45,7 +47,7 @@ export const createRoom = (data = null) => (dispatch, getState, { api, sockets }
 			return response;
 		})
 		.catch(error => {
-			console.log(error);
+			console.log(error.response);
 			console.log(error.response.data);
 			dispatch(createRoomFailure(error.response.data));
 		});
@@ -76,7 +78,7 @@ export const joinRoom = (data = null) => (dispatch, getState, { api, sockets }) 
 			return response;
 		})
 		.catch(error => {
-			console.log(error);
+			console.log(error.response);
 			console.log(error.response.data);
 			dispatch(joinRoomFailure(error.response.data));
 		});
@@ -111,7 +113,7 @@ export const kickPlayer = playerId => (dispatch, getState, { api, sockets }) => 
 			return response;
 		})
 		.catch(error => {
-			console.log(error);
+			console.log(error.response);
 			console.log(error.response.data);
 			dispatch(kickPlayerFailure(error.response.data));
 		});

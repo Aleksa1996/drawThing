@@ -85,6 +85,7 @@ class Room extends Component {
 		// Message comes from text input
 		if (e.type == 'submit') {
 			message = e.target.elements['game-board-chat-input'].value;
+			if (message && message.length <= 0) return;
 			e.target.reset();
 		}
 		// Message comes from emoji dropdown

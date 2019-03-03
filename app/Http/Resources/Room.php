@@ -17,9 +17,16 @@ class Room extends Resource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
+            'active' => $this->active,
+            'number_of_games' => $this->number_of_games,
+            'current_game' => $this->current_game,
+
+            'created_by' => $this->created_by,
+            'administered_by' => $this->administered_by,
+
             'players' => Player::collection($this->whenLoaded('players')),
-            'created_at' => $this->created_at,
-            'created_by' => $this->created_by
+
+            'created_at' => $this->created_at
         ];
     }
 }

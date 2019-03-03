@@ -505,6 +505,7 @@ var subscribeToRoomGlobalEvents = function subscribeToRoomGlobalEvents() {
         sockets = _ref.sockets;
     dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"]));
     dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]));
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_subscribe"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_LEAVED_ROOM"]));
   };
 };
 var unsubscribeToRoomGlobalEvents = function unsubscribeToRoomGlobalEvents() {
@@ -540,7 +541,7 @@ var createRoom = function createRoom() {
       dispatch(createRoomSuccess(response.data));
       return response;
     }).catch(function (error) {
-      console.log(error);
+      console.log(error.response);
       console.log(error.response.data);
       dispatch(createRoomFailure(error.response.data));
     });
@@ -584,7 +585,7 @@ var joinRoom = function joinRoom() {
       dispatch(joinRoomSuccess(response.data));
       return response;
     }).catch(function (error) {
-      console.log(error);
+      console.log(error.response);
       console.log(error.response.data);
       dispatch(joinRoomFailure(error.response.data));
     });
@@ -631,7 +632,7 @@ var kickPlayer = function kickPlayer(playerId) {
       dispatch(kickPlayerSuccess(response.data));
       return response;
     }).catch(function (error) {
-      console.log(error);
+      console.log(error.response);
       console.log(error.response.data);
       dispatch(kickPlayerFailure(error.response.data));
     });
@@ -669,7 +670,7 @@ var clearDataAfterKick = function clearDataAfterKick() {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, SHOW_MODAL, HIDE_MODAL */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, SHOW_MODAL, HIDE_MODAL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -695,15 +696,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOIN_ROOM_SUCCESS", function() { return JOIN_ROOM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOIN_ROOM_FAILURE", function() { return JOIN_ROOM_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_JOINED_ROOM", function() { return PLAYER_JOINED_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_LEAVED_ROOM", function() { return PLAYER_LEAVED_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KICKING_PLAYER", function() { return KICKING_PLAYER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_SUCCESS", function() { return PLAYER_KICK_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_FAILURE", function() { return PLAYER_KICK_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICKED", function() { return PLAYER_KICKED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SENDING_MESSAGE_ROOM", function() { return SENDING_MESSAGE_ROOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEND_MESSAGE_ROOM_SUCCESS", function() { return SEND_MESSAGE_ROOM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEND_MESSAGE_ROOM_FAILURE", function() { return SEND_MESSAGE_ROOM_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_MESSAGE_ROOM", function() { return RECEIVE_MESSAGE_ROOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_CHAT_DATA", function() { return CLEAR_CHAT_DATA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KICKING_PLAYER", function() { return KICKING_PLAYER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_SUCCESS", function() { return PLAYER_KICK_SUCCESS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_FAILURE", function() { return PLAYER_KICK_FAILURE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICKED", function() { return PLAYER_KICKED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_MODAL", function() { return SHOW_MODAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HIDE_MODAL", function() { return HIDE_MODAL; });
 var CONNECT_WS = 'CONNECT_WS';
@@ -735,7 +737,13 @@ var JOINING_ROOM = 'JOINING_ROOM';
 var JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
 var JOIN_ROOM_FAILURE = 'JOIN_ROOM_FAILURE'; //
 
-var PLAYER_JOINED_ROOM = 'PLAYER_JOINED_ROOM'; //
+var PLAYER_JOINED_ROOM = 'PLAYER_JOINED_ROOM';
+var PLAYER_LEAVED_ROOM = 'PLAYER_LEAVED_ROOM'; //
+
+var KICKING_PLAYER = 'KICKING_PLAYER';
+var PLAYER_KICK_SUCCESS = 'PLAYER_KICK_SUCCESS';
+var PLAYER_KICK_FAILURE = 'PLAYER_KICK_FAILURE';
+var PLAYER_KICKED = 'PLAYER_KICKED'; //
 
 var SENDING_MESSAGE_ROOM = 'SENDING_MESSAGE_ROOM';
 var SEND_MESSAGE_ROOM_SUCCESS = 'SEND_MESSAGE_ROOM_SUCCESS';
@@ -743,10 +751,6 @@ var SEND_MESSAGE_ROOM_FAILURE = 'SEND_MESSAGE_ROOM_FAILURE';
 var RECEIVE_MESSAGE_ROOM = 'RECEIVE_MESSAGE_ROOM';
 var CLEAR_CHAT_DATA = 'CLEAR_CHAT_DATA'; //
 
-var KICKING_PLAYER = 'KICKING_PLAYER';
-var PLAYER_KICK_SUCCESS = 'PLAYER_KICK_SUCCESS';
-var PLAYER_KICK_FAILURE = 'PLAYER_KICK_FAILURE';
-var PLAYER_KICKED = 'PLAYER_KICKED';
 var SHOW_MODAL = 'SHOW_MODAL';
 var HIDE_MODAL = 'HIDE_MODAL';
 
@@ -816,6 +820,7 @@ var ws_make_connection = function ws_make_connection(socket) {
     dispatch(ws_subscribe(socket, 'CONNECT_SOCKET_DATA', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_DATA"]));
     dispatch(ws_subscribe(socket, 'connect_error', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_FAILURE"]));
     dispatch(ws_subscribe(socket, 'error', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_FAILURE"]));
+    dispatch(ws_subscribe(socket, 'disconnect', _types__WEBPACK_IMPORTED_MODULE_0__["CONNECT_SOCKET_FAILURE"]));
   };
 };
 
@@ -4468,6 +4473,7 @@ function (_Component) {
 
       if (e.type == 'submit') {
         message = e.target.elements['game-board-chat-input'].value;
+        if (message && message.length <= 0) return;
         e.target.reset();
       } // Message comes from emoji dropdown
       else if (e.type == 'click' && additionalData) {
@@ -5607,8 +5613,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var initialState = {
   id: null,
   uuid: null,
-  created_at: null,
+  active: false,
+  number_of_games: 3,
+  current_game: 0,
   created_by: null,
+  administered_by: null,
+  created_at: null,
   //
   creating: false,
   created: false,
@@ -5645,7 +5655,8 @@ var reducer = function reducer() {
       {
         return updateRoom(state, _objectSpread({
           creating: false,
-          created: true
+          created: true,
+          createError: null
         }, payload.room));
       }
 
@@ -5654,7 +5665,7 @@ var reducer = function reducer() {
         return updateRoom(state, {
           creating: false,
           created: false,
-          createError: payload
+          createError: payload.message
         });
       }
     //
@@ -5670,7 +5681,8 @@ var reducer = function reducer() {
       {
         return updateRoom(state, _objectSpread({
           joining: false,
-          joined: true
+          joined: true,
+          joinError: null
         }, payload.room));
       }
 
@@ -5679,7 +5691,7 @@ var reducer = function reducer() {
         return updateRoom(state, {
           joining: false,
           joined: false,
-          joinError: payload
+          joinError: payload.message
         });
       }
 
@@ -5691,12 +5703,21 @@ var reducer = function reducer() {
         });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_LEAVED_ROOM"]:
       {
         var _newPlayers = removePlayer(state.players, payload.player);
 
         return updateRoom(state, {
-          players: _newPlayers,
+          players: _newPlayers
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]:
+      {
+        var _newPlayers2 = removePlayer(state.players, payload.player);
+
+        return updateRoom(state, {
+          players: _newPlayers2,
           lastKickedPlayer: payload.player
         });
       }

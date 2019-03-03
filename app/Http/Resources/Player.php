@@ -18,6 +18,7 @@ class Player extends Resource
             'id' => $this->id,
             'username' => $this->username,
             'avatar' => $this->avatar,
+            'fd' => $this->fd
         ];
     }
 }

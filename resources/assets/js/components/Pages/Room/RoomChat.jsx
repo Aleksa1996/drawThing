@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { v4 } from 'uuid';
 
 import { split as _split, find as _find } from 'lodash';

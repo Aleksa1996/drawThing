@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayersTable extends Migration
+class CreatePlayerRoundTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreatePlayersTable extends Migration
      */
     public function up()
     {
-        Schema::create('players', function (Blueprint $table) {
+        Schema::create('player_round', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('username');
-            $table->string('password')->default('');
+            $table->boolean('guessed')->default(false);
 
-            $table->string('avatar');
-
-            $table->integer('fd')->default(0);
+            $table->unsignedInteger('player_id');
+            $table->unsignedInteger('round_id');
 
             $table->timestamps();
         });
@@ -34,6 +32,6 @@ class CreatePlayersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('players');
+        Schema::dropIfExists('player_round');
     }
 }

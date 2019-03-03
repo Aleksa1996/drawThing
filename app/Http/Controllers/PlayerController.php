@@ -37,20 +37,10 @@ class PlayerController extends Controller
 
         try {
             // upload image
-            $avatarPath = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
+            $data['avatar'] = $request->avatar->store('img/avatar', ['disk' => 'uploads']);
 
             // creating new player
-            $player = new Player();
-
-            $player->username = $data['username'];
-            $player->avatar = $avatarPath;
-            $player->score = 0;
-            $player->fd = $data['fd'];
-            $player->save();
-
-            // Generating password with id
-            $player->password = $data['username'] . '_' . $player->id;
-            $player->save();
+            $player = Player::create($data);
 
             return response()->json(['player' => new PlayerResource($player)], 201);
         } catch (\Exception $e) {
