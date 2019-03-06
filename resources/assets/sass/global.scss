@@ -139,3 +139,42 @@ body {
 		box-shadow: none;
 	}
 }
+
+.spinner-icon {
+	display: inline-block;
+	color: #ced4da;
+	animation-name: spinnerAnimation;
+	animation-duration: 3s;
+	animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
+	animation-iteration-count: infinite;
+	animation-delay: 0.4s;
+	text-align: left;
+}
+
+@keyframes spinnerAnimation {
+	0% {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+
+	50% {
+		transform: rotate3d(0, 0, 1, 540deg);
+	}
+
+	100% {
+		transform: rotate3d(0, 0, 1, 0deg);
+	}
+}
+
+input[type='button']:disabled,
+input[type='submit']:disabled,
+input[type='reset']:disabled,
+input[type='file']:disabled::-webkit-file-upload-button,
+button:disabled,
+select:disabled,
+optgroup:disabled,
+option:disabled,
+select[disabled] > option {
+	border-color: #ced4da !important;
+	color: #ced4da !important;
+	pointer-events: none;
+}

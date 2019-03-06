@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { v4 } from 'uuid';
 
-import { split as _split, find as _find } from 'lodash';
+import { split as _split, find as _find, get as _get } from 'lodash';
+import RoomChatMessage from './RoomChatMessage';
 
 const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) => {
 	return (
@@ -10,35 +11,15 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 				<h2 className="game-created-title">Room Chat</h2>
 				<div className="game-board-chat-body" ref={chatBodyRef}>
 					{chat.messages.map(m => {
-						const player = room.players.find(p => p.id == m.player_id);
-						if (!player) return null;
+						const player = room.getPlayer(m.player_id);
+						if (!player && m.player_id != '#playerActionMessage') return null;
 						return (
-							<div key={m.id} className="game-board-chat-message">
-								<div className="d-flex justify-content-start align-items-baseline flex-row">
-									<div className="game-board-chat-user mr-2 text-nowrap">
-										<span className="text-nowrap">{player.username}:</span>
-									</div>
-									<div className="game-board-chat-text rounded">
-										<p className="m-0">
-											{_split(
-												chat.emojis.reduce(
-													(accumulator, currentValue) =>
-														accumulator.replace(currentValue.text, ` ${currentValue.text} `),
-													m.text
-												),
-												/\s+/g
-											).map(word => {
-												const found = _find(chat.emojis, v => v.text == word.trim());
-												return found ? (
-													<i key={v4()} className={`fa ${found.class} mx-2`} />
-												) : (
-													` ${word} `
-												);
-											})}
-										</p>
-									</div>
-								</div>
-							</div>
+							<RoomChatMessage
+								key={m.id}
+								chat={chat}
+								message={m.text}
+								username={_get(player, 'username', '')}
+							/>
 						);
 					})}
 				</div>

@@ -18,13 +18,8 @@ class CreatePlayersTable extends Migration
 
             $table->string('username');
             $table->string('password')->default('');
-
             $table->string('avatar');
-            $table->bigInteger('score')->default(0);
-
             $table->integer('fd')->default(0);
-
-            $table->string('game_id')->default(0);
 
             $table->timestamps();
         });

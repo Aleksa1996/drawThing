@@ -43,6 +43,7 @@ Route::group(['middleware' => 'api'], function ($router) {
         Route::delete('/', 'RoomController@destroy');
 
         Route::post('/join', 'RoomController@join');
+        Route::post('/kick', 'RoomController@kick');
     });
 
     // Route::group(['prefix' => 'game'], function () {});

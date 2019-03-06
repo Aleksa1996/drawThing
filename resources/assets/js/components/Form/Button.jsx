@@ -1,8 +1,13 @@
 import React from 'react';
-
-const Button = ({ children, icon, ...props }) => (
-	<button {...props}>
-		{icon && <i className={`fa ${icon} mr-2`} aria-hidden="true" />}
+import Spinner from '../Common/Spinner/Spinner';
+const Button = ({ children, icon, disabled, ...props }) => (
+	<button {...props} disabled={disabled}>
+		{icon && (
+			<i
+				className={`fa ${disabled ? 'fa-hourglass-half spinner-icon' : icon} mr-2`}
+				aria-hidden="true"
+			/>
+		)}
 		{children}
 	</button>
 );

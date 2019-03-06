@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-
+import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { ws_make_connection, createPlayer, createRoom, joinRoom } from '../../../actions';
-import { push } from 'connected-react-router';
+import {
+	ws_make_connection,
+	createPlayer,
+	createRoom,
+	joinRoom,
+	clearState
+} from '../../../actions';
+import { push, replace } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
 
 import Page from '../Page';
@@ -21,7 +27,7 @@ class Play extends Component {
 		this.roomUUID = this.props.match.params.roomUUID;
 		this.hasRoomUUID = typeof this.roomUUID !== 'undefined' && this.roomUUID;
 
-		this.subscribeToSocketConnect = false;
+		this.queryString = queryString.parse(props.location.search);
 
 		this.state = {
 			avatarForm: {
@@ -49,17 +55,19 @@ class Play extends Component {
 	}
 
 	componentDidMount() {
-		if (!this.subscribeToSocketConnect) {
+		if (!this.props.socket.fd && !this.props.socket.connected) {
 			this.props.ws_make_connection('game');
-			this.subscribeToSocketConnect = true;
 		}
+		// if connected to room clear state and disconnect from room
+		this.props.clearState();
 	}
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.room.id != this.props.room.id) {
 			const roomModel = new RoomModel(this.props.room);
 			if (roomModel.isReady()) {
-				this.props.push('/room');
+				roomModel.isJoined() ? this.props.replace('/room') : this.props.push('/room');
+				// this.props.replace('/room');
 			}
 		}
 	}
@@ -67,7 +75,7 @@ class Play extends Component {
 	handleSubmit = async e => {
 		const { username, valid: usernameFormValid } = this.state.usernameForm;
 		const { valid: avatarFormValid } = this.state.avatarForm;
-		const { value: startType } = e.target;
+		const { value: startType } = e.currentTarget;
 
 		e.preventDefault();
 
@@ -84,7 +92,7 @@ class Play extends Component {
 			avatar
 		};
 
-		this.props
+		return this.props
 			.createPlayer(data)
 			.then(response => {
 				switch (startType) {
@@ -105,7 +113,7 @@ class Play extends Component {
 			})
 			.catch(error => {
 				console.log(error);
-
+				console.log(error.response);
 				this.setState(prevState => ({
 					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
 				}));
@@ -136,7 +144,7 @@ class Play extends Component {
 		} = e;
 
 		this.setState(({ usernameForm }) => ({
-			usernameForm: { ...usernameForm, username, valid: username.length > 3 },
+			usernameForm: { ...usernameForm, username, valid: username.length >= 3 },
 			errors: { username: null }
 		}));
 	};
@@ -176,6 +184,7 @@ class Play extends Component {
 							handleFocusUsername={this.handleFocusUsername}
 							errors={errors}
 							hasRoomUUID={this.hasRoomUUID}
+							buttonStatus={room.creating || room.joining || player.creating}
 						/>
 						{errors.general && (
 							<small class="help-text d-block text-center text-danger">
@@ -193,5 +202,5 @@ class Play extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, socket: state.socket }),
-	{ ws_make_connection, createPlayer, createRoom, joinRoom, push }
+	{ ws_make_connection, createPlayer, createRoom, joinRoom, push, replace, clearState }
 )(Play);

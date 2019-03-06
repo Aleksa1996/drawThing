@@ -2,12 +2,20 @@ import {
 	SENDING_MESSAGE_ROOM,
 	SEND_MESSAGE_ROOM_SUCCESS,
 	SEND_MESSAGE_ROOM_FAILURE,
-	RECEIVE_MESSAGE_ROOM
+	RECEIVE_MESSAGE_ROOM,
+	CLEAR_CHAT_DATA,
+	PLAYER_JOINED_ROOM,
+	PLAYER_LEAVED_ROOM,
+	PLAYER_KICKED,
+	REPLACE_ADMIN_ROOM
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
 
+import { v4 } from 'uuid';
+
 const initialState = {
+	// {id, text, player_id}
 	messages: [],
 	sending: false,
 	//
@@ -40,6 +48,42 @@ const reducer = (state = initialState, { type, payload }) => {
 			const newMessages = addMessage(state.messages, payload.message);
 			return updateChat(state, { messages: newMessages });
 		}
+
+		case PLAYER_JOINED_ROOM: {
+			const newMessages = addMessage(
+				state.messages,
+				generatePlayerActionMessage(payload.player, ':player has joined room.')
+			);
+			return updateChat(state, { messages: newMessages });
+		}
+
+		case PLAYER_LEAVED_ROOM: {
+			const newMessages = addMessage(
+				state.messages,
+				generatePlayerActionMessage(payload.player, ':player has leaved room.')
+			);
+			return updateChat(state, { messages: newMessages });
+		}
+
+		case PLAYER_KICKED: {
+			const newMessages = addMessage(
+				state.messages,
+				generatePlayerActionMessage(payload.player, ':player has been kicked from room by admin.')
+			);
+			return updateChat(state, { messages: newMessages });
+		}
+
+		case REPLACE_ADMIN_ROOM: {
+			const newMessages = addMessage(
+				state.messages,
+				generatePlayerActionMessage(payload.player, ':player is now room admin.')
+			);
+			return updateChat(state, { messages: newMessages });
+		}
+
+		case CLEAR_CHAT_DATA: {
+			return { ...initialState };
+		}
 		default:
 			return { ...state };
 	}
@@ -57,3 +101,9 @@ export const updateChat = (state, room) => {
 export const addMessage = (messages, message) => {
 	return messages.concat([message]);
 };
+
+export const generatePlayerActionMessage = (player, text) => ({
+	id: player.id + '_' + player.username + v4(),
+	text: text.replace(/:player/gi, player.username),
+	player_id: '#playerActionMessage'
+});

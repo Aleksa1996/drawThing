@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use SwooleTW\Http\Websocket\Facades\Websocket;
 
+
 /*
 |--------------------------------------------------------------------------
 | Websocket Routes
@@ -12,15 +13,9 @@ use SwooleTW\Http\Websocket\Facades\Websocket;
 |
  */
 
-Websocket::on('connect', function ($websocket, Request $request) {
-    // called while socket on connect
-    $websocket->emit('CONNECT_SOCKET_DATA', ['fd' => $websocket->getSender()]);
-    var_dump('connected');
-});
+Websocket::on('connect', '\App\Http\Controllers\GameController@onConnect_ws');
 
-Websocket::on('disconnect', function ($websocket) {
-    // called while socket on disconnect
-    var_dump('disconnected');
-});
+Websocket::on('disconnect', '\App\Http\Controllers\GameController@onDisconnect_ws');
+Websocket::on('LEAVE_ROOM', '\App\Http\Controllers\GameController@onDisconnect_ws');
 
-Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\Game\GameController@sendMessageRoom_ws');
+Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@sendMessageRoom_ws');

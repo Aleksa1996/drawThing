@@ -1,5 +1,11 @@
-import { CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE } from './types';
-// import { createRoom, joinRoom } from './roomActions';
+import {
+	CREATING_PLAYER,
+	CREATE_PLAYER_SUCCESS,
+	CREATE_PLAYER_FAILURE,
+	CLEAR_PLAYER_DATA
+} from './types';
+
+export const clearPlayerData = () => ({ type: CLEAR_PLAYER_DATA });
 
 export const createPlayer = data => (dispatch, getState, { api, sockets }) => {
 	dispatch({ type: CREATING_PLAYER });

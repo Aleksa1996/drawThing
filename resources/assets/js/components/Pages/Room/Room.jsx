@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { connectRoom, sendMessageRoom, subscribeToRoomChat } from '../../../actions';
-import { push } from 'connected-react-router';
+import {
+	sendMessageRoom,
+	kickPlayer,
+	subscribeToChatGlobalEvents,
+	subscribeToRoomGlobalEvents,
+	clearStateAfterKick,
+	clearState,
+	showModal,
+	leaveRoom
+} from '../../../actions';
+
+import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
+import { push, replace } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
+import ChatModel from '../../../utils/classes/Chat';
 
 import Page from '../Page';
 import PlayRules from '../Play/PlayRules';
@@ -22,25 +34,62 @@ class Room extends Component {
 	}
 
 	componentDidMount() {
-		const { room, push, socket, subscribeToRoomChat } = this.props;
+		const {
+			room,
+			replace,
+			socket,
+			subscribeToChatGlobalEvents,
+			subscribeToRoomGlobalEvents
+		} = this.props;
 
 		const roomModel = new RoomModel(room);
 		try {
-			if (!socket.connected) throw new Exception('Socket not connected');
+			// redirect if socket is not connected
+			if (!socket.connected) throw new Error('Socket not connected');
 
-			if (roomModel.isReady() && !this.subscribedToRoomChat) {
-				subscribeToRoomChat();
-				this.subscribedToRoomChat = true;
+			// listen for chat and room events when room is created or joined
+			if (roomModel.isReady()) {
+				if (!this.subscribedToRoomChat) {
+					subscribeToChatGlobalEvents();
+					subscribeToRoomGlobalEvents();
+					this.subscribedToRoomChat = true;
+				}
+			} else {
+				replace('/play');
 			}
 		} catch (e) {
-			push('/play');
+			console.log(e);
+			replace('/play');
 		}
 	}
 
 	componentDidUpdate(prevProps) {
-		if (this.props.chat.messages.length != prevProps.chat.messages.length) {
+		// redirect player to play page and clear data if he is kicked by admin
+		if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
+			this.props.clearStateAfterKick();
+			this.props.showModal({
+				modalType: INFO_MODAL,
+				modalProps: {
+					body: 'You were kicked from the room by admin'
+				}
+			});
+			this.props.push('/play');
+			return;
+		}
+
+		// chat always scroll on new message to see the latest one
+		if (
+			this.props.chat.messages.length != prevProps.chat.messages.length &&
+			this.props.chat.messages.length > 0
+		) {
 			this.scrollToBottom();
 		}
+	}
+
+	componentWillUnmount() {
+		// clear whole room state
+		this.props.leaveRoom();
+		this.props.clearState();
 	}
 
 	handleChatSend = (e, additionalData = null) => {
@@ -49,6 +98,7 @@ class Room extends Component {
 		// Message comes from text input
 		if (e.type == 'submit') {
 			message = e.target.elements['game-board-chat-input'].value;
+			if (message && message.length <= 0) return;
 			e.target.reset();
 		}
 		// Message comes from emoji dropdown
@@ -61,18 +111,38 @@ class Room extends Component {
 
 	scrollToBottom = () => {
 		const { current: el } = this.chatBodyRef;
-		el.scrollTop = el.scrollHeight;
+
+		if (
+			typeof el !== 'undefined' &&
+			typeof el.scrollTop !== 'undefined' &&
+			typeof el.scrollHeight !== 'undefined'
+		) {
+			el.scrollTop = el.scrollHeight;
+		}
 	};
 
 	handleCopyToClipboard = e => {
+		// copy to clipboard share link
 		this.joinLinkInputRef.current.select();
 		document.execCommand('copy');
 		e.target.focus();
 	};
 
+	handleKick = playerId => {
+		//kick player from room by admin
+		this.props.showModal({
+			modalType: KICK_PLAYER_MODAL,
+			modalProps: {
+				playerId
+			}
+		});
+	};
+
 	render() {
 		const { player, room, chat } = this.props;
 		const roomModel = new RoomModel(room);
+		const chatModel = new ChatModel(chat);
+
 		const isPlayerAdmin = roomModel.isPlayerAdmin(player);
 		if (!roomModel.isCreated() && !roomModel.isJoined()) {
 			return null;
@@ -90,13 +160,15 @@ class Room extends Component {
 							<RoomPlayers
 								room={roomModel}
 								isPlayerAdmin={isPlayerAdmin}
+								player={player}
 								handleCopyToClipboard={this.handleCopyToClipboard}
+								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
 							/>
 							<div className="game-created-chat-container">
 								<RoomChat
 									room={roomModel}
-									chat={chat}
+									chat={chatModel}
 									handleChatSend={this.handleChatSend}
 									ref={this.chatBodyRef}
 								/>
@@ -120,5 +192,16 @@ class Room extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, chat: state.chat, socket: state.socket }),
-	{ connectRoom, sendMessageRoom, push, subscribeToRoomChat }
+	{
+		sendMessageRoom,
+		push,
+		replace,
+		subscribeToChatGlobalEvents,
+		kickPlayer,
+		subscribeToRoomGlobalEvents,
+		clearStateAfterKick,
+		clearState,
+		showModal,
+		leaveRoom
+	}
 )(Room);

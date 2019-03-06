@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Page from '../Page';
 
 import { Link } from 'react-router-dom';
-import { debounce as _debounce } from 'lodash';
 
 class Home extends Component {
 	componentDidMount() {
@@ -32,8 +31,9 @@ class Home extends Component {
 						<div className="col-md-6 page-home-rules-item-text">
 							<h2>Some heading 1</h2>
 							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure esse, beatae et animi error itaque atque deserunt?
-								Esse qui harum laudantium fugiat. Perferendis, at obcaecati voluptates eius aliquam necessitatibus autem!
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure esse, beatae et animi
+								error itaque atque deserunt? Esse qui harum laudantium fugiat. Perferendis, at
+								obcaecati voluptates eius aliquam necessitatibus autem!
 							</p>
 							<span className="page-home-rules-pulse page-home-rules-pulse-right rounded-circle">
 								<i className="fa fa-question" aria-hidden="true" />
@@ -48,9 +48,9 @@ class Home extends Component {
 						<div className="col-md-6 page-home-rules-item-text">
 							<h2>Maybe next heading over here!</h2>
 							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores
-								eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora
-								esse.
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto
+								modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates,
+								laborum deleniti maiores inventore laudantium quis tempora esse.
 							</p>
 							<span className="page-home-rules-pulse page-home-rules-pulse-left rounded-circle">
 								<i className="fa fa-exclamation" aria-hidden="true" />
@@ -59,9 +59,9 @@ class Home extends Component {
 						<div className="col-md-6 page-home-rules-item-text">
 							<h2>And here is our last heading</h2>
 							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores
-								eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora
-								esse.
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto
+								modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates,
+								laborum deleniti maiores inventore laudantium quis tempora esse.
 							</p>
 							<span className="page-home-rules-pulse page-home-rules-pulse-right rounded-circle">
 								<i className="fa fa-paint-brush" aria-hidden="true" />

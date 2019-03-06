@@ -15,11 +15,15 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('uuid');
+            $table->boolean('active')->default(true);
+            $table->integer('number_of_games');
+            $table->integer('current_game')->default(1);
 
-            $table->boolean('active');
+            $table->unsignedInteger('created_by');
+            $table->unsignedInteger('administered_by');
 
-            $table->integer('created_by');
             $table->timestamps();
         });
     }

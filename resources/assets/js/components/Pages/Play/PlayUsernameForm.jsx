@@ -12,11 +12,12 @@ const PlayUsernameForm = ({
 	handleSubmit,
 	handleFocusUsername,
 	errors,
-	hasRoomUUID
+	hasRoomUUID,
+	buttonStatus
 }) => {
 	return (
 		<div className="game-start-username-form-container">
-			<form onSubmit={e => e.preventDefault()}>
+			<form onSubmit={handleSubmit}>
 				<div className="form-group-wrapper input-material-wrapper">
 					<div className="form-group">
 						<label
@@ -58,11 +59,12 @@ const PlayUsernameForm = ({
 					{hasRoomUUID ? (
 						<Button
 							onClick={handleSubmit}
-							type="button"
+							type="submit"
 							name="join_room"
 							value="join_room"
 							icon="fa-rocket"
 							className="mybtn2"
+							disabled={buttonStatus}
 						>
 							Join room
 						</Button>
@@ -70,11 +72,12 @@ const PlayUsernameForm = ({
 						<React.Fragment>
 							<Button
 								onClick={handleSubmit}
-								type="button"
+								type="submit"
 								className="mybtn2"
 								name="create_room"
 								value="create_room"
 								icon="fa-users"
+								disabled={buttonStatus}
 							>
 								Create room
 							</Button>
@@ -85,6 +88,7 @@ const PlayUsernameForm = ({
 								name="random_room"
 								value="random_room"
 								icon="fa-random"
+								disabled={buttonStatus}
 							>
 								Random room
 							</Button>

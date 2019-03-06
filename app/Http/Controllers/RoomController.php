@@ -38,7 +38,7 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         // validate recived data
-        $data = $request->validate([
+        $credentials = $request->validate([
             'id' => 'required|numeric|min:1',
             'username' => 'required|exists:players,username',
             'password' => 'required'
@@ -46,33 +46,23 @@ class RoomController extends Controller
 
         try {
             // get current player
-            $player = Player::where([
-                ['id', '=', $data['id']],
-                ['username', '=', $data['username']],
-                ['password', '=', $data['password']]
-            ])->first();
-
-            if (empty($player)) {
+            $player = Player::checkIdentity($credentials);
+            if (is_null($player)) {
                 throw new \Exception('Wrong credentials!');
             }
 
             // creating new room
-            $room = new Room();
-            $room->uuid = uniqid('room_', true);
-            $room->active = true;
-            $room->created_by = $data['id'];
-            $room->save();
+            $room = Room::create([
+                'uuid' => '',
+                'active' => true,
+                'number_of_games' => 3,
+                'current_game' => 0,
+                'created_by' => $player->id,
+                'administered_by' => $player->id
+            ]);
 
-            // creating new game
-            $game = new Game();
-            $game->room_id = $room->id;
-            $game->save();
-
-            // adding player to game
-            $player->game_id = $game->id;
-            $player->save();
-
-            // joining player in created room
+            // joining player in created room in db and then in websocket table
+            $room->players()->attach($player->id);
             WebsocketRoom::add($player->fd, $room->uuid);
 
             // eager load players in room
@@ -128,39 +118,79 @@ class RoomController extends Controller
             'player.password' => 'required',
             'room.uuid' => 'required|string|min:1'
         ]);
+
         try {
             // joining player in created room
-            $room = Room::where('uuid', '=', $data['room']['uuid'])->first();
+            $room = Room::active()->findByUuid($data['room']['uuid'])->first();
 
-            if (empty($room)) {
+            if (is_null($room)) {
                 throw new \Exception('The Room you tried to join does not exists anymore!');
             }
 
             // get current player
-            $playerData = $data['player'];
-            $player = Player::where([
-                ['id', '=', $playerData['id']],
-                ['username', '=', $playerData['username']],
-                ['password', '=', $playerData['password']]
-            ])->first();
+            $player = Player::checkIdentity($data['player']);
 
-            if (empty($player)) {
+            if (is_null($player)) {
                 throw new \Exception('Wrong credentials!');
             }
 
-            // adding player to game
-            $player->game_id = $room->games()->latest()->first()->id;
-            $player->save();
+            // check if player username already exists in room
+            if ($room->IsPlayerUsernameOccupied($player->username)) {
+                $player->username .= $player->id;
+                $player->save();
+            }
 
-            // joining player in created room
+            // joining player in room
+            $room->players()->attach($player->id);
             WebsocketRoom::add($player->fd, $room->uuid);
 
-            Websocket::setSender($player->fd);
             // sending notification that new  player has joined to room
+            Websocket::setSender($player->fd);
             Websocket::broadcast()->to($room->uuid)->emit('PLAYER_JOINED_ROOM', ['player' => new PlayerResource($player)]);
 
-            $room->loadMissing('players');
+            $room->loadActivePlayers();
             return response()->json(['room' => new RoomResource($room)], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
+
+    public function kick(Request $request)
+    {
+        // validate recived data
+        $data = $request->validate([
+            'player.id' => 'required|numeric|min:1',
+            'player.username' => 'required|exists:players,username',
+            'player.password' => 'required',
+            'room.uuid' => 'required|string|min:1',
+            'player_to_kick.id' => 'required|numeric|min:1'
+        ]);
+
+        try {
+
+            $player = Player::checkIdentity($data['player']);
+            // if player who tries to kick exists
+            if (is_null($player)) {
+                throw new \Exception('Wrong credentials!');
+            }
+
+            // if player is admin
+            if (!$player->isAdminInRoom($data['room']['uuid'])) {
+                throw new \Exception('You dont have permissions to do that!');
+            }
+
+            // find player that we need to kick
+            $playerToKick = Player::find($data['player_to_kick']['id']);
+            $playerToKick->disconnectFromRoom();
+
+            // sending notification that player is kicked
+            Websocket::broadcast()->to($data['room']['uuid'])->emit('PLAYER_KICKED', ['player' => new PlayerResource($playerToKick)]);
+            // remove player from websocket room
+            WebsocketRoom::delete($playerToKick->fd, $data['room']['uuid']);
+
+            return response()->json(['player' => new PlayerResource($playerToKick)], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()

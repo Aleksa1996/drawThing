@@ -71,7 +71,7 @@ class Navigation extends Component {
 							</Link>
 						</li>
 						<li className="nav-item mx-2">
-							<Link to="/game" className="nav-link">
+							<Link to="/play" className="nav-link">
 								Play now !
 							</Link>
 						</li>

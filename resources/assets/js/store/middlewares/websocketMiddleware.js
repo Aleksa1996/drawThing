@@ -26,12 +26,16 @@ function subscribe(socketID, event, customActionType, dispatch) {
 
 	const listener = data => dispatch({ type: actionType, payload: data });
 
-	sockets[socketID].listener = listener;
 	sockets[socketID].connection.on(event, listener);
 }
 
 function unsubscribe(socketID, event) {
-	sockets[socketID].connection.removeListener(event, sockets[socketID].listener);
+	if (!Array.isArray(event)) {
+		event = [event];
+	}
+	event.forEach(e => {
+		sockets[socketID].connection.removeAllListeners(e);
+	});
 }
 
 function emit(socketID, event, data) {
@@ -50,6 +54,8 @@ export default function createWSMiddleware(wsConfig) {
 				socketID
 			);
 		}
+
+		if (!socketExists(socketID)) return next(action);
 
 		if (type === DISCONNECT_WS) {
 			disconnect(socketID);
@@ -70,3 +76,9 @@ export default function createWSMiddleware(wsConfig) {
 		return next(action);
 	};
 }
+
+export const socketExists = socketID => {
+	return (
+		typeof sockets[socketID] !== 'undefined' && typeof sockets[socketID].connection !== 'undefined'
+	);
+};
