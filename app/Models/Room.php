@@ -82,6 +82,17 @@ class Room extends Model
         return $this->players()->where('players.username', trim($username))->count() >= 1;
     }
 
+    public function isEmpty()
+    {
+        return $this->players()->wherePivot('active', true)->count() <= 0;
+    }
+
+    public function deactivate()
+    {
+        $this->active = false;
+        return $this->save();
+    }
+
     // scopes
     public function scopeFindByUuid($query, $uuid)
     {

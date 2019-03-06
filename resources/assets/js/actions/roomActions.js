@@ -123,15 +123,8 @@ export const kickPlayer = playerId => (dispatch, getState, { api, sockets }) => 
 export const kickPlayerSuccess = room => ({ type: PLAYER_KICK_SUCCESS, payload: room });
 export const kickPlayerFailure = error => ({ type: PLAYER_KICK_FAILURE, payload: error });
 
-export const clearDataAfterKick = () => (dispatch, getState, { api, sockets }) => {
-	// clear reducer state
-	dispatch(clearRoomData());
-	dispatch(clearChatData());
-	dispatch(clearPlayerData());
-
-	//unsubscribe chat and room events
-	dispatch(unsubscribeToRoomGlobalEvents());
-	dispatch(unsubscribeToChatGlobalEvents());
+export const leaveRoom = data => (dispatch, getState, { api, sockets }) => {
+	dispatch(ws_emit('game', 'LEAVE_ROOM', null));
 };
 
 export const clearStateAfterKick = () => (dispatch, getState, { api, sockets }) => {

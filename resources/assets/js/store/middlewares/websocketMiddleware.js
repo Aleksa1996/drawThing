@@ -33,7 +33,6 @@ function unsubscribe(socketID, event) {
 	if (!Array.isArray(event)) {
 		event = [event];
 	}
-
 	event.forEach(e => {
 		sockets[socketID].connection.removeAllListeners(e);
 	});
@@ -56,6 +55,8 @@ export default function createWSMiddleware(wsConfig) {
 			);
 		}
 
+		if (!socketExists(socketID)) return next(action);
+
 		if (type === DISCONNECT_WS) {
 			disconnect(socketID);
 		}
@@ -75,3 +76,9 @@ export default function createWSMiddleware(wsConfig) {
 		return next(action);
 	};
 }
+
+export const socketExists = socketID => {
+	return (
+		typeof sockets[socketID] !== 'undefined' && typeof sockets[socketID].connection !== 'undefined'
+	);
+};

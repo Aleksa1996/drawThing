@@ -124,7 +124,10 @@ class GameController extends Controller
             // disconnect player db and websocket tables
             $player->disconnectFromRoom($room);
             WebsocketRoom::delete($player->fd, $room->uuid);
-
+            // if room is empty remove it TODO: SPECIAL RANDOM ROOM DONT DELETE
+            if ($room->isEmpty()) {
+                $room->deactivate();
+            }
             // if player was admin, replace him with another player
             if ($player->isAdminInRoom($room) && $newAdminPlayer = $room->setNewAdmin()) {
                 Websocket::broadcast()->to($room->uuid)->emit('REPLACE_ADMIN_ROOM', ['player' => new PlayerResource($newAdminPlayer)]);

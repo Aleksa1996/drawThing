@@ -6,11 +6,13 @@ import {
 	subscribeToChatGlobalEvents,
 	subscribeToRoomGlobalEvents,
 	clearStateAfterKick,
-	showModal
+	clearState,
+	showModal,
+	leaveRoom
 } from '../../../actions';
 
 import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
 import ChatModel from '../../../utils/classes/Chat';
@@ -34,7 +36,7 @@ class Room extends Component {
 	componentDidMount() {
 		const {
 			room,
-			push,
+			replace,
 			socket,
 			subscribeToChatGlobalEvents,
 			subscribeToRoomGlobalEvents
@@ -46,14 +48,18 @@ class Room extends Component {
 			if (!socket.connected) throw new Error('Socket not connected');
 
 			// listen for chat and room events when room is created or joined
-			if (roomModel.isReady() && !this.subscribedToRoomChat) {
-				subscribeToChatGlobalEvents();
-				subscribeToRoomGlobalEvents();
-				this.subscribedToRoomChat = true;
+			if (roomModel.isReady()) {
+				if (!this.subscribedToRoomChat) {
+					subscribeToChatGlobalEvents();
+					subscribeToRoomGlobalEvents();
+					this.subscribedToRoomChat = true;
+				}
+			} else {
+				replace('/play');
 			}
 		} catch (e) {
 			console.log(e);
-			push('/play');
+			replace('/play');
 		}
 	}
 
@@ -78,6 +84,12 @@ class Room extends Component {
 		) {
 			this.scrollToBottom();
 		}
+	}
+
+	componentWillUnmount() {
+		// clear whole room state
+		this.props.leaveRoom();
+		this.props.clearState();
 	}
 
 	handleChatSend = (e, additionalData = null) => {
@@ -183,10 +195,13 @@ export default connect(
 	{
 		sendMessageRoom,
 		push,
+		replace,
 		subscribeToChatGlobalEvents,
 		kickPlayer,
 		subscribeToRoomGlobalEvents,
 		clearStateAfterKick,
-		showModal
+		clearState,
+		showModal,
+		leaveRoom
 	}
 )(Room);

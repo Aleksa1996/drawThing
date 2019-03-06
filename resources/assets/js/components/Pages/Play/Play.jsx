@@ -8,7 +8,7 @@ import {
 	joinRoom,
 	clearState
 } from '../../../actions';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
 
 import Page from '../Page';
@@ -58,9 +58,7 @@ class Play extends Component {
 		if (!this.props.socket.fd && !this.props.socket.connected) {
 			this.props.ws_make_connection('game');
 		}
-		// if connected to room clear state and do disconnect from room
-		// TODO: DISCONNECT SA ROOM-A KAD SE IDE NA BACK U BROWSER-U
-
+		// if connected to room clear state and disconnect from room
 		this.props.clearState();
 	}
 
@@ -68,7 +66,8 @@ class Play extends Component {
 		if (prevProps.room.id != this.props.room.id) {
 			const roomModel = new RoomModel(this.props.room);
 			if (roomModel.isReady()) {
-				this.props.push('/room');
+				roomModel.isJoined() ? this.props.replace('/room') : this.props.push('/room');
+				// this.props.replace('/room');
 			}
 		}
 	}
@@ -165,7 +164,6 @@ class Play extends Component {
 	render() {
 		const { avatarForm, usernameForm, errors } = this.state;
 		const { player, room } = this.props;
-		// room.creating || room.joining || player.creating
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-start-game">
 				<div className="game-start-container container">
@@ -204,5 +202,5 @@ class Play extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, socket: state.socket }),
-	{ ws_make_connection, createPlayer, createRoom, joinRoom, push, clearState }
+	{ ws_make_connection, createPlayer, createRoom, joinRoom, push, replace, clearState }
 )(Play);
