@@ -8,6 +8,7 @@ import {
 	PLAYER_JOINED_ROOM,
 	PLAYER_LEAVED_ROOM,
 	PLAYER_KICKED,
+	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA
 } from '../../actions/types';
 
@@ -59,7 +60,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		case CREATE_ROOM_FAILURE: {
 			return updateRoom(state, { creating: false, created: false, createError: payload.message });
 		}
-		//
+
 		case JOINING_ROOM: {
 			return updateRoom(state, { joining: true });
 		}
@@ -78,13 +79,17 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case PLAYER_LEAVED_ROOM: {
-			const newPlayers = removePlayer(state.players, payload.player);
+			const newPlayers = editPlayer(state.players, payload.player.id, { active: false });
 			return updateRoom(state, { players: newPlayers });
 		}
 
 		case PLAYER_KICKED: {
-			const newPlayers = removePlayer(state.players, payload.player);
+			const newPlayers = editPlayer(state.players, payload.player.id, { active: false });
 			return updateRoom(state, { players: newPlayers, lastKickedPlayer: payload.player });
+		}
+
+		case REPLACE_ADMIN_ROOM: {
+			return updateRoom(state, { administered_by: payload.player.id });
 		}
 
 		case CLEAR_ROOM_DATA: {
@@ -113,3 +118,9 @@ export const addPlayer = (players, player) => {
 export const removePlayer = (players, player) => {
 	return players.filter(p => p.id != player.id);
 };
+
+export const editPlayer = (players, id, player) =>
+	players.map(p => {
+		if (p.id == id) return _fp_assign(p, player);
+		return p;
+	});

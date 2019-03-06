@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-
+import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { ws_make_connection, createPlayer, createRoom, joinRoom } from '../../../actions';
+import {
+	ws_make_connection,
+	createPlayer,
+	createRoom,
+	joinRoom,
+	clearState
+} from '../../../actions';
 import { push } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
 
@@ -20,6 +26,8 @@ class Play extends Component {
 
 		this.roomUUID = this.props.match.params.roomUUID;
 		this.hasRoomUUID = typeof this.roomUUID !== 'undefined' && this.roomUUID;
+
+		this.queryString = queryString.parse(props.location.search);
 
 		this.state = {
 			avatarForm: {
@@ -50,6 +58,10 @@ class Play extends Component {
 		if (!this.props.socket.fd && !this.props.socket.connected) {
 			this.props.ws_make_connection('game');
 		}
+		// if connected to room clear state and do disconnect from room
+		// TODO: DISCONNECT SA ROOM-A KAD SE IDE NA BACK U BROWSER-U
+
+		this.props.clearState();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -102,7 +114,7 @@ class Play extends Component {
 			})
 			.catch(error => {
 				console.log(error);
-
+				console.log(error.response);
 				this.setState(prevState => ({
 					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
 				}));
@@ -153,6 +165,7 @@ class Play extends Component {
 	render() {
 		const { avatarForm, usernameForm, errors } = this.state;
 		const { player, room } = this.props;
+		// room.creating || room.joining || player.creating
 		return (
 			<Page title="Play game - Drawthing" className="container-fluid page-start-game">
 				<div className="game-start-container container">
@@ -173,6 +186,7 @@ class Play extends Component {
 							handleFocusUsername={this.handleFocusUsername}
 							errors={errors}
 							hasRoomUUID={this.hasRoomUUID}
+							buttonStatus={room.creating || room.joining || player.creating}
 						/>
 						{errors.general && (
 							<small class="help-text d-block text-center text-danger">
@@ -190,5 +204,5 @@ class Play extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, socket: state.socket }),
-	{ ws_make_connection, createPlayer, createRoom, joinRoom, push }
+	{ ws_make_connection, createPlayer, createRoom, joinRoom, push, clearState }
 )(Play);

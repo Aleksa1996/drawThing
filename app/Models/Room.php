@@ -4,6 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Room
+ *
+ * @property integer $id
+ * @property string $uuid
+ * @property boolean $active
+ * @property integer $number_of_games
+ * @property integer $current_game
+ *
+ * @property integer $created_by
+ * @property integer $administered_by
+ *
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Room extends Model
 {
     // options
@@ -25,6 +40,13 @@ class Room extends Model
     // accessors
 
     // methods
+
+    /**
+     * Creates new room record in database
+     *
+     * @param array $attributes
+     * @return $this
+     */
     public static function create(array $attributes)
     {
         $model = static::query()->create($attributes);
@@ -34,11 +56,30 @@ class Room extends Model
         return $model;
     }
 
+    /**
+     * Eager loads players relation
+     *
+     * @return $this
+     */
     public function loadActivePlayers()
     {
         return $this->load(['players' => function ($query) {
             $query->where('player_room.active', true);
         }]);
+    }
+
+    public function setNewAdmin()
+    {
+        $newAdminPlayer = $this->players()->wherePivot('active', true)->first();
+        if (empty($newAdminPlayer)) return false;
+
+        $this->administered_by = $newAdminPlayer->id;
+        return $this->save() ? $newAdminPlayer : false;
+    }
+
+    public function IsPlayerUsernameOccupied($username)
+    {
+        return $this->players()->where('players.username', trim($username))->count() >= 1;
     }
 
     // scopes

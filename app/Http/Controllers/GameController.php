@@ -119,11 +119,16 @@ class GameController extends Controller
                 return;
             }
 
-            // get the room where he has left
+            // get the room from wich player left
             $room = $player->currentRoom();
             // disconnect player db and websocket tables
             $player->disconnectFromRoom($room);
             WebsocketRoom::delete($player->fd, $room->uuid);
+
+            // if player was admin, replace him with another player
+            if ($player->isAdminInRoom($room) && $newAdminPlayer = $room->setNewAdmin()) {
+                Websocket::broadcast()->to($room->uuid)->emit('REPLACE_ADMIN_ROOM', ['player' => new PlayerResource($newAdminPlayer)]);
+            }
 
             // send notification to others
             Websocket::broadcast()->to($room->uuid)->emit('PLAYER_LEAVED_ROOM', ['player' => new PlayerResource($player)]);

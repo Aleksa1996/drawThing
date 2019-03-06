@@ -5,7 +5,7 @@ import {
 	kickPlayer,
 	subscribeToChatGlobalEvents,
 	subscribeToRoomGlobalEvents,
-	clearDataAfterKick,
+	clearStateAfterKick,
 	showModal
 } from '../../../actions';
 
@@ -13,6 +13,7 @@ import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
 import { push } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
+import ChatModel from '../../../utils/classes/Chat';
 
 import Page from '../Page';
 import PlayRules from '../Play/PlayRules';
@@ -59,7 +60,7 @@ class Room extends Component {
 	componentDidUpdate(prevProps) {
 		// redirect player to play page and clear data if he is kicked by admin
 		if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
-			this.props.clearDataAfterKick();
+			this.props.clearStateAfterKick();
 			this.props.showModal({
 				modalType: INFO_MODAL,
 				modalProps: {
@@ -128,6 +129,8 @@ class Room extends Component {
 	render() {
 		const { player, room, chat } = this.props;
 		const roomModel = new RoomModel(room);
+		const chatModel = new ChatModel(chat);
+
 		const isPlayerAdmin = roomModel.isPlayerAdmin(player);
 		if (!roomModel.isCreated() && !roomModel.isJoined()) {
 			return null;
@@ -145,6 +148,7 @@ class Room extends Component {
 							<RoomPlayers
 								room={roomModel}
 								isPlayerAdmin={isPlayerAdmin}
+								player={player}
 								handleCopyToClipboard={this.handleCopyToClipboard}
 								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
@@ -152,7 +156,7 @@ class Room extends Component {
 							<div className="game-created-chat-container">
 								<RoomChat
 									room={roomModel}
-									chat={chat}
+									chat={chatModel}
 									handleChatSend={this.handleChatSend}
 									ref={this.chatBodyRef}
 								/>
@@ -182,7 +186,7 @@ export default connect(
 		subscribeToChatGlobalEvents,
 		kickPlayer,
 		subscribeToRoomGlobalEvents,
-		clearDataAfterKick,
+		clearStateAfterKick,
 		showModal
 	}
 )(Room);

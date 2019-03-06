@@ -18,9 +18,7 @@ class CreatePlayersTable extends Migration
 
             $table->string('username');
             $table->string('password')->default('');
-
             $table->string('avatar');
-
             $table->integer('fd')->default(0);
 
             $table->timestamps();

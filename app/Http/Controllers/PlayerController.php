@@ -41,7 +41,6 @@ class PlayerController extends Controller
 
             // creating new player
             $player = Player::create($data);
-
             return response()->json(['player' => new PlayerResource($player)], 201);
         } catch (\Exception $e) {
             return response()->json([

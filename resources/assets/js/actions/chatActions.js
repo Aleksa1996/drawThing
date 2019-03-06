@@ -8,20 +8,14 @@ import {
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
+const globalEvents = [SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM];
+
 export const subscribeToChatGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
-	dispatch(ws_subscribe('game', SEND_MESSAGE_ROOM_SUCCESS));
-	dispatch(ws_subscribe('game', SEND_MESSAGE_ROOM_FAILURE));
-	dispatch(ws_subscribe('game', RECEIVE_MESSAGE_ROOM));
+	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
 };
 
 export const unsubscribeToChatGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
-	dispatch(
-		ws_unsubscribe('game', [
-			SEND_MESSAGE_ROOM_SUCCESS,
-			SEND_MESSAGE_ROOM_FAILURE,
-			RECEIVE_MESSAGE_ROOM
-		])
-	);
+	globalEvents.forEach(e => dispatch(ws_unsubscribe('game', e)));
 };
 
 export const clearChatData = () => ({ type: CLEAR_CHAT_DATA });

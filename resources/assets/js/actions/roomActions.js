@@ -11,20 +11,21 @@ import {
 	PLAYER_KICK_SUCCESS,
 	PLAYER_KICK_FAILURE,
 	PLAYER_KICKED,
+	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 import { clearChatData, unsubscribeToChatGlobalEvents } from './chatActions';
 import { clearPlayerData } from './playerActions';
 
+const globalEvents = [PLAYER_JOINED_ROOM, PLAYER_KICKED, PLAYER_LEAVED_ROOM, REPLACE_ADMIN_ROOM];
+
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
-	dispatch(ws_subscribe('game', PLAYER_JOINED_ROOM));
-	dispatch(ws_subscribe('game', PLAYER_KICKED));
-	dispatch(ws_subscribe('game', PLAYER_LEAVED_ROOM));
+	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
 };
 
 export const unsubscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
-	dispatch(ws_unsubscribe('game', [PLAYER_JOINED_ROOM, PLAYER_KICKED]));
+	globalEvents.forEach(e => dispatch(ws_unsubscribe('game', e)));
 };
 
 export const clearRoomData = () => ({ type: CLEAR_ROOM_DATA });
@@ -123,6 +124,21 @@ export const kickPlayerSuccess = room => ({ type: PLAYER_KICK_SUCCESS, payload: 
 export const kickPlayerFailure = error => ({ type: PLAYER_KICK_FAILURE, payload: error });
 
 export const clearDataAfterKick = () => (dispatch, getState, { api, sockets }) => {
+	// clear reducer state
+	dispatch(clearRoomData());
+	dispatch(clearChatData());
+	dispatch(clearPlayerData());
+
+	//unsubscribe chat and room events
+	dispatch(unsubscribeToRoomGlobalEvents());
+	dispatch(unsubscribeToChatGlobalEvents());
+};
+
+export const clearStateAfterKick = () => (dispatch, getState, { api, sockets }) => {
+	dispatch(clearState());
+};
+
+export const clearState = () => (dispatch, getState, { api, sockets }) => {
 	// clear reducer state
 	dispatch(clearRoomData());
 	dispatch(clearChatData());

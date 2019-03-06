@@ -3,7 +3,7 @@ import React from 'react';
 import globals from '../../../globals';
 
 const RoomPlayers = React.forwardRef(
-	({ room, handleCopyToClipboard, isPlayerAdmin, handleKick }, joinLinkInputRef) => {
+	({ room, handleCopyToClipboard, isPlayerAdmin, player, handleKick }, joinLinkInputRef) => {
 		return (
 			<React.Fragment>
 				<div className="game-created-join-link">
@@ -27,11 +27,11 @@ const RoomPlayers = React.forwardRef(
 					</button>
 				</div>
 				<ul className="game-created-user-list">
-					{room.players.map(p => (
+					{room.getActivePlayers().map(p => (
 						<li key={p.id} className="game-created-user-list-item">
 							<span className="game-created-user-avatar shadow mx-3">
 								<img src={p.avatar} alt={p.username} className="rounded" />
-								{p.id == room.created_by && (
+								{room.isPlayerAdmin(p) && (
 									<i
 										className="fa fa-star game-creater-user-leader"
 										aria-hidden="true"
@@ -39,8 +39,10 @@ const RoomPlayers = React.forwardRef(
 									/>
 								)}
 							</span>
-							<span className="game-created-user-username mx-3">{p.username}</span>
-							{isPlayerAdmin && p.id != room.created_by && (
+							<span className="game-created-user-username mx-3">
+								{p.username} {player.id == p.id ? <small> (you)</small> : null}
+							</span>
+							{isPlayerAdmin && !room.isPlayerAdmin(p) && (
 								<span onClick={e => handleKick(p.id)} className="game-created-user-kick ml-auto">
 									<button className="mybtn2" title="Kick">
 										<i className="fa fa-times" aria-hidden="true" />

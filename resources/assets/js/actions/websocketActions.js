@@ -9,6 +9,19 @@ import {
 	CONNECT_SOCKET_DATA
 } from './types';
 
+const globalEvents = [
+	{ eType: 'connect', action: CONNECT_SOCKET_SUCCESS },
+	{ eType: 'CONNECT_SOCKET_DATA', action: CONNECT_SOCKET_DATA },
+	{ eType: 'connect_error', action: CONNECT_SOCKET_FAILURE },
+	{ eType: 'error', action: CONNECT_SOCKET_FAILURE },
+	{ eType: 'disconnect', action: CONNECT_SOCKET_FAILURE }
+];
+
+export const ws_make_connection = socket => (dispatch, getState, { api, sockets }) => {
+	dispatch(ws_connect(socket));
+	globalEvents.forEach(e => dispatch(ws_subscribe(socket, e.eType, e.action)));
+};
+
 export const ws_connect = socketID => ({ type: CONNECT_WS, socketID });
 
 export const ws_disconnect = socketID => ({
@@ -35,13 +48,3 @@ export const ws_emit = (socketID, event, data = {}) => ({
 	event,
 	data
 });
-
-export const ws_make_connection = socket => (dispatch, getState, { api, sockets }) => {
-	dispatch(ws_connect(socket));
-
-	dispatch(ws_subscribe(socket, 'connect', CONNECT_SOCKET_SUCCESS));
-	dispatch(ws_subscribe(socket, 'CONNECT_SOCKET_DATA', CONNECT_SOCKET_DATA));
-	dispatch(ws_subscribe(socket, 'connect_error', CONNECT_SOCKET_FAILURE));
-	dispatch(ws_subscribe(socket, 'error', CONNECT_SOCKET_FAILURE));
-	dispatch(ws_subscribe(socket, 'disconnect', CONNECT_SOCKET_FAILURE));
-};

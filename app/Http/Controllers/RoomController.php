@@ -134,6 +134,12 @@ class RoomController extends Controller
                 throw new \Exception('Wrong credentials!');
             }
 
+            // check if player username already exists in room
+            if ($room->IsPlayerUsernameOccupied($player->username)) {
+                $player->username .= $player->id;
+                $player->save();
+            }
+
             // joining player in room
             $room->players()->attach($player->id);
             WebsocketRoom::add($player->fd, $room->uuid);
