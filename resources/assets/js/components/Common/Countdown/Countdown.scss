@@ -1,0 +1,47 @@
+.countdown-container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background: rgba(0, 0, 0, 0.6);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 10001;
+
+	.countdown-number {
+		font-size: 1rem;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+	& > div {
+		height: 100px;
+		width: 100px;
+	}
+}
+
+.countdown-enter {
+	opacity: 0;
+}
+.countdown-enter-active {
+	opacity: 1;
+	font-size: 5rem !important;
+	transition: all 450ms ease-in-out;
+}
+.countdown-enter-done {
+	opacity: 0;
+	transition: all 170ms ease-in-out;
+	font-size: 6rem !important;
+}
+.countdown-exit {
+	opacity: 0;
+	font-size: 6rem !important;
+}
+.countdown-exit-activ5 {
+	opacity: 0;
+	font-size: 6rem !important;
+	transition: all 170ms ease-in-out;
+}

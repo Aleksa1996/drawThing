@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 
 class GameScore extends Component {
-	state = {
-		users: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-	};
 	render() {
+		const { room, player } = this.props;
 		return (
 			<div className="col-md-3">
 				<div className="game-board-container-left">
@@ -14,21 +12,21 @@ class GameScore extends Component {
 							<span>Scoreboard</span>
 						</div>
 						<ul className="game-board-score-list">
-							{this.state.users.map(u => (
-								<li key={u} className="game-board-score-row rounded">
+							{room.getActivePlayers().map(p => (
+								<li key={p.id} className="game-board-score-row rounded">
 									<span className="game-board-score-avatar-container">
 										<span className="game-board-score-drawing">
-											{u == 4 && <i className="fa fa-paint-brush" aria-hidden="true" />}
+											{/* {u == 4 && <i className="fa fa-paint-brush" aria-hidden="true" />} */}
 										</span>
 
 										<span className="game-board-score-avatar">
-											Avatar
-											<span className="game-board-score-position">{u}</span>
+											<img src={p.avatar} className="shadow" />
+											<span className="game-board-score-position">{p.id}</span>
 										</span>
 									</span>
 									<span className="game-board-score-username">
-										Username
-										<small className="game-board-score-points">({Math.floor(Math.random() * 10) * u}) point/s</small>
+										{p.username} {player.id == p.id ? <small> (you)</small> : null}
+										<small className="game-board-score-points">(22) point/s</small>
 									</span>
 								</li>
 							))}

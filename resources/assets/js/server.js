@@ -56,7 +56,10 @@ Promise.all(dataRequirements)
 		___loggger___.enableLogger();
 		dispatch(htmlTemplate(reactDom, reduxState, helmetData));
 	})
-	.catch(e => console.log(e));
+	.catch(e => {
+		___loggger___.enableLogger();
+		console.log(e);
+	});
 
 function htmlTemplate(reactDom, reduxState, helmetData) {
 	const js_bundles = context.js_bundle.map(b => `<script src="${b}"></script>`);

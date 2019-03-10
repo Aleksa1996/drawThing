@@ -51,7 +51,7 @@ class GameTools extends Component {
 	};
 
 	handleToolLocally = e => {
-		let { name, value } = e.target;
+		let { name, value } = e.currentTarget;
 
 		if (name == 'size') value = parseInt(value);
 
@@ -60,7 +60,7 @@ class GameTools extends Component {
 
 	render() {
 		const { defaultPosition, show } = this.state;
-		const { tool, size, color, fillColor } = this.props;
+		const { tool, size, color, fillColor, isEraserActive } = this.props;
 		return (
 			<Draggable
 				axis="both"
@@ -147,6 +147,16 @@ class GameTools extends Component {
 								onClick={this.handleToolLocally}
 								type="button"
 								className="mybtn2"
+								name="undo"
+								value="undo"
+							>
+								<i className="fa fa-undo mr-2" aria-hidden="true" />
+								Undo
+							</button>
+							<button
+								onClick={this.handleToolLocally}
+								type="button"
+								className={`mybtn2 ${isEraserActive ? 'active' : ''}`}
 								name="eraser"
 								value="eraser"
 							>
@@ -161,7 +171,7 @@ class GameTools extends Component {
 								value="clear"
 							>
 								<i className="fa fa-times mr-2" aria-hidden="true" />
-								Clear all
+								Clear
 							</button>
 						</div>
 					</form>

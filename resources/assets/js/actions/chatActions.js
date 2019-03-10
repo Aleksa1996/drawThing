@@ -3,7 +3,8 @@ import {
 	SEND_MESSAGE_ROOM_SUCCESS,
 	SEND_MESSAGE_ROOM_FAILURE,
 	RECEIVE_MESSAGE_ROOM,
-	CLEAR_CHAT_DATA
+	CLEAR_CHAT_DATA,
+	CLEAR_CHAT_MESSAGES
 } from './types';
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
@@ -19,6 +20,7 @@ export const unsubscribeToChatGlobalEvents = () => (dispatch, getState, { api, s
 };
 
 export const clearChatData = () => ({ type: CLEAR_CHAT_DATA });
+export const clearChatMessages = () => ({ type: CLEAR_CHAT_MESSAGES });
 
 export const sendMessageRoom = data => (dispatch, getState, { api, sockets }) => {
 	dispatch({ type: SENDING_MESSAGE_ROOM });

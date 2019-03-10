@@ -7,7 +7,8 @@ import {
 	PLAYER_JOINED_ROOM,
 	PLAYER_LEAVED_ROOM,
 	PLAYER_KICKED,
-	REPLACE_ADMIN_ROOM
+	REPLACE_ADMIN_ROOM,
+	CLEAR_CHAT_MESSAGES
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -83,6 +84,10 @@ const reducer = (state = initialState, { type, payload }) => {
 
 		case CLEAR_CHAT_DATA: {
 			return { ...initialState };
+		}
+
+		case CLEAR_CHAT_MESSAGES: {
+			return updateChat(state, { messages: [] });
 		}
 		default:
 			return { ...state };

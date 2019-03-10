@@ -24,11 +24,11 @@ class Layout extends Component {
 			<div id="main-content-layout">
 				<Navigation scrollTop={this.state.scrollTop} {...this.props} />
 				<div id="main-container">
-					{/* <TransitionGroup>
-						<CSSTransition key={currentKey} classNames="fade" timeout={timeout} appear> */}
-					<Router {...this.props} />
-					{/* </CSSTransition>
-					</TransitionGroup> */}
+					<TransitionGroup>
+						<CSSTransition key={currentKey} classNames="fade" timeout={timeout} appear>
+							<Router {...this.props} />
+						</CSSTransition>
+					</TransitionGroup>
 				</div>
 				<Footer />
 

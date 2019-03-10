@@ -8,7 +8,9 @@ import {
 	clearStateAfterKick,
 	clearState,
 	showModal,
-	leaveRoom
+	leaveRoom,
+	startGame,
+	clearChatMessages
 } from '../../../actions';
 
 import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
@@ -24,6 +26,8 @@ import RoomChat from './RoomChat';
 import RoomPlayers from './RoomPlayers';
 
 import Button from '../../Form/Button';
+
+import Countdown from '../../Common/Countdown/Countdown';
 
 class Room extends Component {
 	constructor(props) {
@@ -87,9 +91,11 @@ class Room extends Component {
 	}
 
 	componentWillUnmount() {
-		// clear whole room state
-		this.props.leaveRoom();
-		this.props.clearState();
+		if (!this.props.game.started) {
+			// clear whole room state
+			this.props.leaveRoom();
+			this.props.clearState();
+		}
 	}
 
 	handleChatSend = (e, additionalData = null) => {
@@ -138,6 +144,10 @@ class Room extends Component {
 		});
 	};
 
+	handleStartGame = e => {
+		this.props.startGame();
+	};
+
 	render() {
 		const { player, room, chat } = this.props;
 		const roomModel = new RoomModel(room);
@@ -176,7 +186,12 @@ class Room extends Component {
 
 							{isPlayerAdmin && (
 								<div className="text-center">
-									<Button icon="fa-rocket" className="mybtn2 my-auto">
+									<Button
+										onClick={this.handleStartGame}
+										type="button"
+										icon="fa-rocket"
+										className="mybtn2 my-auto"
+									>
 										Start game
 									</Button>
 								</div>
@@ -185,13 +200,29 @@ class Room extends Component {
 					</div>
 					<PlayRules />
 				</div>
+				<Countdown
+					countDownFrom={3}
+					shouldInitOnMount={false}
+					activate={this.props.game.started}
+					countdownEndText="START"
+					onCountdownEnd={() => {
+						this.props.clearChatMessages();
+						this.props.replace('/game');
+					}}
+				/>
 			</Page>
 		);
 	}
 }
 
 export default connect(
-	state => ({ player: state.player, room: state.room, chat: state.chat, socket: state.socket }),
+	state => ({
+		player: state.player,
+		room: state.room,
+		chat: state.chat,
+		socket: state.socket,
+		game: state.game
+	}),
 	{
 		sendMessageRoom,
 		push,
@@ -202,6 +233,8 @@ export default connect(
 		clearStateAfterKick,
 		clearState,
 		showModal,
-		leaveRoom
+		leaveRoom,
+		startGame,
+		clearChatMessages
 	}
 )(Room);

@@ -1,6 +1,7 @@
 .game-board-container-center {
 	padding-top: 15px;
 	padding-bottom: 15px;
+	padding: 15px 10px;
 	.game-board-sketchpad {
 		background: #fff;
 		overflow: hidden;
@@ -15,5 +16,21 @@
 				cursor: crosshair;
 			}
 		}
+	}
+
+	.game-sketchpad-canvas {
+		background: #fff;
+		cursor: crosshair;
+		&:hover {
+			cursor: crosshair;
+		}
+		margin: 0 auto;
+		display: block;
+	}
+}
+
+@media screen and (max-width: 1366px) {
+	.game-board-container-center {
+		max-height: 580px;
 	}
 }

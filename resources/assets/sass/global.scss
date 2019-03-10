@@ -40,7 +40,8 @@ body {
 	outline: none !important;
 	z-index: 1;
 
-	&:hover {
+	&:hover,
+	&.active {
 		text-decoration: none;
 		color: $mytheme-color-first;
 		&::after {
@@ -79,7 +80,8 @@ body {
 		background: $mytheme-color-first;
 	}
 
-	&:hover {
+	&:hover,
+	&.active {
 		color: #fff;
 	}
 }

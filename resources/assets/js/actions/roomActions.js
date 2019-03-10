@@ -12,13 +12,20 @@ import {
 	PLAYER_KICK_FAILURE,
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
-	CLEAR_ROOM_DATA
+	CLEAR_ROOM_DATA,
+	GAME_STARTED
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
-import { clearChatData, unsubscribeToChatGlobalEvents } from './chatActions';
-import { clearPlayerData } from './playerActions';
+import { clearState } from './commonActions';
+import { clearSubscriptions } from './commonActions';
 
-const globalEvents = [PLAYER_JOINED_ROOM, PLAYER_KICKED, PLAYER_LEAVED_ROOM, REPLACE_ADMIN_ROOM];
+const globalEvents = [
+	PLAYER_JOINED_ROOM,
+	PLAYER_KICKED,
+	PLAYER_LEAVED_ROOM,
+	REPLACE_ADMIN_ROOM,
+	GAME_STARTED
+];
 
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
@@ -128,16 +135,6 @@ export const leaveRoom = data => (dispatch, getState, { api, sockets }) => {
 };
 
 export const clearStateAfterKick = () => (dispatch, getState, { api, sockets }) => {
+	dispatch(clearSubscriptions());
 	dispatch(clearState());
-};
-
-export const clearState = () => (dispatch, getState, { api, sockets }) => {
-	// clear reducer state
-	dispatch(clearRoomData());
-	dispatch(clearChatData());
-	dispatch(clearPlayerData());
-
-	//unsubscribe chat and room events
-	dispatch(unsubscribeToRoomGlobalEvents());
-	dispatch(unsubscribeToChatGlobalEvents());
 };

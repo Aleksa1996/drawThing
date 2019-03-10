@@ -172,4 +172,68 @@ class GameController extends Controller
             ]);
         }
     }
+
+    public function start(Request $request)
+    {
+        $data = $request->validate([
+            'player.id' => 'required|numeric|min:1',
+            'player.username' => 'required|exists:players,username',
+            'player.password' => 'required',
+            'room.uuid' => 'required|string|min:1'
+        ]);
+
+        try {
+            $player = Player::checkIdentity($data['player']);
+
+            // if player who tries to start game exists
+            if (is_null($player)) {
+                throw new \Exception('Wrong credentials!');
+            }
+
+            // if player is admin
+            if (!$player->isAdminInRoom($data['room']['uuid'])) {
+                throw new \Exception('You dont have permissions to do that!');
+            }
+
+            // sending notification that admin started game
+            Websocket::broadcast()->to($data['room']['uuid'])->emit('GAME_STARTED', []);
+
+            return response()->json(['game' => []], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
+
+    public function sendDrawing_ws($websocket, $data)
+    {
+        try {
+            // validate recived data
+            $validator = Validator::make($data, [
+                'player.id' => 'required|numeric|min:1',
+                'player.username' => 'required|exists:players,username',
+                'player.password' => 'required',
+                'room.uuid' => 'required|string|min:1',
+                'drawing.items' => 'present|array'
+            ]);
+
+            if ($validator->fails()) {
+                throw new \Exception('You are sending wrong data!');
+            }
+
+            $drawing = [
+                'drawing' => $data['drawing'],
+                'player' => ['id' => $data['player']['id']]
+            ];
+            // pass drawing from one player to others in same room
+            // $websocket->emit('SEND_DRAWING_GAME_SUCCESS', $drawing);
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_DRAWING', $drawing);
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $websocket->emit('SEND_DRAWING_GAME_FAILURE', [
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

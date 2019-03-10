@@ -14,7 +14,7 @@ class Home extends Component {
 			<Page title="Home - Drawthing" className="page-home">
 				<div className="page-home-banner text-center">
 					<div className="page-padding">
-						<Link to="/game" className="mybtn1">
+						<Link to="/play" className="mybtn1">
 							<i className="fa fa-play mr-2" aria-hidden="true" />
 							Play now !
 						</Link>

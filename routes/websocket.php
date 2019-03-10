@@ -19,3 +19,5 @@ Websocket::on('disconnect', '\App\Http\Controllers\GameController@onDisconnect_w
 Websocket::on('LEAVE_ROOM', '\App\Http\Controllers\GameController@onDisconnect_ws');
 
 Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@sendMessageRoom_ws');
+
+Websocket::on('SEND_DRAWING', '\App\Http\Controllers\GameController@sendDrawing_ws');
