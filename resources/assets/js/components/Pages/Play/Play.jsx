@@ -67,7 +67,6 @@ class Play extends Component {
 			const roomModel = new RoomModel(this.props.room);
 			if (roomModel.isReady()) {
 				roomModel.isJoined() ? this.props.replace('/room') : this.props.push('/room');
-				// this.props.replace('/room');
 			}
 		}
 	}
@@ -138,6 +137,31 @@ class Play extends Component {
 		}));
 	};
 
+	onUndo = e => {
+		this.setState(({ avatarForm }) => {
+			const newItems = [...avatarForm.items].slice(0, -1);
+			return {
+				avatarForm: {
+					...avatarForm,
+					items: newItems,
+					valid: newItems.length > 0
+				},
+				errors: { avatar: null }
+			};
+		});
+	};
+
+	onClear = e => {
+		this.setState(({ avatarForm }) => ({
+			avatarForm: {
+				...avatarForm,
+				items: [],
+				valid: false
+			},
+			errors: { avatar: null }
+		}));
+	};
+
 	handleChangeUsername = e => {
 		const {
 			target: { value: username }
@@ -174,6 +198,8 @@ class Play extends Component {
 							{...avatarForm}
 							sketchpadRef={this.sketchpadRef}
 							onCompleteDrawing={this.onCompleteDrawing}
+							onUndo={this.onUndo}
+							onClear={this.onClear}
 							errors={errors}
 						/>
 

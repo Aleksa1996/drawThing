@@ -28,6 +28,8 @@ import Game from './components/Pages/Game/Game';
 import Play from './components/Pages/Play/Play';
 import Room from './components/Pages/Room/Room';
 
+import Page404 from './components/Pages/PageStatuses/Page404';
+
 export const routes = [
 	{
 		id: v4(),
@@ -73,6 +75,7 @@ const Router = props => {
 			{routes.map((r, id) => (
 				<Route key={id} exact path={r.path} component={r.component} />
 			))}
+			<Route component={Page404} />
 		</Switch>
 	);
 };

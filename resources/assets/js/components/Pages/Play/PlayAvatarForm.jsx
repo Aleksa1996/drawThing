@@ -1,12 +1,22 @@
 import React from 'react';
 import SketchPad from '../Game/GameCanvas/SketchPad/SketchPad';
 
-const PlayAvatarForm = ({ onCompleteDrawing, sketchpadRef, valid, errors, ...avatarForm }) => {
+const PlayAvatarForm = ({
+	onCompleteDrawing,
+	onUndo,
+	onClear,
+	sketchpadRef,
+	valid,
+	errors,
+	...avatarForm
+}) => {
 	return (
 		<div className="game-start-canvas-container">
 			<SketchPad
 				{...avatarForm}
 				onCompleteItem={onCompleteDrawing}
+				onUndo={onUndo}
+				onClear={onClear}
 				canvasClassName="game-start-canvas rounded"
 				ref={sketchpadRef}
 			>

@@ -12613,13 +12613,17 @@ body {
 }
 
 .mybtn1:hover,
-.mybtn2:hover {
+.mybtn2:hover,
+.mybtn1.active,
+.active.mybtn2 {
   text-decoration: none;
   color: #37ca8a;
 }
 
 .mybtn1:hover::after,
-.mybtn2:hover::after {
+.mybtn2:hover::after,
+.mybtn1.active::after,
+.active.mybtn2::after {
   width: 80%;
   opacity: 1;
 }
@@ -12659,7 +12663,8 @@ body {
   background: #37ca8a;
 }
 
-.mybtn2:hover {
+.mybtn2:hover,
+.mybtn2.active {
   color: #fff;
 }
 
@@ -13278,6 +13283,17 @@ select[disabled] > option {
   min-height: 100vh;
 }
 
+.page-game .game-sketchpad-canvas {
+  background: #fff;
+  cursor: crosshair;
+  margin: 0 auto;
+  display: block;
+}
+
+.page-game .game-sketchpad-canvas:hover {
+  cursor: crosshair;
+}
+
 .game-board-container-center {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -13686,8 +13702,8 @@ select[disabled] > option {
 }
 
 .game-tools-container .game-tools-buttons .mybtn2 {
-  width: 150px;
-  padding: 10px 13px;
+  width: 100px;
+  padding: 10px 12px;
 }
 
 .page-start-game {
@@ -13891,6 +13907,101 @@ select[disabled] > option {
   overflow: hidden;
   outline: 0;
   display: block;
+}
+
+.page-404 {
+  width: 100%;
+  height: 100vh;
+  background: url("/img/pattern_bg_4.png");
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.page-404 .page-status-text-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 55%;
+  border: 4px solid #fff;
+  padding: 10px 25px;
+  background: white;
+}
+
+.page-404 .page-status-text-wrapper .page-status-heading {
+  font-size: 4rem;
+  color: #37ca8a;
+  border-bottom: 2px solid #e6e6e6;
+  padding: 5px 0px 15px;
+}
+
+.page-404 .page-status-text-wrapper .page-status-text {
+  font-size: 1.3rem;
+  padding: 30px 0px;
+  line-height: 37px;
+}
+
+.page-404 .page-status-text-wrapper .page-status-link {
+  font-size: 1.3rem;
+}
+
+.page-404 .page-status-text-wrapper .page-status-link::after {
+  height: 102% !important;
+}
+
+.countdown-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+.countdown-container .countdown-number {
+  font-size: 1rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.countdown-container > div {
+  height: 100px;
+  width: 100px;
+}
+
+.countdown-enter {
+  opacity: 0;
+}
+
+.countdown-enter-active {
+  opacity: 1;
+  font-size: 5rem !important;
+  transition: all 450ms ease-in-out;
+}
+
+.countdown-enter-done {
+  opacity: 0;
+  transition: all 170ms ease-in-out;
+  font-size: 6rem !important;
+}
+
+.countdown-exit {
+  opacity: 0;
+  font-size: 6rem !important;
+}
+
+.countdown-exit-activ5 {
+  opacity: 0;
+  font-size: 6rem !important;
+  transition: all 170ms ease-in-out;
 }
 
 

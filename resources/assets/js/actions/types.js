@@ -45,3 +45,8 @@ export const CLEAR_CHAT_DATA = 'CLEAR_CHAT_DATA';
 //
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
+//
+export const STARTING_GAME = 'STARTING_GAME';
+export const START_GAME_SUCCESS = 'START_GAME_SUCCESS';
+export const START_GAME_FAILURE = 'START_GAME_FAILURE';
+export const GAME_STARTED = 'GAME_STARTED';
