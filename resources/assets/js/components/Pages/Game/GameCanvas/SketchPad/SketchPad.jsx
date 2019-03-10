@@ -76,24 +76,27 @@ export default class SketchPad extends Component {
 	}
 
 	componentDidUpdate({ tool, items }) {
-		if (this.props.items.length !== 0) {
-			items
-				.filter(item => this.props.items.indexOf(item) === -1)
-				.forEach(item => {
-					this.initTool(item.tool);
-					this.toolObj.draw(item, this.props.animate);
-				});
+		if (this.props.items.length != items.length) {
+			this.redraw(this.props.items);
+			this.initTool(this.state.tool);
 		}
-
-		this.initTool(this.state.tool);
 	}
 
-	initTool = tool => {
-		this.toolObj = this.props.toolsMap[tool](this.ctx);
-	};
+	initTool = tool => (this.toolObj = this.props.toolsMap[tool](this.ctx));
 
-	clear = () => {
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	clearCanvas = () => this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+	redraw = items => {
+		this.clearCanvas();
+		const copiedItems = items.slice();
+		const lastCopiedItem = copiedItems.pop();
+		copiedItems.forEach(item => {
+			this.initTool(item.tool);
+			this.toolObj.draw(item, false);
+		});
+		if (lastCopiedItem) {
+			this.toolObj.draw(lastCopiedItem, this.props.animate);
+		}
 	};
 
 	onMouseDown = e => {
@@ -148,7 +151,9 @@ export default class SketchPad extends Component {
 		if (name == 'eraser') {
 			this.setState(prevState => ({ eraser: !prevState.eraser }));
 		} else if (name == 'clear') {
-			this.clear();
+			this.props.onClear();
+		} else if (name == 'undo') {
+			this.props.onUndo();
 		} else {
 			this.setState({ [name]: value });
 		}
@@ -156,7 +161,7 @@ export default class SketchPad extends Component {
 
 	render() {
 		const { width, height, canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
-		const { tool, size, color, fillColor } = this.state;
+		const { tool, size, color, fillColor, eraser } = this.state;
 		return (
 			<React.Fragment>
 				<GameTools
@@ -167,6 +172,7 @@ export default class SketchPad extends Component {
 					size={size}
 					color={color}
 					fillColor={fillColor}
+					isEraserActive={eraser}
 				/>
 				<canvas
 					ref={canvas => {

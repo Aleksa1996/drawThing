@@ -9,7 +9,8 @@ import {
 	clearState,
 	showModal,
 	leaveRoom,
-	startGame
+	startGame,
+	clearChatMessages
 } from '../../../actions';
 
 import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
@@ -205,6 +206,7 @@ class Room extends Component {
 					activate={this.props.game.started}
 					countdownEndText="START"
 					onCountdownEnd={() => {
+						this.props.clearChatMessages();
 						this.props.replace('/game');
 					}}
 				/>
@@ -232,6 +234,7 @@ export default connect(
 		clearState,
 		showModal,
 		leaveRoom,
-		startGame
+		startGame,
+		clearChatMessages
 	}
 )(Room);

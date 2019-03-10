@@ -1,41 +1,93 @@
-// import {
-// 	CREATING_ROOM,
-// 	CREATE_ROOM_SUCCESS,
-// 	CREATE_ROOM_FAILURE,
-// 	RANDOMING_ROOM,
-// 	RANDOM_ROOM_SUCCESS,
-// 	RANDOM_ROOM_FAILURE
-// } from './types';
+import {
+	STARTING_GAME,
+	START_GAME_SUCCESS,
+	START_GAME_FAILURE,
+	SKETCHPAD_DRAW,
+	SKETCHPAD_UNDO,
+	SKETCHPAD_CLEAR,
+	SENDING_DRAWING,
+	SEND_DRAWING,
+	SEND_DRAWING_SUCCESS,
+	SEND_DRAWING_FAILURE,
+	RECEIVE_DRAWING,
+	CLEAR_GAME_DATA
+} from './types';
 
-// export const createRoom = data => (dispatch, getState, api) => {
-// 	dispatch({ type: CREATING_ROOM });
+import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
-// 	const fData = new FormData();
-// 	fData.append('username', data.username);
-// 	fData.append('avatar', data.avatar);
+const globalEvents = [SEND_DRAWING_SUCCESS, SEND_DRAWING_FAILURE, RECEIVE_DRAWING];
 
-// 	return api.game
-// 		.createRoom(fData)
-// 		.then(response => {
-// 			console.log(response);
-// 			dispatch(createRoomSuccess(response.data));
-// 		})
-// 		.catch(error => {
-// 			console.log(error.response);
-// 			dispatch(createRoomFailure(error.response.data.error));
-// 		});
-// };
+export const subscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
+	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
+};
 
-// // export const randomRoom = () => (dispatch, getState, api) => {
-// //     RANDOMING_ROOM
-// // };
+export const unsubscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
+	globalEvents.forEach(e => dispatch(ws_unsubscribe('game', e)));
+};
 
-// export const createRoomSuccess = userData => ({ type: CREATE_ROOM_SUCCESS, payload: userData });
+export const clearGameData = () => ({ type: CLEAR_GAME_DATA });
 
-// export const createRoomFailure = error => ({ type: CREATE_ROOM_FAILURE, payload: error });
+export const startGame = data => (dispatch, getState, { api, sockets }) => {
+	dispatch({ type: STARTING_GAME });
 
-// export const randomRoomSuccess = userData => ({ type: RANDOM_ROOM_SUCCESS, payload: userData });
+	const { id, username, password } = getState().player;
+	const { uuid } = getState().room;
 
-// export const randomRoomFailure = error => ({ type: RANDOM_ROOM_FAILURE, payload: error });
+	const fdata = {
+		player: {
+			id,
+			username,
+			password
+		},
+		room: {
+			uuid
+		}
+	};
 
-// export const resetGameStartFormErrors = () => ({ type: GAME_START_FORM_ERROR_RESET });
+	return api.game
+		.start(fdata)
+		.then(response => {
+			console.log(response);
+			dispatch(startGameSuccess(response.data));
+		})
+		.catch(error => {
+			console.log(error.response);
+			dispatch(startGameFailure(error.response.data.error));
+		});
+};
+export const startGameSuccess = data => ({ type: START_GAME_SUCCESS, payload: data });
+export const startGameFailure = error => ({ type: START_GAME_FAILURE, payload: error });
+//
+export const sketchDraw = item => (dispatch, getState, { api, sockets }) => {
+	dispatch({ type: SKETCHPAD_DRAW, payload: item });
+	dispatch(sketchSendDrawings(getState().game.drawing.items));
+};
+
+export const sketchUndo = item => (dispatch, getState, { api, sockets }) => {
+	dispatch({ type: SKETCHPAD_UNDO });
+	dispatch(sketchSendDrawings(getState().game.drawing.items));
+};
+
+export const sketchClear = item => (dispatch, getState, { api, sockets }) => {
+	dispatch({ type: SKETCHPAD_CLEAR });
+	dispatch(sketchSendDrawings(getState().game.drawing.items));
+};
+//
+export const sketchSendDrawings = items => (dispatch, getState, { api, sockets }) => {
+	dispatch({ type: SENDING_DRAWING });
+
+	const { id, username, password } = getState().player;
+	const { uuid } = getState().room;
+	const dataDrawing = {
+		drawing: { items },
+		player: {
+			id,
+			username,
+			password
+		},
+		room: {
+			uuid
+		}
+	};
+	dispatch(ws_emit('game', SEND_DRAWING, dataDrawing));
+};

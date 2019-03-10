@@ -46,5 +46,9 @@ Route::group(['middleware' => 'api'], function ($router) {
         Route::post('/kick', 'RoomController@kick');
     });
 
+    Route::group(['prefix' => 'game'], function () {
+        Route::post('/start', 'GameController@start');
+    });
+
     // Route::group(['prefix' => 'game'], function () {});
 });

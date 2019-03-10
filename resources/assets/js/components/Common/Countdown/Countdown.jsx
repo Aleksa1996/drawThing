@@ -6,7 +6,7 @@ class Countdown extends Component {
 		super(props);
 		this.countdown = null;
 		this.state = {
-			countdown: props.countDownFrom + 1,
+			countdown: props.countDownFrom + 2,
 			finished: !props.shouldInitOnMount,
 			started: false
 		};
@@ -29,7 +29,11 @@ class Countdown extends Component {
 	countdownInit = () => {
 		return setInterval(() => {
 			if (this.state.countdown > 0) {
-				this.setState(({ countdown }) => ({ countdown: countdown - 1, started: true }));
+				this.setState(({ countdown }) => ({
+					countdown: countdown - 1,
+					started: true,
+					finished: false
+				}));
 			} else {
 				clearInterval(this.countdown);
 				this.countdown = null;
@@ -46,17 +50,17 @@ class Countdown extends Component {
 	}
 
 	render() {
-		const { countdownEndText } = this.props;
+		const { countdownEndText, countDownFrom } = this.props;
 		const { countdown, started, finished } = this.state;
 
-		if (!this.countdown && finished) return null;
+		if (!this.countdown || finished) return null;
 
 		return (
 			<div className="countdown-container">
 				<TransitionGroup>
 					<CSSTransition key={countdown} timeout={{ enter: 450, exit: 170 }} classNames="countdown">
 						<React.Fragment>
-							{started && (
+							{started && countdown <= countDownFrom && (
 								<div className="countdown-number">
 									{countdown == 0 ? countdownEndText : countdown}
 								</div>

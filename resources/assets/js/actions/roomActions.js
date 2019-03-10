@@ -16,8 +16,8 @@ import {
 	GAME_STARTED
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
-import { clearChatData, unsubscribeToChatGlobalEvents } from './chatActions';
-import { clearPlayerData } from './playerActions';
+import { clearState } from './commonActions';
+import { clearSubscriptions } from './commonActions';
 
 const globalEvents = [
 	PLAYER_JOINED_ROOM,
@@ -135,16 +135,6 @@ export const leaveRoom = data => (dispatch, getState, { api, sockets }) => {
 };
 
 export const clearStateAfterKick = () => (dispatch, getState, { api, sockets }) => {
+	dispatch(clearSubscriptions());
 	dispatch(clearState());
-};
-
-export const clearState = () => (dispatch, getState, { api, sockets }) => {
-	// clear reducer state
-	dispatch(clearRoomData());
-	dispatch(clearChatData());
-	dispatch(clearPlayerData());
-
-	//unsubscribe chat and room events
-	dispatch(unsubscribeToRoomGlobalEvents());
-	dispatch(unsubscribeToChatGlobalEvents());
 };

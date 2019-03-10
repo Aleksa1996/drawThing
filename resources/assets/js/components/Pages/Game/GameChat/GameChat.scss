@@ -26,6 +26,7 @@
 			padding-bottom: 15px;
 			overflow-y: scroll;
 			max-height: calc(100% - 95px - 58px);
+			min-height: calc(100% - 95px - 58px);
 
 			.game-board-chat-message {
 				width: auto;
@@ -114,5 +115,11 @@
 				}
 			}
 		}
+	}
+}
+
+@media screen and (max-width: 1366px) {
+	.game-board-container-right {
+		max-height: 580px;
 	}
 }
