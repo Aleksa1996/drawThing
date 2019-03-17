@@ -18,6 +18,7 @@ import { push, replace } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
 import ChatModel from '../../../utils/classes/Chat';
+import GameModel from '../../../utils/classes/Game';
 
 import Page from '../Page';
 import PlayRules from '../Play/PlayRules';
@@ -28,6 +29,7 @@ import RoomPlayers from './RoomPlayers';
 import Button from '../../Form/Button';
 
 import Countdown from '../../Common/Countdown/Countdown';
+import Errors from '../../Common/Errors/Errors';
 
 class Room extends Component {
 	constructor(props) {
@@ -58,9 +60,7 @@ class Room extends Component {
 					subscribeToRoomGlobalEvents();
 					this.subscribedToRoomChat = true;
 				}
-			} else {
-				replace('/play');
-			}
+			} else throw new Error('Room is not ready');
 		} catch (e) {
 			console.log(e);
 			replace('/play');
@@ -149,9 +149,10 @@ class Room extends Component {
 	};
 
 	render() {
-		const { player, room, chat } = this.props;
+		const { player, room, chat, game, clearChatMessages, replace } = this.props;
 		const roomModel = new RoomModel(room);
 		const chatModel = new ChatModel(chat);
+		const gameModel = new GameModel(game);
 
 		const isPlayerAdmin = roomModel.isPlayerAdmin(player);
 		if (!roomModel.isCreated() && !roomModel.isJoined()) {
@@ -183,7 +184,7 @@ class Room extends Component {
 									ref={this.chatBodyRef}
 								/>
 							</div>
-
+							<Errors errors={[]} />>
 							{isPlayerAdmin && (
 								<div className="text-center">
 									<Button
@@ -191,6 +192,7 @@ class Room extends Component {
 										type="button"
 										icon="fa-rocket"
 										className="mybtn2 my-auto"
+										disabled={game.starting_game_request}
 									>
 										Start game
 									</Button>
@@ -203,11 +205,11 @@ class Room extends Component {
 				<Countdown
 					countDownFrom={3}
 					shouldInitOnMount={false}
-					activate={this.props.game.started}
+					activate={gameModel.starting()}
 					countdownEndText="START"
 					onCountdownEnd={() => {
-						this.props.clearChatMessages();
-						this.props.replace('/game');
+						clearChatMessages();
+						replace('/game');
 					}}
 				/>
 			</Page>

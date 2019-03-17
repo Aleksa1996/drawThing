@@ -124,7 +124,7 @@ class Player extends Model
      *          'username' => (string)
      *          'password' => (string)
      *      ]
-     * @return void
+     * @return \App\Models\Player
      */
     public static function checkIdentity(array $credentials)
     {

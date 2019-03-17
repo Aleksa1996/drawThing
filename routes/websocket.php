@@ -13,11 +13,9 @@ use SwooleTW\Http\Websocket\Facades\Websocket;
 |
  */
 
-Websocket::on('connect', '\App\Http\Controllers\GameController@onConnect_ws');
+Websocket::on('connect', '\App\Http\Controllers\WebsocketController@onConnect');
+Websocket::on('disconnect', '\App\Http\Controllers\WebsocketController@onDisconnect');
+Websocket::on('LEAVE_ROOM', '\App\Http\Controllers\WebsocketController@onDisconnect');
 
-Websocket::on('disconnect', '\App\Http\Controllers\GameController@onDisconnect_ws');
-Websocket::on('LEAVE_ROOM', '\App\Http\Controllers\GameController@onDisconnect_ws');
-
-Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@sendMessageRoom_ws');
-
-Websocket::on('SEND_DRAWING', '\App\Http\Controllers\GameController@sendDrawing_ws');
+Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@onRoomMessage');
+Websocket::on('SEND_DRAWING', '\App\Http\Controllers\GameController@onDrawing');

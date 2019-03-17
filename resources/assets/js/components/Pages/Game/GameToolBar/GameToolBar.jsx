@@ -5,6 +5,7 @@ import Dropdown from '../../../Common/Dropdown/Dropdown';
 class GameToolBar extends Component {
 	state = {};
 	render() {
+		const { game, player } = this.props;
 		return (
 			<div className="game-board-toolbar-container container-fluid">
 				<div className="row">
@@ -17,12 +18,12 @@ class GameToolBar extends Component {
 					<div className="col-md-8 game-board-guessing-word-container d-flex justify-content-center align-items-center">
 						<div className="mr-3">
 							<p className="game-board-guessing-word">
-								<span className="game-board-guessing-word-letter">L</span>
-								<span className="game-board-guessing-word-letter">E</span>
-								<span className="game-board-guessing-word-letter">T</span>
-								<span className="game-board-guessing-word-letter">T</span>
-								<span className="game-board-guessing-word-letter">E</span>
-								<span className="game-board-guessing-word-letter">R</span>
+								{game.chosedWordExists() &&
+									game.chosedWordToArrayOfLetters().map((letter, key) => (
+										<span key={key} className="game-board-guessing-word-letter">
+											{game.isPlayerDrawing(player) ? letter : ' '}
+										</span>
+									))}
 							</p>
 						</div>
 						<div className="ml-3">

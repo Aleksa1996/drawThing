@@ -115,11 +115,17 @@ return [
     |--------------------------------------------------------------------------
      */
     'tables' => [
-        // 'table_name' => [
-        //     'size' => 1024,
-        //     'columns' => [
-        //         ['name' => 'column_name', 'type' => Table::TYPE_STRING, 'size' => 1024],
-        //     ]
-        // ],
+        'rooms' => [
+            'size' => 4096,
+            'columns' => [
+                ['name' => 'value', 'type' => Table::TYPE_STRING, 'size' => 2048],
+            ]
+        ],
+        'fds' => [
+            'size' => 8192,
+            'columns' => [
+                ['name' => 'value', 'type' => Table::TYPE_STRING, 'size' => 2048],
+            ]
+        ]
     ]
 ];

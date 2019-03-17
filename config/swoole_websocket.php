@@ -40,7 +40,7 @@ return [
     | Default websocket driver
     |--------------------------------------------------------------------------
     */
-    'default' => 'table',
+    'default' => 'tableWorkers',
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +64,7 @@ return [
     'drivers' => [
         'table' => SwooleTW\Http\Websocket\Rooms\TableRoom::class,
         'redis' => SwooleTW\Http\Websocket\Rooms\RedisRoom::class,
+        'tableWorkers' => SwooleTW\Http\Websocket\Rooms\TableRoomWorkers::class,
     ],
 
     /*
@@ -79,6 +80,8 @@ return [
             'client_rows' => 8192,
             'client_size' => 2048
         ],
+
+        'tableWorkers' => [],
 
         'redis' => [
             'server' => [

@@ -6,7 +6,16 @@ import Button from '../../Form/Button';
 
 ReactModal.setAppElement('#main-content-layout');
 
-const Modal = ({ title, body, buttons, data, handleClose, children }) => {
+const Modal = ({
+	title,
+	body,
+	buttons,
+	data,
+	handleClose,
+	children,
+	shouldCloseOnOverlayClick,
+	shouldHideCloseButton
+}) => {
 	return (
 		<ReactModal
 			isOpen={true}
@@ -15,21 +24,25 @@ const Modal = ({ title, body, buttons, data, handleClose, children }) => {
 			contentLabel="Example Modal"
 			overlayClassName="react-modal-backdrop"
 			className="react-modal modal-dialog"
-			shouldCloseOnOverlayClick={true}
+			shouldCloseOnOverlayClick={
+				typeof shouldCloseOnOverlayClick == 'undefined' ? true : shouldCloseOnOverlayClick
+			}
 		>
 			<div className="modal-dialog" role="document">
 				<div className="modal-content">
 					<div className="modal-header">
 						<h5 className="modal-title">{title}</h5>
-						<button
-							onClick={handleClose}
-							type="button"
-							className="close"
-							data-dismiss="modal"
-							aria-label="Close"
-						>
-							<span aria-hidden="true">&times;</span>
-						</button>
+						{shouldHideCloseButton ? null : (
+							<button
+								onClick={handleClose}
+								type="button"
+								className="close"
+								data-dismiss="modal"
+								aria-label="Close"
+							>
+								<span aria-hidden="true">&times;</span>
+							</button>
+						)}
 					</div>
 					<div className="modal-body">
 						<p>{body}</p>

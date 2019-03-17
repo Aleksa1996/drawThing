@@ -77,7 +77,7 @@ class Room extends Model
         return $this->save() ? $newAdminPlayer : false;
     }
 
-    public function IsPlayerUsernameOccupied($username)
+    public function isPlayerUsernameOccupied($username)
     {
         return $this->players()->where('players.username', trim($username))->count() >= 1;
     }
@@ -91,6 +91,16 @@ class Room extends Model
     {
         $this->active = false;
         return $this->save();
+    }
+
+    public function getRandomPlayer($except = [])
+    {
+        return $this->players()->active()->whereNotIn('players.id', $except)->inRandomOrder()->take(1)->first();
+    }
+
+    public function getPlayerCount()
+    {
+        return $this->players()->active()->count();
     }
 
     // scopes
