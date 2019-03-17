@@ -3,13 +3,9 @@ import Model from './Model';
 import { get as _get } from 'lodash';
 
 export default class Room extends Model {
-	isCreated = () => {
-		return this.created && this.createError == null;
-	};
+	isCreated = () => this.created && this.createError == null;
 
-	isJoined = () => {
-		return this.joined && this.joinError == null;
-	};
+	isJoined = () => this.joined && this.joinError == null;
 
 	isReady = () => this.isCreated() || this.isJoined();
 
@@ -22,7 +18,11 @@ export default class Room extends Model {
 		return player && _get(player, 'active', true);
 	};
 
-	getActivePlayers = () => {
-		return this.players.filter(p => _get(p, 'active', true));
-	};
+	getActivePlayers = () => this.players.filter(p => _get(p, 'active', true));
+
+	isEmpty = () => this.players.length <= 0;
+
+	getPlayerCount = () => this.players.length;
+
+	getActivePlayerCount = () => this.getActivePlayers().length;
 }

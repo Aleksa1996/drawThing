@@ -15,9 +15,9 @@ class CreateWordsTable extends Migration
     {
         Schema::create('words', function (Blueprint $table) {
             $table->increments('id');
-
             $table->text('word');
             $table->bigInteger('points_worth');
+            $table->enum('type', ['easy', 'medium', 'hard']);
 
             $table->timestamps();
         });

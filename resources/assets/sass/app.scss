@@ -2,6 +2,8 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,600');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+@import './animations';
+
 @import '~font-awesome/css/font-awesome.min';
 @import './_variables';
 @import '~bootstrap/scss/bootstrap';
@@ -31,3 +33,5 @@
 @import '../js/components/Pages/PageStatuses/Page404';
 
 @import '../js/components/Common/Countdown/Countdown';
+
+@import '../js/components/Common/Errors/Errors';

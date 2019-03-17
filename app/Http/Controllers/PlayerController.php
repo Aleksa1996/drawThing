@@ -30,7 +30,7 @@ class PlayerController extends Controller
     {
         // validate recived data
         $data = $request->validate([
-            'username' => 'required|min:3|max:16',
+            'username' => 'required|min:4|max:16',
             'avatar' => 'required|file|image',
             'fd' => 'required|numeric'
         ]);

@@ -21,7 +21,7 @@ export const clearState = (whatToClear = []) => (dispatch, getState, { api, sock
 	});
 };
 
-export const clearSubscriptions = (whatToClear = []) => {
+export const clearSubscriptions = (whatToClear = []) => (dispatch, getState, { api, sockets }) => {
 	//unsubscribe chat and room events
 	if (whatToClear && whatToClear.length == 0) {
 		whatToClear = ['room', 'chat', 'game'];

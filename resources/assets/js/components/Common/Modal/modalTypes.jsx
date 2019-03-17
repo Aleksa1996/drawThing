@@ -1,2 +1,3 @@
 export const KICK_PLAYER_MODAL = 'KICK_PLAYER_MODAL';
 export const INFO_MODAL = 'INFO_MODAL';
+export const CHOOSE_WORD_MODAL = 'CHOOSE_WORD_MODAL';

@@ -53,11 +53,18 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof ModelNotFoundException) {
-            return response()->json(['error' => '404 Not Found.'], 404);
+            return response()->json(['errors' => [['field' => null, 'message' => '404 Not Found.']]], 404);
         }
 
         if ($exception instanceof ValidationException) {
-            return response()->json(['error' => $exception->errors()], 422);
+
+            $errorCollection = collect($exception->errors());
+            $errorCollection = $errorCollection->map(function ($error, $key) {
+                if ($key == '_general_error') return ['field' => '', 'message' => $error];
+                return ['field' => $key, 'message' => $error[0]];
+            });
+
+            return response()->json(['errors' => $errorCollection->values()], 422);
         }
 
         return parent::render($request, $exception);

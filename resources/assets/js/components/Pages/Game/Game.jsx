@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
+	subscribeToGameGlobalEvents,
+	unsubscribeToGameGlobalEvents,
+	sketchDraw,
+	sketchUndo,
+	sketchClear,
 	sendMessageRoom,
-	kickPlayer,
-	subscribeToChatGlobalEvents,
-	subscribeToRoomGlobalEvents,
-	clearStateAfterKick,
 	clearState,
 	showModal,
 	leaveRoom,
 	startGame,
-	sketchDraw,
-	sketchUndo,
-	sketchClear,
-	subscribeToGameGlobalEvents,
-	unsubscribeToGameGlobalEvents
+	requestWordsToChoose
 } from '../../../actions';
 import { push, replace } from 'connected-react-router';
 
 import RoomModel from '../../../utils/classes/Room';
 import ChatModel from '../../../utils/classes/Chat';
 import PlayerModel from '../../../utils/classes/Player';
+import GameModel from '../../../utils/classes/Game';
 
 import Page from '../Page';
 
@@ -30,6 +28,8 @@ import GameToolBar from './GameToolBar/GameToolBar';
 import GameScore from './GameScore/GameScore';
 import GameCanvas from './GameCanvas/GameCanvas';
 import GameChat from './GameChat/GameChat';
+
+import { CHOOSE_WORD_MODAL } from '../../Common/Modal/modalTypes';
 
 class Game extends Component {
 	constructor(props) {
@@ -48,27 +48,21 @@ class Game extends Component {
 				size: 5,
 				color: '#151515',
 				fillColor: '#fdffff',
-				// items: [],
 				animate: true,
 				eraser: false,
 
 				gtDefaultPosition: { x: 0, y: 0 },
-				gtShow: false
+				gtShow: false,
+				canvasDisabled: false
 			}
 		};
 	}
 
 	componentDidMount() {
-		const {
-			room,
-			chat,
-			replace,
-			socket,
-			subscribeToGameGlobalEvents,
-			unsubscribeToGameGlobalEvents
-		} = this.props;
+		const { player, room, game, replace, socket, subscribeToGameGlobalEvents } = this.props;
 
 		const roomModel = new RoomModel(room);
+		const gameModel = new GameModel(game);
 		try {
 			// redirect if socket is not connected
 			if (!socket.connected) throw new Error('Socket not connected');
@@ -79,9 +73,8 @@ class Game extends Component {
 					subscribeToGameGlobalEvents();
 					this.subscribedToGameGlobalEvents = true;
 				}
-			} else {
-				replace('/play');
-			}
+			} else throw new Error('Room is not ready');
+			this.updateDrawingUI();
 		} catch (e) {
 			console.log(e);
 			replace('/play');
@@ -95,6 +88,10 @@ class Game extends Component {
 			this.props.chat.messages.length > 0
 		) {
 			this.scrollToBottom();
+		}
+
+		if (prevProps.game.drawn_by != this.props.game.drawn_by) {
+			this.updateDrawingUI();
 		}
 	}
 
@@ -114,6 +111,26 @@ class Game extends Component {
 		) {
 			el.scrollTop = el.scrollHeight;
 		}
+	};
+
+	updateDrawingUI = () => {
+		const isPlayerDrawing = this.props.game.drawn_by == this.props.player.id;
+
+		if (isPlayerDrawing) {
+			this.props.requestWordsToChoose();
+			this.props.showModal({
+				modalType: CHOOSE_WORD_MODAL,
+				modalProps: {}
+			});
+		}
+
+		this.setState(({ sketchpad }) => ({
+			sketchpad: {
+				...sketchpad,
+				canvasDisabled: !isPlayerDrawing,
+				animate: !isPlayerDrawing
+			}
+		}));
 	};
 
 	onCompleteDrawing = item => this.props.sketchDraw(item);
@@ -143,11 +160,12 @@ class Game extends Component {
 		const roomModel = new RoomModel(room);
 		const chatModel = new ChatModel(chat);
 		const playerModel = new PlayerModel(player);
+		const gameModel = new GameModel(game);
 
 		return (
 			<Page title="Game - Drawthing" className="container-fluid page-game">
 				<GameLayout>
-					<GameToolBar />
+					<GameToolBar game={gameModel} player={playerModel} />
 					<div className="row no-gutters">
 						<GameScore room={roomModel} player={playerModel} />
 						<GameCanvas
@@ -184,10 +202,6 @@ export default connect(
 		sendMessageRoom,
 		push,
 		replace,
-		subscribeToChatGlobalEvents,
-		kickPlayer,
-		subscribeToRoomGlobalEvents,
-		clearStateAfterKick,
 		clearState,
 		showModal,
 		leaveRoom,
@@ -196,6 +210,7 @@ export default connect(
 		sketchUndo,
 		sketchClear,
 		subscribeToGameGlobalEvents,
-		unsubscribeToGameGlobalEvents
+		unsubscribeToGameGlobalEvents,
+		requestWordsToChoose
 	}
 )(Game);

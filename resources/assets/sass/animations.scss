@@ -1,0 +1,45 @@
+@keyframes spinnerAnimation {
+	0% {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+
+	50% {
+		transform: rotate3d(0, 0, 1, 540deg);
+	}
+
+	100% {
+		transform: rotate3d(0, 0, 1, 0deg);
+	}
+}
+
+.bounceAnimation {
+	animation: bounceAnimation 1.44s ease infinite;
+	transform-origin: 50% 50%;
+}
+
+@keyframes bounceAnimation {
+	0% {
+		transform: translate(0, -3px);
+	}
+	5.55556% {
+		transform: translate(0, 3px);
+	}
+	11.11111% {
+		transform: translate(0, -3px);
+	}
+	16.66667% {
+		transform: translate(0, 3px);
+	}
+	22.22222% {
+		transform: translate(0, -3px);
+	}
+	27.77778% {
+		transform: translate(0, 3px);
+	}
+	30.55556% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
+}

@@ -10,13 +10,12 @@ import {
 } from '../../../actions';
 import { push, replace } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
+import Errors from '../../../utils/classes/Errors';
 
 import Page from '../Page';
 import PlayAvatarForm from './PlayAvatarForm';
 import PlayUsernameForm from './PlayUsernameForm';
 import PlayRules from './PlayRules';
-
-import { mapValues as _mapValues } from 'lodash';
 
 class Play extends Component {
 	constructor(props) {
@@ -50,7 +49,7 @@ class Play extends Component {
 				valid: false,
 				pristine: true
 			},
-			errors: { avatar: null, username: null, general: null }
+			errors: []
 		};
 	}
 
@@ -110,13 +109,7 @@ class Play extends Component {
 						break;
 				}
 			})
-			.catch(error => {
-				console.log(error);
-				console.log(error.response);
-				this.setState(prevState => ({
-					errors: { ..._mapValues(error.response.data.error, v => v[0] || null) }
-				}));
-			});
+			.catch(({ response: { data: { errors } } }) => this.setState({ errors }));
 	};
 
 	createAvatarImage = () =>
@@ -127,18 +120,18 @@ class Play extends Component {
 		});
 
 	onCompleteDrawing = item => {
-		this.setState(({ avatarForm }) => ({
+		this.setState(({ avatarForm, errors }) => ({
 			avatarForm: {
 				...avatarForm,
 				items: [...avatarForm.items, item],
 				valid: true
 			},
-			errors: { avatar: null }
+			errors: Errors.init(errors).remove('avatar')
 		}));
 	};
 
 	onUndo = e => {
-		this.setState(({ avatarForm }) => {
+		this.setState(({ avatarForm, errors }) => {
 			const newItems = [...avatarForm.items].slice(0, -1);
 			return {
 				avatarForm: {
@@ -146,19 +139,19 @@ class Play extends Component {
 					items: newItems,
 					valid: newItems.length > 0
 				},
-				errors: { avatar: null }
+				errors: Errors.init(errors).remove('avatar')
 			};
 		});
 	};
 
 	onClear = e => {
-		this.setState(({ avatarForm }) => ({
+		this.setState(({ avatarForm, errors }) => ({
 			avatarForm: {
 				...avatarForm,
 				items: [],
 				valid: false
 			},
-			errors: { avatar: null }
+			errors: Errors.init(errors).remove('avatar')
 		}));
 	};
 
@@ -167,9 +160,9 @@ class Play extends Component {
 			target: { value: username }
 		} = e;
 
-		this.setState(({ usernameForm }) => ({
+		this.setState(({ usernameForm, errors }) => ({
 			usernameForm: { ...usernameForm, username, valid: username.length >= 3 },
-			errors: { username: null }
+			errors: Errors.init(errors).remove('username')
 		}));
 	};
 
@@ -208,16 +201,10 @@ class Play extends Component {
 							handleSubmit={this.handleSubmit}
 							handleChangeUsername={this.handleChangeUsername}
 							handleFocusUsername={this.handleFocusUsername}
-							errors={errors}
+							errors={Errors.init(errors)}
 							hasRoomUUID={this.hasRoomUUID}
 							buttonStatus={room.creating || room.joining || player.creating}
 						/>
-						{errors.general && (
-							<small class="help-text d-block text-center text-danger">
-								<i class="fa fa-exclamation-circle mr-2" aria-hidden="true" />
-								{errors.general}
-							</small>
-						)}
 					</div>
 					<PlayRules />
 				</div>

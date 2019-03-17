@@ -13,18 +13,20 @@ import {
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA,
-	GAME_STARTED
+	STARTING_GAME_COUNTDOWN
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 import { clearState } from './commonActions';
 import { clearSubscriptions } from './commonActions';
+
+import Helpers from '../utils/Helpers';
 
 const globalEvents = [
 	PLAYER_JOINED_ROOM,
 	PLAYER_KICKED,
 	PLAYER_LEAVED_ROOM,
 	REPLACE_ADMIN_ROOM,
-	GAME_STARTED
+	STARTING_GAME_COUNTDOWN
 ];
 
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
@@ -43,10 +45,7 @@ export const createRoom = (data = null) => (dispatch, getState, { api, sockets }
 
 	const { id, username, password } = getState().player;
 
-	const fData = new FormData();
-	fData.append('id', id);
-	fData.append('username', username);
-	fData.append('password', password);
+	const fData = Helpers.objToFormData({ id, username, password }, 'player');
 
 	return api.room
 		.create(fData)

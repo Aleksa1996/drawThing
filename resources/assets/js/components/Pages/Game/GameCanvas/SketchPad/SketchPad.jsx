@@ -37,7 +37,8 @@ export default class SketchPad extends Component {
 		onEveryItemChange: PropTypes.func, // function(idStroke:string, x:number, y:number) { ... }
 		onDebouncedItemChange: PropTypes.func, // function(idStroke, points:Point[]) { ... }
 		onCompleteItem: PropTypes.func, // function(stroke:Stroke) { ... }
-		debounceTime: PropTypes.number
+		debounceTime: PropTypes.number,
+		canvasDisabled: PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -51,7 +52,8 @@ export default class SketchPad extends Component {
 		animate: true,
 		tool: TOOL_PENCIL,
 		toolsMap,
-		eraser: false
+		eraser: false,
+		canvasDisabled: false
 	};
 
 	constructor(props) {
@@ -75,10 +77,9 @@ export default class SketchPad extends Component {
 		this.initTool(this.state.tool);
 	}
 
-	componentDidUpdate({ tool, items }) {
+	componentDidUpdate({ tool, items }, prevState) {
 		if (this.props.items.length != items.length) {
 			this.redraw(this.props.items);
-			this.initTool(this.state.tool);
 		}
 	}
 
@@ -90,18 +91,24 @@ export default class SketchPad extends Component {
 		this.clearCanvas();
 		const copiedItems = items.slice();
 		const lastCopiedItem = copiedItems.pop();
+
 		copiedItems.forEach(item => {
 			this.initTool(item.tool);
 			this.toolObj.draw(item, false);
 		});
+
 		if (lastCopiedItem) {
+			this.initTool(lastCopiedItem.tool);
 			this.toolObj.draw(lastCopiedItem, this.props.animate);
 		}
 	};
 
 	onMouseDown = e => {
+		if (this.props.canvasDisabled) return;
 		const { onItemStart, onDebouncedItemChange, debounceTime } = this.props;
-		let { color, size, fillColor, eraser } = this.state;
+		let { color, size, fillColor, eraser, tool } = this.state;
+
+		this.initTool(tool);
 
 		if (eraser) {
 			this.initTool(TOOL_PENCIL);
@@ -126,6 +133,7 @@ export default class SketchPad extends Component {
 	};
 
 	onMouseMove = e => {
+		if (this.props.canvasDisabled) return;
 		const data = this.toolObj.onMouseMove(...this.getCursorPosition(e));
 		data &&
 			data[0] &&
@@ -134,6 +142,7 @@ export default class SketchPad extends Component {
 	};
 
 	onMouseUp = e => {
+		if (this.props.canvasDisabled) return;
 		const data = this.toolObj.onMouseUp(...this.getCursorPosition(e));
 		data && data[0] && this.props.onCompleteItem && this.props.onCompleteItem.apply(null, data);
 		if (this.props.onDebouncedItemChange) {
@@ -164,16 +173,19 @@ export default class SketchPad extends Component {
 		const { tool, size, color, fillColor, eraser } = this.state;
 		return (
 			<React.Fragment>
-				<GameTools
-					defaultPosition={gtDefaultPosition}
-					show={gtShow}
-					handleTool={this.handleTool}
-					tool={tool}
-					size={size}
-					color={color}
-					fillColor={fillColor}
-					isEraserActive={eraser}
-				/>
+				{!this.props.canvasDisabled && (
+					<GameTools
+						defaultPosition={gtDefaultPosition}
+						show={gtShow}
+						handleTool={this.handleTool}
+						tool={tool}
+						size={size}
+						color={color}
+						fillColor={fillColor}
+						isEraserActive={eraser}
+					/>
+				)}
+
 				<canvas
 					ref={canvas => {
 						this.canvasRef = canvas;
