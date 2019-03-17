@@ -2,7 +2,7 @@ import {
 	SKETCHPAD_DRAW,
 	SKETCHPAD_UNDO,
 	SKETCHPAD_CLEAR,
-	RECEIVE_DRAWING,
+	RECEIVE_DRAWING_GAME,
 	//
 	STARTING_GAME_REQUEST,
 	STARTING_GAME_REQUEST_SUCCESS,
@@ -48,7 +48,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		case SKETCHPAD_CLEAR: {
 			return updateGame(state, { drawing: { items: [] } });
 		}
-		case RECEIVE_DRAWING: {
+		case RECEIVE_DRAWING_GAME: {
 			return updateGame(state, { drawing: { items: payload.drawing.items } });
 		}
 		//
@@ -64,7 +64,8 @@ const reducer = (state = initialState, { type, payload }) => {
 		case STARTING_GAME_REQUEST_FAILURE: {
 			return updateGame(state, {
 				starting_game_request: false,
-				starting_game_request_approved: false
+				starting_game_request_approved: false,
+				starting_game_request_errors: payload.errors
 			});
 		}
 		// REAL GAME STATUSES

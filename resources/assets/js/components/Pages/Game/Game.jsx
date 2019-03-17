@@ -10,7 +10,8 @@ import {
 	clearState,
 	showModal,
 	leaveRoom,
-	startGame
+	startGame,
+	requestWordsToChoose
 } from '../../../actions';
 import { push, replace } from 'connected-react-router';
 
@@ -116,6 +117,7 @@ class Game extends Component {
 		const isPlayerDrawing = this.props.game.drawn_by == this.props.player.id;
 
 		if (isPlayerDrawing) {
+			this.props.requestWordsToChoose();
 			this.props.showModal({
 				modalType: CHOOSE_WORD_MODAL,
 				modalProps: {}
@@ -208,6 +210,7 @@ export default connect(
 		sketchUndo,
 		sketchClear,
 		subscribeToGameGlobalEvents,
-		unsubscribeToGameGlobalEvents
+		unsubscribeToGameGlobalEvents,
+		requestWordsToChoose
 	}
 )(Game);

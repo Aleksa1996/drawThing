@@ -44,10 +44,12 @@ const PlayUsernameForm = ({
 					</div>
 
 					<div
-						className={`invalid-feedback text-left ${errors.username && valid ? 'd-block' : ''}`}
+						className={`invalid-feedback text-left ${
+							errors.exists('username') && valid ? 'd-block' : ''
+						}`}
 					>
 						<i className="fa fa-exclamation-circle" aria-hidden="true" /> &nbsp;
-						{errors.username}
+						{errors.getMessage('username')}
 					</div>
 				</div>
 

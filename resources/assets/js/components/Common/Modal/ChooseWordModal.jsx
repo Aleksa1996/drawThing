@@ -13,7 +13,7 @@ class ChooseWordModal extends Component {
 		super(props);
 		this.countdownId = null;
 		this.state = {
-			countdown: 5
+			countdown: 8
 		};
 	}
 	componentDidMount() {

@@ -91,7 +91,7 @@ class Room extends Component {
 	}
 
 	componentWillUnmount() {
-		if (!this.props.game.started) {
+		if (this.props.game.status == 'NOT_STARTED') {
 			// clear whole room state
 			this.props.leaveRoom();
 			this.props.clearState();
@@ -184,7 +184,7 @@ class Room extends Component {
 									ref={this.chatBodyRef}
 								/>
 							</div>
-							<Errors errors={[]} />>
+							<Errors errors={gameModel.starting_game_request_errors} />
 							{isPlayerAdmin && (
 								<div className="text-center">
 									<Button
@@ -192,7 +192,7 @@ class Room extends Component {
 										type="button"
 										icon="fa-rocket"
 										className="mybtn2 my-auto"
-										disabled={game.starting_game_request}
+										disabled={game.starting_game_request || roomModel.getActivePlayerCount() <= 1}
 									>
 										Start game
 									</Button>

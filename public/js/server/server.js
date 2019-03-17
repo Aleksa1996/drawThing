@@ -79416,7 +79416,7 @@ var clearSubscriptions = function clearSubscriptions() {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/gameActions.js ***!
   \****************************************************/
-/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord */
+/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord, requestWordsToChoose */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79432,11 +79432,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameSuccess", function() { return startingGameSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameFailure", function() { return startingGameFailure; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return chooseWord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "requestWordsToChoose", function() { return requestWordsToChoose; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"]];
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"]];
 var subscribeToGameGlobalEvents = function subscribeToGameGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -79545,7 +79546,7 @@ var startGame = function startGame(data) {
       dispatch(startingGameSuccess(response.data));
     }).catch(function (error) {
       console.log(error.response);
-      dispatch(startingGameFailure(error.response.data.error));
+      dispatch(startingGameFailure(error.response.data));
     });
   };
 };
@@ -79555,10 +79556,10 @@ var startingGameSuccess = function startingGameSuccess(data) {
     payload: data
   };
 };
-var startingGameFailure = function startingGameFailure(error) {
+var startingGameFailure = function startingGameFailure(errors) {
   return {
     type: _types__WEBPACK_IMPORTED_MODULE_0__["STARTING_GAME_REQUEST_FAILURE"],
-    payload: error
+    payload: errors
   };
 }; //
 
@@ -79569,6 +79570,29 @@ var chooseWord = function chooseWord(word) {
     dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["CHOSED_WORD"], {
       word: word
     }));
+    dispatch({
+      type: _types__WEBPACK_IMPORTED_MODULE_0__["CHOSED_WORD"],
+      payload: {
+        word: word
+      }
+    });
+  };
+};
+var requestWordsToChoose = function requestWordsToChoose() {
+  return function (dispatch, getState, _ref9) {
+    var api = _ref9.api,
+        sockets = _ref9.sockets;
+    var _getState$player3 = getState().player,
+        id = _getState$player3.id,
+        username = _getState$player3.username,
+        password = _getState$player3.password;
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["REQUEST_WORDS"], {
+      player: {
+        id: id,
+        username: username,
+        password: password
+      }
+    }));
   };
 };
 
@@ -79578,7 +79602,7 @@ var chooseWord = function chooseWord(word) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/index.js ***!
   \**********************************************/
-/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord, clearPlayerData, createPlayer, createPlayerSuccess, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal */
+/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord, requestWordsToChoose */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79622,12 +79646,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["chooseWord"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "requestWordsToChoose", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["requestWordsToChoose"]; });
+
 /* harmony import */ var _playerActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./playerActions */ "./resources/assets/js/actions/playerActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["clearPlayerData"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createPlayer", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["createPlayer"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createPlayerSuccess", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["createPlayerSuccess"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createPlayerFailure", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["createPlayerFailure"]; });
 
 /* harmony import */ var _roomActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./roomActions */ "./resources/assets/js/actions/roomActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "subscribeToRoomGlobalEvents", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["subscribeToRoomGlobalEvents"]; });
@@ -79717,7 +79745,7 @@ var hideModal = function hideModal() {
 /*!******************************************************!*\
   !*** ./resources/assets/js/actions/playerActions.js ***!
   \******************************************************/
-/*! exports provided: clearPlayerData, createPlayer, createPlayerSuccess */
+/*! exports provided: clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79725,7 +79753,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return clearPlayerData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPlayer", function() { return createPlayer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPlayerSuccess", function() { return createPlayerSuccess; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createPlayerFailure", function() { return createPlayerFailure; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
+/* harmony import */ var _utils_Helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/Helpers */ "./resources/assets/js/utils/Helpers.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 var clearPlayerData = function clearPlayerData() {
   return {
@@ -79738,15 +79773,16 @@ var createPlayer = function createPlayer(data) {
         sockets = _ref.sockets;
     dispatch({
       type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATING_PLAYER"]
-    }); // za pravljenje form data form data
-
-    var fData = new FormData();
-    fData.append('username', data.username);
-    fData.append('avatar', data.avatar);
-    fData.append('fd', getState().socket.fd);
+    });
+    var fData = _utils_Helpers__WEBPACK_IMPORTED_MODULE_1__["default"].objToFormData(_objectSpread({}, data, {
+      fd: getState().socket.fd
+    }));
     return api.player.create(fData).then(function (response) {
       dispatch(createPlayerSuccess(response.data));
       return response;
+    }, function (error) {
+      dispatch(createPlayerFailure());
+      throw error;
     });
   };
 };
@@ -79754,6 +79790,11 @@ var createPlayerSuccess = function createPlayerSuccess(userData) {
   return {
     type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATE_PLAYER_SUCCESS"],
     payload: userData
+  };
+};
+var createPlayerFailure = function createPlayerFailure() {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["CREATE_PLAYER_FAILURE"]
   };
 };
 
@@ -79833,11 +79874,6 @@ var createRoom = function createRoom() {
       username: username,
       password: password
     }, 'player');
-    console.log(fData); // const fData = new FormData();
-    // fData.append('id', id);
-    // fData.append('username', username);
-    // fData.append('password', password);
-
     return api.room.create(fData).then(function (response) {
       dispatch(createRoomSuccess(response.data));
       return response;
@@ -79973,7 +80009,7 @@ var clearStateAfterKick = function clearStateAfterKick() {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME_COUNTDOWN, PLAYER_CHOOSING_WORD, CHOSED_WORD, CHOOSE_WORD, CLEAR_GAME_DATA */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME_COUNTDOWN, PLAYER_CHOOSING_WORD, CHOSED_WORD, CHOOSE_WORD, REQUEST_WORDS, CLEAR_GAME_DATA */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -80017,7 +80053,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SKETCHPAD_UNDO", function() { return SKETCHPAD_UNDO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SKETCHPAD_CLEAR", function() { return SKETCHPAD_CLEAR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEND_DRAWING", function() { return SEND_DRAWING; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_DRAWING", function() { return RECEIVE_DRAWING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_DRAWING_GAME", function() { return RECEIVE_DRAWING_GAME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST", function() { return STARTING_GAME_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST_SUCCESS", function() { return STARTING_GAME_REQUEST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST_FAILURE", function() { return STARTING_GAME_REQUEST_FAILURE; });
@@ -80025,6 +80061,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_CHOOSING_WORD", function() { return PLAYER_CHOOSING_WORD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOSED_WORD", function() { return CHOSED_WORD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOOSE_WORD", function() { return CHOOSE_WORD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REQUEST_WORDS", function() { return REQUEST_WORDS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_GAME_DATA", function() { return CLEAR_GAME_DATA; });
 var CONNECT_WS = 'CONNECT_WS';
 var DISCONNECT_WS = 'DISCONNECT_WS';
@@ -80078,7 +80115,7 @@ var SKETCHPAD_DRAW = 'SKETCHPAD_DRAW';
 var SKETCHPAD_UNDO = 'SKETCHPAD_UNDO';
 var SKETCHPAD_CLEAR = 'SKETCHPAD_CLEAR';
 var SEND_DRAWING = 'SEND_DRAWING';
-var RECEIVE_DRAWING = 'RECEIVE_DRAWING'; //
+var RECEIVE_DRAWING_GAME = 'RECEIVE_DRAWING_GAME'; //
 
 var STARTING_GAME_REQUEST = 'STARTING_GAME_REQUEST';
 var STARTING_GAME_REQUEST_SUCCESS = 'STARTING_GAME_REQUEST_SUCCESS';
@@ -80088,7 +80125,8 @@ var STARTING_GAME_COUNTDOWN = 'STARTING_GAME_COUNTDOWN';
 var PLAYER_CHOOSING_WORD = 'PLAYER_CHOOSING_WORD';
 var CHOSED_WORD = 'CHOSED_WORD'; //
 
-var CHOOSE_WORD = 'CHOOSE_WORD'; //
+var CHOOSE_WORD = 'CHOOSE_WORD';
+var REQUEST_WORDS = 'REQUEST_WORDS'; //
 
 var CLEAR_GAME_DATA = 'CLEAR_GAME_DATA';
 
@@ -80463,6 +80501,34 @@ var Dropdown = function Dropdown(_ref) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/Common/Errors/ErrorItem.jsx":
+/*!********************************************************************!*\
+  !*** ./resources/assets/js/components/Common/Errors/ErrorItem.jsx ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var ErrorItem = function ErrorItem(_ref) {
+  var className = _ref.className,
+      children = _ref.children;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "error-list-item ".concat(className)
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fa fa-exclamation-circle",
+    "aria-hidden": "true"
+  }), " \xA0 ", children);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ErrorItem);
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/Common/Errors/Errors.jsx":
 /*!*****************************************************************!*\
   !*** ./resources/assets/js/components/Common/Errors/Errors.jsx ***!
@@ -80474,20 +80540,28 @@ var Dropdown = function Dropdown(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/classes/Errors */ "./resources/assets/js/utils/classes/Errors.js");
+/* harmony import */ var _ErrorItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ErrorItem */ "./resources/assets/js/components/Common/Errors/ErrorItem.jsx");
+
+
 
 
 var Errors = function Errors(_ref) {
   var errors = _ref.errors;
   if (!Array.isArray(errors)) errors = [errors];
+  var errorsModel = new _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_1__["default"](errors);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "error-list-container"
-  }, errors.map(function (e) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      class: "error-list-item"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      class: "fa fa-exclamation-circle",
-      "aria-hidden": "true"
-    }), " \xA0 ", e);
+  }, errorsModel.getGeneralErrors().map(function (e) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ErrorItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: e.message,
+      className: "text-center mb-3"
+    }, e.message);
+  }), errorsModel.getFormErrors().map(function (e) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ErrorItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: e.field,
+      className: "text-center mb-3"
+    }, e.field, " ", e.message);
   }));
 };
 
@@ -80608,7 +80682,7 @@ function (_Component) {
 
     _this.countdownId = null;
     _this.state = {
-      countdown: 5
+      countdown: 8
     };
     return _this;
   }
@@ -81940,6 +82014,8 @@ function (_Component) {
       var isPlayerDrawing = _this.props.game.drawn_by == _this.props.player.id;
 
       if (isPlayerDrawing) {
+        _this.props.requestWordsToChoose();
+
         _this.props.showModal({
           modalType: _Common_Modal_modalTypes__WEBPACK_IMPORTED_MODULE_14__["CHOOSE_WORD_MODAL"],
           modalProps: {}
@@ -82123,7 +82199,8 @@ function (_Component) {
   sketchUndo: _actions__WEBPACK_IMPORTED_MODULE_2__["sketchUndo"],
   sketchClear: _actions__WEBPACK_IMPORTED_MODULE_2__["sketchClear"],
   subscribeToGameGlobalEvents: _actions__WEBPACK_IMPORTED_MODULE_2__["subscribeToGameGlobalEvents"],
-  unsubscribeToGameGlobalEvents: _actions__WEBPACK_IMPORTED_MODULE_2__["unsubscribeToGameGlobalEvents"]
+  unsubscribeToGameGlobalEvents: _actions__WEBPACK_IMPORTED_MODULE_2__["unsubscribeToGameGlobalEvents"],
+  requestWordsToChoose: _actions__WEBPACK_IMPORTED_MODULE_2__["requestWordsToChoose"]
 })(Game));
 
 /***/ }),
@@ -83800,12 +83877,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/lib/index.js");
 /* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(connected_react_router__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _utils_classes_Room__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/classes/Room */ "./resources/assets/js/utils/classes/Room.js");
-/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
-/* harmony import */ var _PlayAvatarForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PlayAvatarForm */ "./resources/assets/js/components/Pages/Play/PlayAvatarForm.jsx");
-/* harmony import */ var _PlayUsernameForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PlayUsernameForm */ "./resources/assets/js/components/Pages/Play/PlayUsernameForm.jsx");
-/* harmony import */ var _PlayRules__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlayRules */ "./resources/assets/js/components/Pages/Play/PlayRules.jsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils/classes/Errors */ "./resources/assets/js/utils/classes/Errors.js");
+/* harmony import */ var _Page__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Page */ "./resources/assets/js/components/Pages/Page.jsx");
+/* harmony import */ var _PlayAvatarForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PlayAvatarForm */ "./resources/assets/js/components/Pages/Play/PlayAvatarForm.jsx");
+/* harmony import */ var _PlayUsernameForm__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlayUsernameForm */ "./resources/assets/js/components/Pages/Play/PlayUsernameForm.jsx");
+/* harmony import */ var _PlayRules__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./PlayRules */ "./resources/assets/js/components/Pages/Play/PlayRules.jsx");
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -83945,16 +84021,10 @@ function (_Component) {
                     default:
                       break;
                   }
-                }).catch(function (error) {
-                  console.log(error);
-                  console.log(error.response);
-
-                  _this.setState(function (prevState) {
-                    return {
-                      errors: _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_11__["mapValues"])(error.response.data.error, function (v) {
-                        return v[0] || null;
-                      }))
-                    };
+                }).catch(function (_ref3) {
+                  var errors = _ref3.response.data.errors;
+                  return _this.setState({
+                    errors: errors
                   });
                 }));
 
@@ -83980,23 +84050,23 @@ function (_Component) {
     };
 
     _this.onCompleteDrawing = function (item) {
-      _this.setState(function (_ref3) {
-        var avatarForm = _ref3.avatarForm;
+      _this.setState(function (_ref4) {
+        var avatarForm = _ref4.avatarForm,
+            errors = _ref4.errors;
         return {
           avatarForm: _objectSpread({}, avatarForm, {
             items: [].concat(_toConsumableArray(avatarForm.items), [item]),
             valid: true
           }),
-          errors: {
-            avatar: null
-          }
+          errors: _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__["default"].init(errors).remove('avatar')
         };
       });
     };
 
     _this.onUndo = function (e) {
-      _this.setState(function (_ref4) {
-        var avatarForm = _ref4.avatarForm;
+      _this.setState(function (_ref5) {
+        var avatarForm = _ref5.avatarForm,
+            errors = _ref5.errors;
 
         var newItems = _toConsumableArray(avatarForm.items).slice(0, -1);
 
@@ -84005,24 +84075,21 @@ function (_Component) {
             items: newItems,
             valid: newItems.length > 0
           }),
-          errors: {
-            avatar: null
-          }
+          errors: _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__["default"].init(errors).remove('avatar')
         };
       });
     };
 
     _this.onClear = function (e) {
-      _this.setState(function (_ref5) {
-        var avatarForm = _ref5.avatarForm;
+      _this.setState(function (_ref6) {
+        var avatarForm = _ref6.avatarForm,
+            errors = _ref6.errors;
         return {
           avatarForm: _objectSpread({}, avatarForm, {
             items: [],
             valid: false
           }),
-          errors: {
-            avatar: null
-          }
+          errors: _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__["default"].init(errors).remove('avatar')
         };
       });
     };
@@ -84030,16 +84097,15 @@ function (_Component) {
     _this.handleChangeUsername = function (e) {
       var username = e.target.value;
 
-      _this.setState(function (_ref6) {
-        var usernameForm = _ref6.usernameForm;
+      _this.setState(function (_ref7) {
+        var usernameForm = _ref7.usernameForm,
+            errors = _ref7.errors;
         return {
           usernameForm: _objectSpread({}, usernameForm, {
             username: username,
             valid: username.length >= 3
           }),
-          errors: {
-            username: null
-          }
+          errors: _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__["default"].init(errors).remove('username')
         };
       });
     };
@@ -84047,8 +84113,8 @@ function (_Component) {
     _this.handleFocusUsername = function (e) {
       var type = e.type;
 
-      _this.setState(function (_ref7) {
-        var usernameForm = _ref7.usernameForm;
+      _this.setState(function (_ref8) {
+        var usernameForm = _ref8.usernameForm;
         return {
           usernameForm: _objectSpread({}, usernameForm, {
             focused: type === 'focus',
@@ -84086,11 +84152,7 @@ function (_Component) {
         valid: false,
         pristine: true
       },
-      errors: {
-        avatar: null,
-        username: null,
-        general: null
-      }
+      errors: []
     };
     return _this;
   }
@@ -84126,7 +84188,7 @@ function (_Component) {
       var _this$props = this.props,
           player = _this$props.player,
           room = _this$props.room;
-      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Page__WEBPACK_IMPORTED_MODULE_8__["default"], {
         title: "Play game - Drawthing",
         className: "container-fluid page-start-game"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -84135,25 +84197,20 @@ function (_Component) {
         className: "game-start-card rounded shadow"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", {
         className: "game-start-heading"
-      }, "Start new game"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayAvatarForm__WEBPACK_IMPORTED_MODULE_8__["default"], _extends({}, avatarForm, {
+      }, "Start new game"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayAvatarForm__WEBPACK_IMPORTED_MODULE_9__["default"], _extends({}, avatarForm, {
         sketchpadRef: this.sketchpadRef,
         onCompleteDrawing: this.onCompleteDrawing,
         onUndo: this.onUndo,
         onClear: this.onClear,
         errors: errors
-      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayUsernameForm__WEBPACK_IMPORTED_MODULE_9__["default"], _extends({}, usernameForm, {
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayUsernameForm__WEBPACK_IMPORTED_MODULE_10__["default"], _extends({}, usernameForm, {
         handleSubmit: this.handleSubmit,
         handleChangeUsername: this.handleChangeUsername,
         handleFocusUsername: this.handleFocusUsername,
-        errors: errors,
+        errors: _utils_classes_Errors__WEBPACK_IMPORTED_MODULE_7__["default"].init(errors),
         hasRoomUUID: this.hasRoomUUID,
         buttonStatus: room.creating || room.joining || player.creating
-      })), errors.general && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("small", {
-        class: "help-text d-block text-center text-danger"
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
-        class: "fa fa-exclamation-circle mr-2",
-        "aria-hidden": "true"
-      }), errors.general)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayRules__WEBPACK_IMPORTED_MODULE_10__["default"], null)));
+      }))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_PlayRules__WEBPACK_IMPORTED_MODULE_11__["default"], null)));
     }
   }]);
 
@@ -84309,11 +84366,11 @@ var PlayUsernameForm = function PlayUsernameForm(_ref) {
     className: "fa fa-exclamation-circle",
     "aria-hidden": "true"
   }), " \xA0 Username must be min 3 characters!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "invalid-feedback text-left ".concat(errors.username && valid ? 'd-block' : '')
+    className: "invalid-feedback text-left ".concat(errors.exists('username') && valid ? 'd-block' : '')
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-exclamation-circle",
     "aria-hidden": "true"
-  }), " \xA0", errors.username)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), " \xA0", errors.getMessage('username'))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-start-buttons"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/",
@@ -84530,7 +84587,7 @@ function (_Component) {
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      if (!this.props.game.started) {
+      if (this.props.game.status == 'NOT_STARTED') {
         // clear whole room state
         this.props.leaveRoom();
         this.props.clearState();
@@ -84581,15 +84638,15 @@ function (_Component) {
         handleChatSend: this.handleChatSend,
         ref: this.chatBodyRef
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Errors_Errors__WEBPACK_IMPORTED_MODULE_14__["default"], {
-        errors: []
-      }), ">", isPlayerAdmin && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        errors: gameModel.starting_game_request_errors
+      }), isPlayerAdmin && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Button__WEBPACK_IMPORTED_MODULE_12__["default"], {
         onClick: this.handleStartGame,
         type: "button",
         icon: "fa-rocket",
         className: "mybtn2 my-auto",
-        disabled: game.starting_game_request
+        disabled: game.starting_game_request || roomModel.getActivePlayerCount() <= 1
       }, "Start game")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Play_PlayRules__WEBPACK_IMPORTED_MODULE_9__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Countdown_Countdown__WEBPACK_IMPORTED_MODULE_13__["default"], {
         countDownFrom: 3,
         shouldInitOnMount: false,
@@ -85676,7 +85733,7 @@ var reducer = function reducer() {
         });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"]:
       {
         return updateGame(state, {
           drawing: {
@@ -85705,7 +85762,8 @@ var reducer = function reducer() {
       {
         return updateGame(state, {
           starting_game_request: false,
-          starting_game_request_approved: false
+          starting_game_request_approved: false,
+          starting_game_request_errors: payload.errors
         });
       }
     // REAL GAME STATUSES
@@ -85885,11 +85943,17 @@ var reducer = function reducer() {
           creating: false,
           created: true,
           password: payload.player.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.player.id
-        }); // save player in localstorage
-        // LocalStorage.save('player', newPlayer);
-
+        });
 
         return updatePlayer(state, newPlayer);
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CREATE_PLAYER_FAILURE"]:
+      {
+        return updatePlayer(state, {
+          creating: false,
+          created: false
+        });
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PLAYER_DATA"]:
@@ -86289,7 +86353,7 @@ Helpers.objToFormData = function (obj, rootName) {
     if (!ignore(root)) {
       root = root || '';
 
-      if (data instanceof File) {
+      if (data instanceof File || data instanceof Blob) {
         formData.append(root, data);
       } else if (Array.isArray(data)) {
         for (var i = 0; i < data.length; i++) {
@@ -86394,6 +86458,77 @@ function (_Model) {
 }(_Model__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/utils/classes/Errors.js":
+/*!*****************************************************!*\
+  !*** ./resources/assets/js/utils/classes/Errors.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Errors = function Errors(errors) {
+  _classCallCheck(this, Errors);
+
+  _initialiseProps.call(this);
+
+  this.errors = errors;
+};
+
+Errors.init = function (errors) {
+  return new Errors(errors);
+};
+
+var _initialiseProps = function _initialiseProps() {
+  var _this = this;
+
+  this.exists = function (field) {
+    return _this.get(field) !== undefined;
+  };
+
+  this.get = function (field) {
+    return _this.errors.find(function (e) {
+      return e.field == field;
+    });
+  };
+
+  this.getMessage = function (field) {
+    return _this.exists(field) && _this.get(field).message;
+  };
+
+  this.isGeneralError = function (field) {
+    return _this.exists(field) && _this.get(field).field.length == 0;
+  };
+
+  this.isFormError = function (field) {
+    return !_this.isGeneralError(field);
+  };
+
+  this.getGeneralErrors = function () {
+    return _this.errors.filter(function (e) {
+      return _this.isGeneralError(e);
+    });
+  };
+
+  this.getFormErrors = function () {
+    return _this.errors.filter(function (e) {
+      return _this.isFormError(e);
+    });
+  };
+
+  this.remove = function (field) {
+    return _this.errors.filter(function (e) {
+      return e.field != field;
+    });
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Errors);
 
 /***/ }),
 
@@ -86756,6 +86891,12 @@ function (_Model) {
       return _this.players.filter(function (p) {
         return Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(p, 'active', true);
       });
+    }, _this.isEmpty = function () {
+      return _this.players.length <= 0;
+    }, _this.getPlayerCount = function () {
+      return _this.players.length;
+    }, _this.getActivePlayerCount = function () {
+      return _this.getActivePlayers().length;
     }, _temp));
   }
 

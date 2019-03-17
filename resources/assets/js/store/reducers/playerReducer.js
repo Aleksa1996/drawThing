@@ -38,11 +38,11 @@ const reducer = (state = initialState, { type, payload }) => {
 				password:
 					payload.player.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.player.id
 			};
-
-			// save player in localstorage
-			// LocalStorage.save('player', newPlayer);
-
 			return updatePlayer(state, newPlayer);
+		}
+
+		case CREATE_PLAYER_FAILURE: {
+			return updatePlayer(state, { creating: false, created: false });
 		}
 
 		case CLEAR_PLAYER_DATA: {

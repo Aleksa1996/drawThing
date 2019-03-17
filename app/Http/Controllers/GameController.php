@@ -76,6 +76,7 @@ class GameController extends WebsocketController
                 throw ValidationException::withMessages($validator->failed());
             }
 
+            //TODO: IS PLAYER DRAWING ?!?!?!?
             $player = $this->validatePlayer($data);
 
             $drawing = [
@@ -90,54 +91,61 @@ class GameController extends WebsocketController
         }
     }
 
-    /** TODO:
-     * Starts the game
+    /**
+     * Undocumented function
      *
-     * @param Request $request
-     * @return Response
+     * @param Websocket $websocket
+     * @param array $data
+     * @return void
      */
-    public function start(Request $request)
+    public function onRequestWordsToChoose($websocket, $data)
     {
-        $data = $request->validate([
-            'player.id' => 'required|numeric|min:1',
-            'player.username' => 'required|exists:players,username',
-            'player.password' => 'required',
-            'room.uuid' => 'required|string|min:1'
-        ]);
-
         try {
-            $player = Player::checkIdentity($data['player']);
+            //TODO: IS PLAYER DRAWING ?!?!?!?
+            $player = $this->validatePlayer($data);
 
-            // if player who tries to start game exists
-            if (is_null($player)) {
-                throw new \Exception('Wrong credentials!');
-            }
-
-            // if player is admin
-            if (!$player->isAdminInRoom($data['room']['uuid'])) {
-                throw new \Exception('You dont have permissions to do that!');
-            }
-
-            $room = $player->currentRoom();
-            if ($room->getPlayerCount() <= 1) {
-                throw new \Exception('Cannot start game with one player in room!');
-            }
-
-            $randomPlayer = $room->getRandomPlayer([$player->id]);
-            var_dump($randomPlayer->toArray());
-            // sending notification that admin started game
-            Websocket::broadcast()->to($data['room']['uuid'])->emit('STARTING_GAME_COUNTDOWN', ['drawn_by' => $player->id]);
             $game = [
                 'game' => [
                     'words_to_choose' => WordResoruce::collection(Word::getWordsToChoose())
                 ]
             ];
-            // Websocket::emit();
-            return response()->json(['STARTING_GAME_COUNTDOWN' => true], 200);
+
+            $websocket->emit('CHOOSE_WORD', $game);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
+            //TODO: CHANGE EVENT ON FAIL
+            $this->emitException($websocket, 'SEND_DRAWING_GAME_FAILURE', $e);
         }
+    }
+
+    /**
+     * Starts the game
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function start(Request $request, Player $player)
+    {
+        $data = $request->validate([
+            'room.uuid' => 'required|string|min:1'
+        ]);
+
+        // only admin can start game
+        if (!$player->isAdminInRoom($data['room']['uuid'])) {
+            throw ValidationException::withMessages(['_general_error' => ['You dont have permissions to do that!']]);
+        }
+
+        // room must have more than 1 player
+        $room = $player->currentRoom();
+        if ($room->getPlayerCount() <= 1) {
+            throw ValidationException::withMessages(['_general_error' => ['Cannot start game with one player in room!']]);
+        }
+
+        // which player first draw ?
+        $randomPlayer = $room->getRandomPlayer([$player->id]);
+
+        // notify that admin started game
+        Websocket::broadcast()->to($data['room']['uuid'])->emit('STARTING_GAME_COUNTDOWN', ['drawn_by' => $randomPlayer->id]);
+
+        return response()->json(['STARTING_GAME_COUNTDOWN' => true], 200);
     }
 }

@@ -19,3 +19,4 @@ Websocket::on('LEAVE_ROOM', '\App\Http\Controllers\WebsocketController@onDisconn
 
 Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@onRoomMessage');
 Websocket::on('SEND_DRAWING', '\App\Http\Controllers\GameController@onDrawing');
+Websocket::on('REQUEST_WORDS', '\App\Http\Controllers\GameController@onRequestWordsToChoose');

@@ -46,11 +46,6 @@ export const createRoom = (data = null) => (dispatch, getState, { api, sockets }
 	const { id, username, password } = getState().player;
 
 	const fData = Helpers.objToFormData({ id, username, password }, 'player');
-	console.log(fData);
-	// const fData = new FormData();
-	// fData.append('id', id);
-	// fData.append('username', username);
-	// fData.append('password', password);
 
 	return api.room
 		.create(fData)

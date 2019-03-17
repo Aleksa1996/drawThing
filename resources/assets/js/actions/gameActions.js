@@ -3,7 +3,7 @@ import {
 	SKETCHPAD_UNDO,
 	SKETCHPAD_CLEAR,
 	SEND_DRAWING,
-	RECEIVE_DRAWING,
+	RECEIVE_DRAWING_GAME,
 	//
 	STARTING_GAME_REQUEST,
 	STARTING_GAME_REQUEST_SUCCESS,
@@ -14,13 +14,14 @@ import {
 	CHOSED_WORD,
 	//
 	CHOOSE_WORD,
+	REQUEST_WORDS,
 	//
 	CLEAR_GAME_DATA
 } from './types';
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
-const globalEvents = [RECEIVE_DRAWING, CHOOSE_WORD];
+const globalEvents = [RECEIVE_DRAWING_GAME, CHOOSE_WORD];
 
 export const subscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
@@ -85,15 +86,21 @@ export const startGame = data => (dispatch, getState, { api, sockets }) => {
 		})
 		.catch(error => {
 			console.log(error.response);
-			dispatch(startingGameFailure(error.response.data.error));
+			dispatch(startingGameFailure(error.response.data));
 		});
 };
 export const startingGameSuccess = data => ({ type: STARTING_GAME_REQUEST_SUCCESS, payload: data });
-export const startingGameFailure = error => ({
+export const startingGameFailure = errors => ({
 	type: STARTING_GAME_REQUEST_FAILURE,
-	payload: error
+	payload: errors
 });
 //
 export const chooseWord = word => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_emit('game', CHOSED_WORD, { word }));
+	dispatch({ type: CHOSED_WORD, payload: { word } });
+};
+
+export const requestWordsToChoose = () => (dispatch, getState, { api, sockets }) => {
+	const { id, username, password } = getState().player;
+	dispatch(ws_emit('game', REQUEST_WORDS, { player: { id, username, password } }));
 };

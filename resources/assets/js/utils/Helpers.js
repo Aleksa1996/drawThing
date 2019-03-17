@@ -5,7 +5,7 @@ export default class Helpers {
 		const appendFormData = (data, root) => {
 			if (!ignore(root)) {
 				root = root || '';
-				if (data instanceof File) {
+				if (data instanceof File || data instanceof Blob) {
 					formData.append(root, data);
 				} else if (Array.isArray(data)) {
 					for (var i = 0; i < data.length; i++) {

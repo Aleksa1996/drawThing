@@ -3,6 +3,8 @@ class Errors {
 		this.errors = errors;
 	}
 
+	static init = errors => new Errors(errors);
+
 	exists = field => this.get(field) !== undefined;
 
 	get = field => this.errors.find(e => e.field == field);
@@ -16,4 +18,8 @@ class Errors {
 	getGeneralErrors = () => this.errors.filter(e => this.isGeneralError(e));
 
 	getFormErrors = () => this.errors.filter(e => this.isFormError(e));
+
+	remove = field => this.errors.filter(e => e.field != field);
 }
+
+export default Errors;
