@@ -330,7 +330,7 @@ var clearSubscriptions = function clearSubscriptions() {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/gameActions.js ***!
   \****************************************************/
-/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord, requestWordsToChoose */
+/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, requestWordsToChoose, chooseWord */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -345,13 +345,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startGame", function() { return startGame; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameSuccess", function() { return startingGameSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameFailure", function() { return startingGameFailure; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return chooseWord; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "requestWordsToChoose", function() { return requestWordsToChoose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return chooseWord; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"]];
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSED_WORD"]];
 var subscribeToGameGlobalEvents = function subscribeToGameGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -477,25 +477,10 @@ var startingGameFailure = function startingGameFailure(errors) {
   };
 }; //
 
-var chooseWord = function chooseWord(word) {
+var requestWordsToChoose = function requestWordsToChoose() {
   return function (dispatch, getState, _ref8) {
     var api = _ref8.api,
         sockets = _ref8.sockets;
-    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["CHOSED_WORD"], {
-      word: word
-    }));
-    dispatch({
-      type: _types__WEBPACK_IMPORTED_MODULE_0__["CHOSED_WORD"],
-      payload: {
-        word: word
-      }
-    });
-  };
-};
-var requestWordsToChoose = function requestWordsToChoose() {
-  return function (dispatch, getState, _ref9) {
-    var api = _ref9.api,
-        sockets = _ref9.sockets;
     var _getState$player3 = getState().player,
         id = _getState$player3.id,
         username = _getState$player3.username,
@@ -509,6 +494,27 @@ var requestWordsToChoose = function requestWordsToChoose() {
     }));
   };
 };
+var chooseWord = function chooseWord(word) {
+  return function (dispatch, getState, _ref9) {
+    var api = _ref9.api,
+        sockets = _ref9.sockets;
+    var _getState$player4 = getState().player,
+        id = _getState$player4.id,
+        username = _getState$player4.username,
+        password = _getState$player4.password;
+    dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSED_WORD"], {
+      player: {
+        id: id,
+        username: username,
+        password: password
+      },
+      word: word,
+      room: {
+        uuid: getState().room.uuid
+      }
+    }));
+  };
+};
 
 /***/ }),
 
@@ -516,7 +522,7 @@ var requestWordsToChoose = function requestWordsToChoose() {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/index.js ***!
   \**********************************************/
-/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, chooseWord, requestWordsToChoose */
+/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, requestWordsToChoose, chooseWord, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -558,9 +564,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "startingGameFailure", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["startingGameFailure"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["chooseWord"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "requestWordsToChoose", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["requestWordsToChoose"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "chooseWord", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["chooseWord"]; });
 
 /* harmony import */ var _playerActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./playerActions */ "./resources/assets/js/actions/playerActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["clearPlayerData"]; });
@@ -834,6 +840,13 @@ var joinRoom = function joinRoom() {
     };
     return api.room.join(fdata).then(function (response) {
       dispatch(joinRoomSuccess(response.data));
+      var player = response.data.player;
+      if (player) dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_0__["UPDATE_PLAYER"],
+        payload: {
+          player: player
+        }
+      });
       return response;
     }).catch(function (error) {
       console.log(error.response);
@@ -923,7 +936,7 @@ var clearStateAfterKick = function clearStateAfterKick() {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME_COUNTDOWN, PLAYER_CHOOSING_WORD, CHOSED_WORD, CHOOSE_WORD, REQUEST_WORDS, CLEAR_GAME_DATA */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME_COUNTDOWN, PLAYER_CHOOSING_WORD, CHOOSED_WORD, CHOOSE_WORD, REQUEST_WORDS, CLEAR_GAME_DATA */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -950,6 +963,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOIN_ROOM_FAILURE", function() { return JOIN_ROOM_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_JOINED_ROOM", function() { return PLAYER_JOINED_ROOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_LEAVED_ROOM", function() { return PLAYER_LEAVED_ROOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_PLAYER", function() { return UPDATE_PLAYER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KICKING_PLAYER", function() { return KICKING_PLAYER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_SUCCESS", function() { return PLAYER_KICK_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_KICK_FAILURE", function() { return PLAYER_KICK_FAILURE; });
@@ -973,7 +987,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST_FAILURE", function() { return STARTING_GAME_REQUEST_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_COUNTDOWN", function() { return STARTING_GAME_COUNTDOWN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_CHOOSING_WORD", function() { return PLAYER_CHOOSING_WORD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOSED_WORD", function() { return CHOSED_WORD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOOSED_WORD", function() { return CHOOSED_WORD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOOSE_WORD", function() { return CHOOSE_WORD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REQUEST_WORDS", function() { return REQUEST_WORDS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_GAME_DATA", function() { return CLEAR_GAME_DATA; });
@@ -1009,6 +1023,7 @@ var JOIN_ROOM_FAILURE = 'JOIN_ROOM_FAILURE'; //
 var PLAYER_JOINED_ROOM = 'PLAYER_JOINED_ROOM';
 var PLAYER_LEAVED_ROOM = 'PLAYER_LEAVED_ROOM'; //
 
+var UPDATE_PLAYER = 'UPDATE_PLAYER';
 var KICKING_PLAYER = 'KICKING_PLAYER';
 var PLAYER_KICK_SUCCESS = 'PLAYER_KICK_SUCCESS';
 var PLAYER_KICK_FAILURE = 'PLAYER_KICK_FAILURE';
@@ -1037,7 +1052,7 @@ var STARTING_GAME_REQUEST_FAILURE = 'STARTING_GAME_REQUEST_FAILURE'; //
 
 var STARTING_GAME_COUNTDOWN = 'STARTING_GAME_COUNTDOWN';
 var PLAYER_CHOOSING_WORD = 'PLAYER_CHOOSING_WORD';
-var CHOSED_WORD = 'CHOSED_WORD'; //
+var CHOOSED_WORD = 'CHOOSED_WORD'; //
 
 var CHOOSE_WORD = 'CHOOSE_WORD';
 var REQUEST_WORDS = 'REQUEST_WORDS'; //
@@ -3029,11 +3044,16 @@ function (_Component) {
     _this.handleChatSend = function (e) {
       var additionalData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       e.preventDefault();
+      var _this$props = _this.props,
+          player = _this$props.player,
+          game = _this$props.game;
+      var gameModel = new _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__["default"](game);
+      if (gameModel.isPlayerDrawing(player)) return false;
       var message = ''; // Message comes from text input
 
       if (e.type == 'submit') {
         message = e.target.elements['game-board-chat-input'].value;
-        if (message && message.length <= 0) return;
+        if (message && message.length <= 0) return false;
         e.target.reset();
       } // Message comes from emoji dropdown
       else if (e.type == 'click' && additionalData) {
@@ -3072,13 +3092,13 @@ function (_Component) {
   _createClass(Game, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this$props = this.props,
-          player = _this$props.player,
-          room = _this$props.room,
-          game = _this$props.game,
-          replace = _this$props.replace,
-          socket = _this$props.socket,
-          subscribeToGameGlobalEvents = _this$props.subscribeToGameGlobalEvents;
+      var _this$props2 = this.props,
+          player = _this$props2.player,
+          room = _this$props2.room,
+          game = _this$props2.game,
+          replace = _this$props2.replace,
+          socket = _this$props2.socket,
+          subscribeToGameGlobalEvents = _this$props2.subscribeToGameGlobalEvents;
       var roomModel = new _utils_classes_Room__WEBPACK_IMPORTED_MODULE_4__["default"](room);
       var gameModel = new _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__["default"](game);
 
@@ -3121,11 +3141,11 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this$props2 = this.props,
-          player = _this$props2.player,
-          room = _this$props2.room,
-          chat = _this$props2.chat,
-          game = _this$props2.game;
+      var _this$props3 = this.props,
+          player = _this$props3.player,
+          room = _this$props3.room,
+          chat = _this$props3.chat,
+          game = _this$props3.game;
       var roomModel = new _utils_classes_Room__WEBPACK_IMPORTED_MODULE_4__["default"](room);
       var chatModel = new _utils_classes_Chat__WEBPACK_IMPORTED_MODULE_5__["default"](chat);
       var playerModel = new _utils_classes_Player__WEBPACK_IMPORTED_MODULE_6__["default"](player);
@@ -3149,8 +3169,10 @@ function (_Component) {
         canvasClassName: "game-sketchpad-canvas",
         ref: this.sketchpadRef
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameChat_GameChat__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        player: playerModel,
         room: roomModel,
         chat: chatModel,
+        game: gameModel,
         handleChatSend: this.handleChatSend,
         ref: this.chatBodyRef
       }))));
@@ -4247,8 +4269,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function (_ref, chatBodyRef) {
-  var room = _ref.room,
+  var player = _ref.player,
+      room = _ref.room,
       chat = _ref.chat,
+      game = _ref.game,
       handleChatSend = _ref.handleChatSend;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-md-3"
@@ -4282,13 +4306,14 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     name: "game-board-chat-input",
     className: "form-control",
     id: "game-board-chat-input",
-    placeholder: "Type word..."
+    placeholder: "Type word...",
+    disabled: game.isPlayerDrawing(player)
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-emojis"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "dropdown dropup"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-secondary dropdown-toggle",
+    className: "btn btn-secondary dropdown-toggle ".concat(game.isPlayerDrawing(player) ? 'disabled' : ''),
     href: "javascript:void(0)",
     role: "button",
     id: "game-board-chat-emojis-dropdown",
@@ -5628,7 +5653,7 @@ function (_Component) {
         icon: "fa-rocket",
         className: "mybtn2 my-auto",
         disabled: game.starting_game_request || roomModel.getActivePlayerCount() <= 1
-      }, "Start game")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Play_PlayRules__WEBPACK_IMPORTED_MODULE_9__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Countdown_Countdown__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      }, roomModel.getActivePlayerCount() <= 1 ? 'Waiting...' : 'Start game')))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Play_PlayRules__WEBPACK_IMPORTED_MODULE_9__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Countdown_Countdown__WEBPACK_IMPORTED_MODULE_13__["default"], {
         countDownFrom: 3,
         shouldInitOnMount: false,
         activate: gameModel.starting(),
@@ -6669,7 +6694,7 @@ var reducer = function reducer() {
         });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CHOSED_WORD"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CHOOSED_WORD"]:
       {
         return updateGame(state, {
           status: 'STARTED',
@@ -6777,13 +6802,14 @@ var updateModal = function updateModal(state, player) {
 /*!*************************************************************!*\
   !*** ./resources/assets/js/store/reducers/playerReducer.js ***!
   \*************************************************************/
-/*! exports provided: default, selector, updatePlayer */
+/*! exports provided: default, selector, updatePlayer, generatePassword */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updatePlayer", function() { return updatePlayer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generatePassword", function() { return generatePassword; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _utils_classes_LocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/classes/LocalStorage */ "./resources/assets/js/utils/classes/LocalStorage.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
@@ -6825,10 +6851,12 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CREATE_PLAYER_SUCCESS"]:
       {
-        var newPlayer = _objectSpread({}, state.player, payload.player, {
+        var player = payload.player;
+
+        var newPlayer = _objectSpread({}, state.player, player, {
           creating: false,
           created: true,
-          password: payload.player.username.toLowerCase().replace(/\s+/g, '') + '_' + payload.player.id
+          password: generatePassword(player.id, player.username)
         });
 
         return updatePlayer(state, newPlayer);
@@ -6840,6 +6868,17 @@ var reducer = function reducer() {
           creating: false,
           created: false
         });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["UPDATE_PLAYER"]:
+      {
+        var _player = payload.player;
+
+        var _newPlayer = _objectSpread({}, state.player, payload.player, {
+          password: generatePassword(_player.id, _player.username)
+        });
+
+        return updatePlayer(state, _newPlayer);
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PLAYER_DATA"]:
@@ -6858,6 +6897,9 @@ var selector = function selector(state) {}; // utility reducer functions
 
 var updatePlayer = function updatePlayer(state, player) {
   return Object(lodash_fp__WEBPACK_IMPORTED_MODULE_2__["assign"])(state, player);
+};
+var generatePassword = function generatePassword(id, username) {
+  return username.toLowerCase().replace(/\s+/g, '') + '_' + id;
 };
 
 /***/ }),

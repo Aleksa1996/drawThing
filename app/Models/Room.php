@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $uuid
  * @property boolean $active
  * @property integer $number_of_games
- * @property integer $current_game
  *
+ * @property integer $current_game
  * @property integer $created_by
  * @property integer $administered_by
  *
@@ -68,6 +68,11 @@ class Room extends Model
         }]);
     }
 
+    /**
+     * Choose one random player from room and set it as admin
+     *
+     * @return boolean
+     */
     public function setNewAdmin()
     {
         $newAdminPlayer = $this->players()->wherePivot('active', true)->first();
@@ -77,30 +82,82 @@ class Room extends Model
         return $this->save() ? $newAdminPlayer : false;
     }
 
+    /**
+     * Checks if player username already exists in room
+     *
+     * @param string $username
+     * @return boolean
+     */
     public function isPlayerUsernameOccupied($username)
     {
         return $this->players()->where('players.username', trim($username))->count() >= 1;
     }
 
+    /**
+     * Is room empty
+     *
+     * @return boolean
+     */
     public function isEmpty()
     {
         return $this->players()->wherePivot('active', true)->count() <= 0;
     }
 
+    /**
+     * Set room active flag to false
+     *
+     * @return boolean
+     */
     public function deactivate()
     {
         $this->active = false;
         return $this->save();
     }
 
+    /**
+     * Get random player from room
+     *
+     * @param array $except set of player id's to exclude
+     * @return \App\Models\Player|null
+     */
     public function getRandomPlayer($except = [])
     {
         return $this->players()->active()->whereNotIn('players.id', $except)->inRandomOrder()->take(1)->first();
     }
 
+    /**
+     * Get number of active players in room
+     *
+     * @return int
+     */
     public function getPlayerCount()
     {
         return $this->players()->active()->count();
+    }
+
+    /**
+     * Get number of games that was played in room
+     *
+     * @return int
+     */
+    public function getGamesCount()
+    {
+        return $this->games()->count();
+    }
+
+    /**
+     * Collect necessary data and create new game
+     *
+     * @return \App\Models\Game
+     */
+    public function createGame()
+    {
+        $game = new Game();
+        $game->number = (int)$this->getGamesCount() + 1;
+        $game->number_of_rounds = $this->getPlayerCount();
+        $game->current_round = 1;
+
+        return $this->games()->save($game);
     }
 
     // scopes

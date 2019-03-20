@@ -136,6 +136,18 @@ class Player extends Model
     }
 
     /**
+     * Doing necessary updates to handle this type of problem
+     *
+     * @return boolean
+     */
+    public function handleUsernameOccupied()
+    {
+        $this->username .= $this->id;
+        $this->password = $this->username . '_' .  $this->id;
+        return $this->save();
+    }
+
+    /**
      * Finds player by file descriptor
      *
      * @param int $fd

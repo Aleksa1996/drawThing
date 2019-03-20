@@ -117,6 +117,36 @@ class GameController extends WebsocketController
         }
     }
 
+    public function onChoosedWord($websocket, $data)
+    {
+        try {
+
+            $validator = Validator::make($data, [
+                'room.uuid' => 'required|string|min:1',
+                'word.id' => 'required|numeric|exists:words,id'
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages($validator->failed());
+            }
+
+            //TODO: IS PLAYER DRAWING ?!?!?!?
+            $player = $this->validatePlayer($data);
+
+            $room = $player->currentRoom();
+            $game = $room->createGame();
+
+            $websocket->emit('CHOOSED_WORD', ['word' => $data['word']]);
+
+            // mask the word and send it to all other players
+            $data['word']['word'] = str_repeat('_', $data['word']['clength']);
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('CHOOSED_WORD', ['word' => $data['word']]);
+        } catch (\Exception $e) {
+            //TODO: CHANGE EVENT ON FAIL
+            $this->emitException($websocket, 'SEND_DRAWING_GAME_FAILURE', $e);
+        }
+    }
+
     /**
      * Starts the game
      *

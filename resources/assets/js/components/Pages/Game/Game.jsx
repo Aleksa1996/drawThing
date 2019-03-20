@@ -139,11 +139,16 @@ class Game extends Component {
 
 	handleChatSend = (e, additionalData = null) => {
 		e.preventDefault();
+		const { player, game } = this.props;
+		const gameModel = new GameModel(game);
+
+		if (gameModel.isPlayerDrawing(player)) return false;
+
 		let message = '';
 		// Message comes from text input
 		if (e.type == 'submit') {
 			message = e.target.elements['game-board-chat-input'].value;
-			if (message && message.length <= 0) return;
+			if (message && message.length <= 0) return false;
 			e.target.reset();
 		}
 		// Message comes from emoji dropdown
@@ -178,8 +183,10 @@ class Game extends Component {
 							ref={this.sketchpadRef}
 						/>
 						<GameChat
+							player={playerModel}
 							room={roomModel}
 							chat={chatModel}
+							game={gameModel}
 							handleChatSend={this.handleChatSend}
 							ref={this.chatBodyRef}
 						/>

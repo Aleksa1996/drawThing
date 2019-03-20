@@ -11,7 +11,7 @@ import {
 	//
 	STARTING_GAME_COUNTDOWN,
 	PLAYER_CHOOSING_WORD,
-	CHOSED_WORD,
+	CHOOSED_WORD,
 	//
 	CHOOSE_WORD,
 	REQUEST_WORDS,
@@ -21,7 +21,7 @@ import {
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
-const globalEvents = [RECEIVE_DRAWING_GAME, CHOOSE_WORD];
+const globalEvents = [RECEIVE_DRAWING_GAME, CHOOSE_WORD, PLAYER_CHOOSING_WORD, CHOOSED_WORD];
 
 export const subscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
@@ -95,12 +95,18 @@ export const startingGameFailure = errors => ({
 	payload: errors
 });
 //
-export const chooseWord = word => (dispatch, getState, { api, sockets }) => {
-	dispatch(ws_emit('game', CHOSED_WORD, { word }));
-	dispatch({ type: CHOSED_WORD, payload: { word } });
-};
-
 export const requestWordsToChoose = () => (dispatch, getState, { api, sockets }) => {
 	const { id, username, password } = getState().player;
 	dispatch(ws_emit('game', REQUEST_WORDS, { player: { id, username, password } }));
+};
+
+export const chooseWord = word => (dispatch, getState, { api, sockets }) => {
+	const { id, username, password } = getState().player;
+	dispatch(
+		ws_emit('game', CHOOSED_WORD, {
+			player: { id, username, password },
+			word,
+			room: { uuid: getState().room.uuid }
+		})
+	);
 };

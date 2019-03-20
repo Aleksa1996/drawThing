@@ -194,7 +194,7 @@ class Room extends Component {
 										className="mybtn2 my-auto"
 										disabled={game.starting_game_request || roomModel.getActivePlayerCount() <= 1}
 									>
-										Start game
+										{roomModel.getActivePlayerCount() <= 1 ? 'Waiting...' : 'Start game'}
 									</Button>
 								</div>
 							)}

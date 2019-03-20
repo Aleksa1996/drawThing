@@ -4,6 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Word
+ *
+ * @property integer $id
+ * @property string $word
+ * @property integer $points_worth
+ * @property string $type
+ *
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Word extends Model
 {
     // options
@@ -44,4 +55,6 @@ class Word extends Model
         $words[] = self::where('type', 'hard')->inRandomOrder()->take(1)->first();
         return collect($words);
     }
+
+    //scopes
 }

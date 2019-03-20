@@ -10,7 +10,7 @@ import {
 	//
 	STARTING_GAME_COUNTDOWN,
 	PLAYER_CHOOSING_WORD,
-	CHOSED_WORD,
+	CHOOSED_WORD,
 	//
 	CHOOSE_WORD,
 	//
@@ -77,7 +77,7 @@ const reducer = (state = initialState, { type, payload }) => {
 				status: 'CHOOSING_WORD'
 			});
 		}
-		case CHOSED_WORD: {
+		case CHOOSED_WORD: {
 			return updateGame(state, {
 				status: 'STARTED',
 				chosed_word: payload.word

@@ -13,7 +13,8 @@ import {
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA,
-	STARTING_GAME_COUNTDOWN
+	STARTING_GAME_COUNTDOWN,
+	UPDATE_PLAYER
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 import { clearState } from './commonActions';
@@ -82,6 +83,10 @@ export const joinRoom = (data = null) => (dispatch, getState, { api, sockets }) 
 		.join(fdata)
 		.then(response => {
 			dispatch(joinRoomSuccess(response.data));
+
+			const { player } = response.data;
+			if (player) dispatch({ type: UPDATE_PLAYER, payload: { player } });
+
 			return response;
 		})
 		.catch(error => {

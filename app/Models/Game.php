@@ -4,6 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Game
+ *
+ * @property integer $id
+ * @property integer $number
+ * @property integer $number_of_rounds
+ *
+ * @property integer $current_round
+ * @property integer $room_id
+ *
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Game extends Model
 {
     // options
@@ -30,4 +43,6 @@ class Game extends Model
     // accessors
 
     // methods
+
+    //scopes
 }
