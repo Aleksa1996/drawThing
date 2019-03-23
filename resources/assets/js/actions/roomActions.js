@@ -17,8 +17,6 @@ import {
 	UPDATE_PLAYER
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
-import { clearState } from './commonActions';
-import { clearSubscriptions } from './commonActions';
 
 import Helpers from '../utils/Helpers';
 
@@ -136,9 +134,4 @@ export const kickPlayerFailure = error => ({ type: PLAYER_KICK_FAILURE, payload:
 
 export const leaveRoom = data => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_emit('game', 'LEAVE_ROOM', null));
-};
-
-export const clearStateAfterKick = () => (dispatch, getState, { api, sockets }) => {
-	dispatch(clearSubscriptions());
-	dispatch(clearState());
 };

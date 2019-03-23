@@ -43,7 +43,6 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateChat(state, { sending: false, messages: newMessages });
 		}
 		case SEND_MESSAGE_ROOM_FAILURE: {
-			console.log(payload);
 			return updateChat(state, { sending: false, chatError: payload.message });
 		}
 		case RECEIVE_MESSAGE_ROOM: {

@@ -7,6 +7,7 @@ import Router from '../../Router';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import ModalRoot from '../Common/Modal/ModalRoot';
+import CountDown from '../Common/Countdown/Countdown';
 
 class Layout extends Component {
 	state = {};
@@ -33,6 +34,7 @@ class Layout extends Component {
 				<Footer />
 
 				<ModalRoot />
+				<CountDown />
 			</div>
 		);
 	}

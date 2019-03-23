@@ -8,6 +8,7 @@ import {
 	sketchClear,
 	sendMessageRoom,
 	clearState,
+	clearSubscriptions,
 	showModal,
 	leaveRoom,
 	startGame,
@@ -77,21 +78,26 @@ class Game extends Component {
 			this.updateDrawingUI();
 		} catch (e) {
 			console.log(e);
-			// replace('/play');
+			replace('/play');
 		}
 	}
 
 	componentDidUpdate(prevProps) {
 		// chat always scroll on new message to see the latest one
-		if (
-			this.props.chat.messages.length != prevProps.chat.messages.length &&
-			this.props.chat.messages.length > 0
-		) {
+		const { chat, game } = this.props;
+		if (chat.messages.length != prevProps.chat.messages.length && chat.messages.length > 0) {
 			this.scrollToBottom();
 		}
 
-		if (prevProps.game.drawn_by != this.props.game.drawn_by) {
+		if (prevProps.game.drawn_by != game.drawn_by) {
 			this.updateDrawingUI();
+		}
+
+		if (game.status == 'ROUND_START') {
+			// this.props.roundStart();
+			// flag da je runda pocela
+			// startuje timer 3min
+			//
 		}
 	}
 
@@ -99,6 +105,7 @@ class Game extends Component {
 		// clear whole room state
 		this.props.leaveRoom();
 		this.props.clearState();
+		this.props.clearSubscriptions();
 	}
 
 	scrollToBottom = () => {
@@ -114,7 +121,8 @@ class Game extends Component {
 	};
 
 	updateDrawingUI = () => {
-		const isPlayerDrawing = this.props.game.drawn_by == this.props.player.id;
+		const isPlayerDrawing =
+			this.props.game.drawn_by && this.props.game.drawn_by == this.props.player.id;
 
 		if (isPlayerDrawing) {
 			this.props.requestWordsToChoose();
@@ -210,6 +218,7 @@ export default connect(
 		push,
 		replace,
 		clearState,
+		clearSubscriptions,
 		showModal,
 		leaveRoom,
 		startGame,

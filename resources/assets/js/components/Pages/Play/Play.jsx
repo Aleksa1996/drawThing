@@ -6,7 +6,8 @@ import {
 	createPlayer,
 	createRoom,
 	joinRoom,
-	clearState
+	clearState,
+	clearSubscriptions
 } from '../../../actions';
 import { push, replace } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
@@ -30,8 +31,6 @@ class Play extends Component {
 
 		this.state = {
 			avatarForm: {
-				width: 300,
-				height: 300,
 				tool: 'pencil',
 				size: 5,
 				color: '#151515',
@@ -57,8 +56,9 @@ class Play extends Component {
 		if (!this.props.socket.fd && !this.props.socket.connected) {
 			this.props.ws_make_connection('game');
 		}
-		// if connected to room clear state and disconnect from room
+		// if we came back from room then clear state
 		this.props.clearState();
+		this.props.clearSubscriptions();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -215,5 +215,14 @@ class Play extends Component {
 
 export default connect(
 	state => ({ player: state.player, room: state.room, socket: state.socket }),
-	{ ws_make_connection, createPlayer, createRoom, joinRoom, push, replace, clearState }
+	{
+		ws_make_connection,
+		createPlayer,
+		createRoom,
+		joinRoom,
+		push,
+		replace,
+		clearState,
+		clearSubscriptions
+	}
 )(Play);

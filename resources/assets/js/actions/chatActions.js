@@ -43,12 +43,3 @@ export const sendMessageRoom = data => (dispatch, getState, { api, sockets }) =>
 		dispatch(ws_emit('game', 'SEND_MESSAGE_ROOM', dataMessage));
 	}
 };
-
-// export const sendMessageRoomSuccessfull = userData => ({
-// 	type: CREATE_PLAYER_SUCCESS,
-// 	payload: userData
-// });
-// export const sendMessageRoomFailure = userData => ({
-// 	type: CREATE_PLAYER_SUCCESS,
-// 	payload: userData
-// });

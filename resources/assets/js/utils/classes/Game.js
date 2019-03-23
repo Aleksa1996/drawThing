@@ -9,4 +9,5 @@ export default class Game extends Model {
 
 	started = () => this.status == 'STARTED';
 	starting = () => this.status == 'STARTING';
+	notStarted = () => this.status == 'NOT_STARTED';
 }

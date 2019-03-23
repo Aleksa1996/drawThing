@@ -10,11 +10,13 @@ import {
 	//
 	STARTING_GAME_COUNTDOWN,
 	PLAYER_CHOOSING_WORD,
-	CHOOSED_WORD,
+	PLAYER_CHOOSED_WORD,
 	//
 	CHOOSE_WORD,
 	//
-	CLEAR_GAME_DATA
+	CLEAR_GAME_DATA,
+	//
+	ROUND_START
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -32,7 +34,9 @@ const initialState = {
 	drawn_by: null,
 	//
 	words_to_choose: [],
-	chosed_word: null
+	chosed_word: null,
+	//
+	rounds: []
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -77,10 +81,15 @@ const reducer = (state = initialState, { type, payload }) => {
 				status: 'CHOOSING_WORD'
 			});
 		}
-		case CHOOSED_WORD: {
+		case PLAYER_CHOOSED_WORD: {
 			return updateGame(state, {
-				status: 'STARTED',
+				status: 'CHOOSED_WORD',
 				chosed_word: payload.word
+			});
+		}
+		case ROUND_START: {
+			return updateGame(state, {
+				status: 'ROUND_START'
 			});
 		}
 		//

@@ -23,8 +23,6 @@ export const toolsMap = {
 
 export default class SketchPad extends Component {
 	static propTypes = {
-		width: PropTypes.number,
-		height: PropTypes.number,
 		items: PropTypes.array.isRequired,
 		animate: PropTypes.bool,
 		canvasClassName: PropTypes.string,
@@ -42,8 +40,6 @@ export default class SketchPad extends Component {
 	};
 
 	static defaultProps = {
-		width: 500,
-		height: 500,
 		color: '#000',
 		size: 5,
 		fillColor: '',
@@ -77,6 +73,8 @@ export default class SketchPad extends Component {
 		this.canvas = findDOMNode(this.canvasRef);
 		this.ctx = this.canvas.getContext('2d');
 		this.initTool(this.state.tool);
+
+		this.setCanvasSize();
 	}
 
 	componentDidUpdate({ tool, items }, prevState) {
@@ -84,6 +82,11 @@ export default class SketchPad extends Component {
 			this.redraw(this.props.items, this.props.animate && this.props.items.length > items.length);
 		}
 	}
+
+	setCanvasSize = () => {
+		this.canvas.width = this.canvasContainer.current.offsetWidth;
+		this.canvas.height = this.canvasContainer.current.offsetHeight;
+	};
 
 	initTool = tool => (this.toolObj = this.props.toolsMap[tool](this.ctx));
 
@@ -175,7 +178,7 @@ export default class SketchPad extends Component {
 	};
 
 	render() {
-		const { width, height, canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
+		const { canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
 		const { tool, size, color, fillColor, eraser } = this.state;
 		return (
 			<div className="sketchpad-container" ref={this.canvasContainer} style={{ height: '100%' }}>
@@ -193,16 +196,12 @@ export default class SketchPad extends Component {
 				)}
 
 				<canvas
-					ref={canvas => {
-						this.canvasRef = canvas;
-					}}
+					ref={canvas => (this.canvasRef = canvas)}
 					className={canvasClassName}
 					onMouseDown={this.onMouseDown}
 					onMouseMove={this.onMouseMove}
 					onMouseOut={this.onMouseUp}
 					onMouseUp={this.onMouseUp}
-					width={642}
-					height={642}
 					style={{ width: '100%', height: '100%' }}
 				/>
 				{children}

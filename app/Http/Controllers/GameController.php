@@ -101,6 +101,14 @@ class GameController extends WebsocketController
     public function onRequestWordsToChoose($websocket, $data)
     {
         try {
+            $validator = Validator::make($data, [
+                'room.uuid' => 'required|string|min:1'
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages($validator->failed());
+            }
+
             //TODO: IS PLAYER DRAWING ?!?!?!?
             $player = $this->validatePlayer($data);
 
@@ -110,6 +118,7 @@ class GameController extends WebsocketController
                 ]
             ];
 
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('PLAYER_CHOOSING_WORD', []);
             $websocket->emit('CHOOSE_WORD', $game);
         } catch (\Exception $e) {
             //TODO: CHANGE EVENT ON FAIL
@@ -136,11 +145,14 @@ class GameController extends WebsocketController
             $room = $player->currentRoom();
             $game = $room->createGame();
 
-            $websocket->emit('CHOOSED_WORD', ['word' => $data['word']]);
+            $websocket->emit('PLAYER_CHOOSED_WORD', ['word' => $data['word']]);
 
             // mask the word and send it to all other players
             $data['word']['word'] = str_repeat('_', $data['word']['clength']);
-            $websocket->broadcast()->to($data['room']['uuid'])->emit('CHOOSED_WORD', ['word' => $data['word']]);
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('PLAYER_CHOOSED_WORD', ['word' => $data['word']]);
+            // create round
+            // dispatch action
+            $websocket->broadcast()->to($data['room']['uuid'])->emit('ROUND_START', ['round' => 'hello']);
         } catch (\Exception $e) {
             //TODO: CHANGE EVENT ON FAIL
             $this->emitException($websocket, 'SEND_DRAWING_GAME_FAILURE', $e);
