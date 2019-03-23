@@ -31,6 +31,7 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 							className="form-control"
 							id="game-board-chat-input"
 							placeholder="Type word..."
+							autoComplete="off"
 						/>
 					</form>
 					<div className="game-board-chat-emojis">

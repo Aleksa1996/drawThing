@@ -1,9 +1,6 @@
 .game-board-container-left {
-	padding-top: 15px;
-	padding-bottom: 15px;
 	height: 100%;
 	max-height: 730px;
-
 	.game-board-score {
 		background: #fff;
 		color: $mytheme-color-second;
@@ -127,5 +124,11 @@
 @media screen and (max-width: 1366px) {
 	.game-board-container-left {
 		max-height: 580px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.game-board-container-left {
+		min-height: 400px;
 	}
 }

@@ -13372,17 +13372,20 @@ select[disabled] > option {
 
 .page-game .game-board-container {
   min-height: 100vh;
+  margin-top: 60px;
 }
 
 .game-board-container-center {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding: 15px 10px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .game-board-container-center .game-board-sketchpad {
   background: #fff;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .game-board-container-center .game-board-sketchpad .game-board-sketchpad-canvas {
@@ -13415,8 +13418,6 @@ select[disabled] > option {
 .game-board-container-right {
   height: 100%;
   max-height: 730px;
-  padding-top: 15px;
-  padding-bottom: 15px;
   color: #25313d;
 }
 
@@ -13551,9 +13552,13 @@ select[disabled] > option {
   }
 }
 
+@media screen and (max-width: 768px) {
+  .game-board-container-right {
+    min-height: 400px;
+  }
+}
+
 .game-board-container-left {
-  padding-top: 15px;
-  padding-bottom: 15px;
   height: 100%;
   max-height: 730px;
 }
@@ -13745,6 +13750,12 @@ select[disabled] > option {
   }
 }
 
+@media screen and (max-width: 768px) {
+  .game-board-container-left {
+    min-height: 400px;
+  }
+}
+
 .game-board-toolbar-container {
   background: #25313d;
   padding-top: 10px;
@@ -13756,23 +13767,43 @@ select[disabled] > option {
   left: 0px;
 }
 
-.game-board-toolbar-container .game-board-guessing-word-container .game-board-guessing-word {
+.game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word {
   margin-bottom: 7px;
   font-size: 1.4rem;
 }
 
-.game-board-toolbar-container .game-board-guessing-word-container .game-board-guessing-word .game-board-guessing-word-letter {
+.game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word .game-board-guessing-word-letter {
   border-bottom: 1.5px solid #fff;
   margin-right: 8px;
   text-transform: uppercase;
   width: 15px;
   display: inline-block;
   text-align: center;
+  height: 35px;
 }
 
-.game-board-toolbar-container .game-board-guessing-word-container .info-tooltip {
+.game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .info-tooltip {
   border-radius: 50%;
   padding: 0px 8px;
+}
+
+@media (max-width: 768px) {
+  .game-board-toolbar-menu-container {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .game-board-toolbar-menu-container {
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1200px) {
+  .game-board-toolbar-container-border {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
 
 .game-tools-container {
@@ -13861,6 +13892,8 @@ select[disabled] > option {
 }
 
 .page-start-game .game-start-container .game-start-card .game-start-canvas-container {
+  width: 300px;
+  margin: 0 auto;
   text-align: center;
   padding: 10px;
   color: #37ca8a;

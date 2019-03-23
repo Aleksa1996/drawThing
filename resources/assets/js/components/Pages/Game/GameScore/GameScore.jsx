@@ -4,7 +4,7 @@ class GameScore extends Component {
 	render() {
 		const { room, player } = this.props;
 		return (
-			<div className="col-md-3">
+			<div className="col-md-3 order-3 order-md-1 my-md-0 my-3">
 				<div className="game-board-container-left">
 					<div className="game-board-score shadow rounded">
 						<div className="game-board-score-header rounded">

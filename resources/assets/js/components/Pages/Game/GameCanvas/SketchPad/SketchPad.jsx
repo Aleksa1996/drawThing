@@ -69,6 +69,8 @@ export default class SketchPad extends Component {
 
 		this.toolObj = null;
 		this.nterval = null;
+
+		this.canvasContainer = React.createRef();
 	}
 
 	componentDidMount() {
@@ -79,7 +81,7 @@ export default class SketchPad extends Component {
 
 	componentDidUpdate({ tool, items }, prevState) {
 		if (this.props.items.length != items.length) {
-			this.redraw(this.props.items);
+			this.redraw(this.props.items, this.props.animate && this.props.items.length > items.length);
 		}
 	}
 
@@ -87,7 +89,7 @@ export default class SketchPad extends Component {
 
 	clearCanvas = () => this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-	redraw = items => {
+	redraw = (items, animate) => {
 		this.clearCanvas();
 		const copiedItems = items.slice();
 		const lastCopiedItem = copiedItems.pop();
@@ -99,7 +101,7 @@ export default class SketchPad extends Component {
 
 		if (lastCopiedItem) {
 			this.initTool(lastCopiedItem.tool);
-			this.toolObj.draw(lastCopiedItem, this.props.animate);
+			this.toolObj.draw(lastCopiedItem, animate);
 		}
 	};
 
@@ -152,8 +154,12 @@ export default class SketchPad extends Component {
 	};
 
 	getCursorPosition = e => {
-		const { top, left } = this.canvas.getBoundingClientRect();
-		return [e.clientX - left, e.clientY - top];
+		// https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+		const rect = this.canvas.getBoundingClientRect();
+		const scaleX = this.canvas.width / rect.width;
+		const scaleY = this.canvas.height / rect.height;
+
+		return [(e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY];
 	};
 
 	handleTool = ({ name, value }) => {
@@ -172,7 +178,7 @@ export default class SketchPad extends Component {
 		const { width, height, canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
 		const { tool, size, color, fillColor, eraser } = this.state;
 		return (
-			<React.Fragment>
+			<div className="sketchpad-container" ref={this.canvasContainer} style={{ height: '100%' }}>
 				{!this.props.canvasDisabled && (
 					<GameTools
 						defaultPosition={gtDefaultPosition}
@@ -195,11 +201,12 @@ export default class SketchPad extends Component {
 					onMouseMove={this.onMouseMove}
 					onMouseOut={this.onMouseUp}
 					onMouseUp={this.onMouseUp}
-					width={width}
-					height={height}
+					width={642}
+					height={642}
+					style={{ width: '100%', height: '100%' }}
 				/>
 				{children}
-			</React.Fragment>
+			</div>
 		);
 	}
 }

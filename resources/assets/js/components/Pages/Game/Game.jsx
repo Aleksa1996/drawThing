@@ -43,7 +43,7 @@ class Game extends Component {
 		this.state = {
 			sketchpad: {
 				width: 900,
-				height: 700,
+				height: 900,
 				tool: 'pencil',
 				size: 5,
 				color: '#151515',
@@ -77,7 +77,7 @@ class Game extends Component {
 			this.updateDrawingUI();
 		} catch (e) {
 			console.log(e);
-			replace('/play');
+			// replace('/play');
 		}
 	}
 

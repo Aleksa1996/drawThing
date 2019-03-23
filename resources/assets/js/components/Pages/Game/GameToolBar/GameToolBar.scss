@@ -7,23 +7,45 @@
 	width: 100%;
 	top: 0px;
 	left: 0px;
-	.game-board-guessing-word-container {
-		.game-board-guessing-word {
-			margin-bottom: 7px;
-			font-size: 1.4rem;
+	.game-board-toolbar-container-border {
+		.game-board-guessing-word-container {
+			.game-board-guessing-word {
+				margin-bottom: 7px;
+				font-size: 1.4rem;
 
-			.game-board-guessing-word-letter {
-				border-bottom: 1.5px solid #fff;
-				margin-right: 8px;
-				text-transform: uppercase;
-				width: 15px;
-				display: inline-block;
-				text-align: center;
+				.game-board-guessing-word-letter {
+					border-bottom: 1.5px solid #fff;
+					margin-right: 8px;
+					text-transform: uppercase;
+					width: 15px;
+					display: inline-block;
+					text-align: center;
+					height: 35px;
+				}
+			}
+			.info-tooltip {
+				border-radius: 50%;
+				padding: 0px 8px;
 			}
 		}
-		.info-tooltip {
-			border-radius: 50%;
-			padding: 0px 8px;
-		}
+	}
+}
+
+@media (max-width: 768px) {
+	.game-board-toolbar-menu-container {
+		justify-content: center;
+	}
+}
+
+@media (min-width: 768px) {
+	.game-board-toolbar-menu-container {
+		justify-content: flex-end;
+	}
+}
+
+@media (min-width: 1200px) {
+	.game-board-toolbar-container-border {
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 }

@@ -79608,7 +79608,7 @@ var chooseWord = function chooseWord(word) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/index.js ***!
   \**********************************************/
-/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, requestWordsToChoose, chooseWord, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick */
+/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, requestWordsToChoose, chooseWord, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, clearStateAfterKick, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -81133,14 +81133,14 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 text-left justify-content-center align-items-center d-flex"
+        className: "col-xs-6 col-sm-6 col-md-6 text-left justify-content-center align-items-center d-flex"
       }, "\xA9 2019 \xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://aleksajovanovic.com",
         title: "My portfolio"
       }, "Aleksa Jovanovic"), "\xA0 179/15"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 text-right justify-content-center align-items-center d-flex"
+        className: "col-xs-6 col-sm-6  col-md-6 text-right justify-content-center align-items-center d-flex"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-        className: "main-footer-icons"
+        className: "main-footer-icons p-0"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
         className: "mx-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -82090,7 +82090,7 @@ function (_Component) {
     _this.state = {
       sketchpad: {
         width: 900,
-        height: 700,
+        height: 900,
         tool: 'pencil',
         size: 5,
         color: '#151515',
@@ -82134,8 +82134,7 @@ function (_Component) {
 
         this.updateDrawingUI();
       } catch (e) {
-        console.log(e);
-        replace('/play');
+        console.log(e); // replace('/play');
       }
     }
   }, {
@@ -82288,7 +82287,7 @@ function (_Component) {
           sketchpad = _objectWithoutProperties(_this$props, ["onCompleteItem", "onUndo", "onClear", "sketchpadRef"]);
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6"
+        className: "col-md-6 order-1 order-md-2 my-md-0 my-3 px-md-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-board-container-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -82297,7 +82296,11 @@ function (_Component) {
         onCompleteItem: onCompleteItem,
         onUndo: onUndo,
         onClear: onClear,
-        ref: sketchpadRef
+        ref: sketchpadRef,
+        gtDefaultPosition: {
+          x: 0,
+          y: -61
+        }
       })))));
     }
   }]);
@@ -82625,7 +82628,7 @@ function (_Component) {
       return _this.ctx.clearRect(0, 0, _this.canvas.width, _this.canvas.height);
     };
 
-    _this.redraw = function (items) {
+    _this.redraw = function (items, animate) {
       _this.clearCanvas();
 
       var copiedItems = items.slice();
@@ -82639,7 +82642,7 @@ function (_Component) {
       if (lastCopiedItem) {
         _this.initTool(lastCopiedItem.tool);
 
-        _this.toolObj.draw(lastCopiedItem, _this.props.animate);
+        _this.toolObj.draw(lastCopiedItem, animate);
       }
     };
 
@@ -82708,11 +82711,12 @@ function (_Component) {
     };
 
     _this.getCursorPosition = function (e) {
-      var _this$canvas$getBound = _this.canvas.getBoundingClientRect(),
-          top = _this$canvas$getBound.top,
-          left = _this$canvas$getBound.left;
+      // https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+      var rect = _this.canvas.getBoundingClientRect();
 
-      return [e.clientX - left, e.clientY - top];
+      var scaleX = _this.canvas.width / rect.width;
+      var scaleY = _this.canvas.height / rect.height;
+      return [(e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY];
     };
 
     _this.handleTool = function (_ref) {
@@ -82743,6 +82747,7 @@ function (_Component) {
     };
     _this.toolObj = null;
     _this.nterval = null;
+    _this.canvasContainer = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     return _this;
   }
 
@@ -82760,7 +82765,7 @@ function (_Component) {
           items = _ref2.items;
 
       if (this.props.items.length != items.length) {
-        this.redraw(this.props.items);
+        this.redraw(this.props.items, this.props.animate && this.props.items.length > items.length);
       }
     }
   }, {
@@ -82781,7 +82786,13 @@ function (_Component) {
           color = _this$state2.color,
           fillColor = _this$state2.fillColor,
           eraser = _this$state2.eraser;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, !this.props.canvasDisabled && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "sketchpad-container",
+        ref: this.canvasContainer,
+        style: {
+          height: '100%'
+        }
+      }, !this.props.canvasDisabled && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameTools_GameTools__WEBPACK_IMPORTED_MODULE_4__["default"], {
         defaultPosition: gtDefaultPosition,
         show: gtShow,
         handleTool: this.handleTool,
@@ -82799,8 +82810,12 @@ function (_Component) {
         onMouseMove: this.onMouseMove,
         onMouseOut: this.onMouseUp,
         onMouseUp: this.onMouseUp,
-        width: width,
-        height: height
+        width: 642,
+        height: 642,
+        style: {
+          width: '100%',
+          height: '100%'
+        }
       }), children);
     }
   }]);
@@ -83294,7 +83309,7 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
       game = _ref.game,
       handleChatSend = _ref.handleChatSend;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-3"
+    className: "col-md-3 order-2 order-md-3 my-md-0 my-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-container-right"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83326,7 +83341,8 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     className: "form-control",
     id: "game-board-chat-input",
     placeholder: "Type word...",
-    disabled: game.isPlayerDrawing(player)
+    disabled: game.isPlayerDrawing(player),
+    autoComplete: "off"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-emojis"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83433,7 +83449,7 @@ function (_Component) {
           room = _this$props.room,
           player = _this$props.player;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-3"
+        className: "col-md-3 order-3 order-md-1 my-md-0 my-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-board-container-left"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83539,9 +83555,11 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-board-toolbar-container container-fluid"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game-board-toolbar-container-border"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-2 d-flex justify-content-around align-items-center"
+        className: "col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "game-board-rounds m-1"
       }, "Round: 1 of 3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
@@ -83550,9 +83568,9 @@ function (_Component) {
         className: "fa fa-clock-o",
         "aria-hidden": "true"
       }), " \xA0 2:55")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-8 game-board-guessing-word-container d-flex justify-content-center align-items-center"
+        className: "col-6 col-sm-8 col-md-6 col-lg-6 game-board-guessing-word-container d-flex justify-content-center align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mr-3"
+        className: ""
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "game-board-guessing-word"
       }, game.chosedWordExists() && game.chosedWordToArrayOfLetters().map(function (letter, key) {
@@ -83561,7 +83579,7 @@ function (_Component) {
           className: "game-board-guessing-word-letter"
         }, game.isPlayerDrawing(player) ? letter : ' ');
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "ml-3"
+        className: "ml-3 d-none"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_InfoTooltip_InfoTooltip__WEBPACK_IMPORTED_MODULE_1__["default"], {
         info: "Guessing word",
         className: "m-1"
@@ -83569,7 +83587,7 @@ function (_Component) {
         className: "fa fa-question",
         "aria-hidden": "true"
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-2 d-flex justify-content-center align-items-center"
+        className: "game-board-toolbar-menu-container col-xs-12 col-sm-12 col-md-2 col-lg-3 d-none d-md-flex align-items-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Dropdown_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
         id: "game-board-toolbar-menu",
         actions: [{
@@ -83577,7 +83595,7 @@ function (_Component) {
           title: 'Leave room'
         }],
         classNameMenu: "dropdown-menu-right"
-      }, "Menu"))));
+      }, "Menu")))));
     }
   }]);
 
@@ -84764,7 +84782,8 @@ var RoomChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     name: "game-board-chat-input",
     className: "form-control",
     id: "game-board-chat-input",
-    placeholder: "Type word..."
+    placeholder: "Type word...",
+    autoComplete: "off"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-emojis"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

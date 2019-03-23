@@ -5,7 +5,7 @@ import { split as _split, find as _find, get as _get } from 'lodash';
 
 const GameChat = React.forwardRef(({ player, room, chat, game, handleChatSend }, chatBodyRef) => {
 	return (
-		<div className="col-md-3">
+		<div className="col-md-3 order-2 order-md-3 my-md-0 my-3">
 			<div className="game-board-container-right">
 				<div className="game-board-chat shadow rounded">
 					<div className="game-board-chat-header rounded">
@@ -35,6 +35,7 @@ const GameChat = React.forwardRef(({ player, room, chat, game, handleChatSend },
 								id="game-board-chat-input"
 								placeholder="Type word..."
 								disabled={game.isPlayerDrawing(player)}
+								autoComplete="off"
 							/>
 						</form>
 
