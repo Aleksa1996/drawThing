@@ -5,7 +5,6 @@ export const showCountdown = countDownOptions => (dispatch, getState, { api, soc
 
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			console.log('hide');
 			resolve();
 		}, (countDownOptions.countdownFrom + 1) * 1000);
 	});

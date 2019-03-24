@@ -152,7 +152,7 @@ class GameController extends WebsocketController
             $websocket->broadcast()->to($data['room']['uuid'])->emit('PLAYER_CHOOSED_WORD', ['word' => $data['word']]);
             // create round
             // dispatch action
-            $websocket->broadcast()->to($data['room']['uuid'])->emit('ROUND_START', ['round' => 'hello']);
+            $websocket->to($data['room']['uuid'])->emit('STARTING_ROUND', ['round' => '']);
         } catch (\Exception $e) {
             //TODO: CHANGE EVENT ON FAIL
             $this->emitException($websocket, 'SEND_DRAWING_GAME_FAILURE', $e);

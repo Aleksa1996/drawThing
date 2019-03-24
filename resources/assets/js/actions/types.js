@@ -69,8 +69,9 @@ export const REQUEST_WORDS = 'REQUEST_WORDS';
 //
 export const CLEAR_GAME_DATA = 'CLEAR_GAME_DATA';
 
-export const ROUND_START = 'ROUND_START';
-// export const CLEAR_GAME_DATA = 'CLEAR_GAME_DATA';
-
 export const SHOW_COUNTDOWN = 'SHOW_COUNTDOWN';
 export const HIDE_COUNTDOWN = 'HIDE_COUNTDOWN';
+
+export const STARTING_ROUND = 'STARTING_ROUND';
+export const START_ROUND = 'START_ROUND';
+export const TICK_ROUND = 'TICK_ROUND';

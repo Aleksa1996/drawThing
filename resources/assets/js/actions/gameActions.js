@@ -9,7 +9,6 @@ import {
 	STARTING_GAME_REQUEST_SUCCESS,
 	STARTING_GAME_REQUEST_FAILURE,
 	//
-	STARTING_GAME_COUNTDOWN,
 	PLAYER_CHOOSING_WORD,
 	PLAYER_CHOOSED_WORD,
 	//
@@ -17,12 +16,19 @@ import {
 	REQUEST_WORDS,
 	CHOOSED_WORD,
 	//
-	CLEAR_GAME_DATA
+	CLEAR_GAME_DATA,
+	STARTING_ROUND
 } from './types';
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
-const globalEvents = [RECEIVE_DRAWING_GAME, CHOOSE_WORD, PLAYER_CHOOSING_WORD, PLAYER_CHOOSED_WORD];
+const globalEvents = [
+	RECEIVE_DRAWING_GAME,
+	CHOOSE_WORD,
+	PLAYER_CHOOSING_WORD,
+	PLAYER_CHOOSED_WORD,
+	STARTING_ROUND
+];
 
 export const subscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));

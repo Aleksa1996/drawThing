@@ -16,7 +16,7 @@ import {
 	//
 	CLEAR_GAME_DATA,
 	//
-	ROUND_START
+	STARTING_ROUND
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -87,9 +87,9 @@ const reducer = (state = initialState, { type, payload }) => {
 				chosed_word: payload.word
 			});
 		}
-		case ROUND_START: {
+		case STARTING_ROUND: {
 			return updateGame(state, {
-				status: 'ROUND_START'
+				status: 'STARTING_ROUND'
 			});
 		}
 		//

@@ -34,7 +34,7 @@ const GameChat = React.forwardRef(({ player, room, chat, game, handleChatSend },
 								className="form-control"
 								id="game-board-chat-input"
 								placeholder="Type word..."
-								disabled={game.isPlayerDrawing(player)}
+								disabled={game.isPlayerDrawing(player) || game.choosingWord()}
 								autoComplete="off"
 							/>
 						</form>
@@ -43,7 +43,7 @@ const GameChat = React.forwardRef(({ player, room, chat, game, handleChatSend },
 							<div className="dropdown dropup">
 								<a
 									className={`btn btn-secondary dropdown-toggle ${
-										game.isPlayerDrawing(player) ? 'disabled' : ''
+										game.isPlayerDrawing(player) || game.choosingWord() ? 'disabled' : ''
 									}`}
 									href="javascript:void(0)"
 									role="button"

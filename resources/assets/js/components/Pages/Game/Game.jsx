@@ -12,7 +12,8 @@ import {
 	showModal,
 	leaveRoom,
 	startGame,
-	requestWordsToChoose
+	requestWordsToChoose,
+	startRound
 } from '../../../actions';
 import { push, replace } from 'connected-react-router';
 
@@ -20,6 +21,7 @@ import RoomModel from '../../../utils/classes/Room';
 import ChatModel from '../../../utils/classes/Chat';
 import PlayerModel from '../../../utils/classes/Player';
 import GameModel from '../../../utils/classes/Game';
+import RoundModel from '../../../utils/classes/Round';
 
 import Page from '../Page';
 
@@ -84,7 +86,9 @@ class Game extends Component {
 
 	componentDidUpdate(prevProps) {
 		// chat always scroll on new message to see the latest one
-		const { chat, game } = this.props;
+		const { chat, game, round } = this.props;
+		const gameModel = new GameModel(game);
+
 		if (chat.messages.length != prevProps.chat.messages.length && chat.messages.length > 0) {
 			this.scrollToBottom();
 		}
@@ -93,7 +97,9 @@ class Game extends Component {
 			this.updateDrawingUI();
 		}
 
-		if (game.status == 'ROUND_START') {
+		if (gameModel.startingRound() && !round.started) {
+			this.props.startRound();
+			// console.log('initi');
 			// this.props.roundStart();
 			// flag da je runda pocela
 			// startuje timer 3min
@@ -168,17 +174,18 @@ class Game extends Component {
 	};
 
 	render() {
-		const { player, room, chat, game } = this.props;
+		const { player, room, chat, game, round } = this.props;
 
 		const roomModel = new RoomModel(room);
 		const chatModel = new ChatModel(chat);
 		const playerModel = new PlayerModel(player);
 		const gameModel = new GameModel(game);
+		const roundModel = new RoundModel(round);
 
 		return (
 			<Page title="Game - Drawthing" className="container-fluid page-game">
 				<GameLayout>
-					<GameToolBar game={gameModel} player={playerModel} />
+					<GameToolBar game={gameModel} player={playerModel} round={roundModel} />
 					<div className="row no-gutters">
 						<GameScore room={roomModel} player={playerModel} />
 						<GameCanvas
@@ -211,7 +218,8 @@ export default connect(
 		room: state.room,
 		chat: state.chat,
 		socket: state.socket,
-		game: state.game
+		game: state.game,
+		round: state.round
 	}),
 	{
 		sendMessageRoom,
@@ -227,6 +235,7 @@ export default connect(
 		sketchClear,
 		subscribeToGameGlobalEvents,
 		unsubscribeToGameGlobalEvents,
-		requestWordsToChoose
+		requestWordsToChoose,
+		startRound
 	}
 )(Game);

@@ -22,6 +22,8 @@ import chatReducer from './reducers/chatReducer';
 import gameReducer from './reducers/gameReducer';
 import modalReducer from './reducers/modalReducer';
 import countdownReducer from './reducers/countdownReducer';
+import roundReducer from './reducers/roundReducer';
+
 //Reducer imports end
 
 const isServer = !(
@@ -51,7 +53,8 @@ const rootReducer = combineReducers({
 	chat: chatReducer,
 	game: gameReducer,
 	modal: modalReducer,
-	countdown: countdownReducer
+	countdown: countdownReducer,
+	round: roundReducer
 });
 
 let serverState = {};
