@@ -8,15 +8,11 @@ import {
 	STARTING_GAME_REQUEST_SUCCESS,
 	STARTING_GAME_REQUEST_FAILURE,
 	//
-	STARTING_GAME_COUNTDOWN,
-	PLAYER_CHOOSING_WORD,
-	PLAYER_CHOOSED_WORD,
+	STARTING_GAME,
 	//
-	CHOOSE_WORD,
+	FINISHING_ROUND,
 	//
-	CLEAR_GAME_DATA,
-	//
-	STARTING_ROUND
+	CLEAR_GAME_DATA
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -29,12 +25,12 @@ const initialState = {
 	drawing: {
 		items: []
 	},
-	status: 'NOT_STARTED',
 	//
-	drawn_by: null,
-	//
-	words_to_choose: [],
-	chosed_word: null,
+	id: null,
+	status: null,
+	number_of_rounds: null,
+	room_id: null,
+	created_at: null,
 	//
 	rounds: []
 };
@@ -72,33 +68,15 @@ const reducer = (state = initialState, { type, payload }) => {
 				starting_game_request_errors: payload.errors
 			});
 		}
-		// REAL GAME STATUSES
-		case STARTING_GAME_COUNTDOWN: {
-			return updateGame(state, { status: 'STARTING', drawn_by: payload.drawn_by });
-		}
-		case PLAYER_CHOOSING_WORD: {
-			return updateGame(state, {
-				status: 'CHOOSING_WORD'
-			});
-		}
-		case PLAYER_CHOOSED_WORD: {
-			return updateGame(state, {
-				status: 'CHOOSED_WORD',
-				chosed_word: payload.word
-			});
-		}
-		case STARTING_ROUND: {
-			return updateGame(state, {
-				status: 'STARTING_ROUND'
-			});
+		//
+		case STARTING_GAME: {
+			return updateGame(state, { ...payload.game });
 		}
 		//
-		case CHOOSE_WORD: {
-			return updateGame(state, {
-				words_to_choose: payload.game.words_to_choose
-			});
+		case FINISHING_ROUND: {
+			return updateGame(state, { rounds: payload.rounds });
 		}
-
+		//
 		case CLEAR_GAME_DATA: {
 			return { ...initialState };
 		}

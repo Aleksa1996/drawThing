@@ -17,12 +17,15 @@ class CreateRoundsTable extends Migration
             $table->increments('id');
 
             $table->integer('number')->default(1);
+            $table->enum('status', ['starting', 'in_progress', 'finished']);
 
             $table->unsignedInteger('game_id');
-            $table->unsignedInteger('word_id');
+            $table->unsignedInteger('word_id')->nullable(true);
             $table->unsignedInteger('drawn_by');
 
             $table->timestamps();
+            $table->timestamp('finishing_at')->nullable(true);
+            $table->timestamp('started_at')->nullable(true);
         });
     }
 

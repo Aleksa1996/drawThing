@@ -35,7 +35,7 @@ class Player extends Model
 
     public function rounds()
     {
-        return $this->belongsToMany('App\Models\Round');
+        return $this->hasMany('App\Models\Round', 'drawn_by');
     }
 
     // mutators
@@ -93,7 +93,7 @@ class Player extends Model
      */
     public function currentRoom()
     {
-        return $this->rooms()->latest()->first();
+        return $this->rooms()->latest()->take(1)->first();
     }
 
     /**

@@ -39,6 +39,10 @@ class Word extends Model
     // mutators
 
     // accessors
+    public function getClengthAttribute()
+    {
+        return strlen($this->word);
+    }
 
     // methods
 

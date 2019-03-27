@@ -13,7 +13,7 @@ import {
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA,
-	STARTING_GAME_COUNTDOWN,
+	STARTING_GAME,
 	UPDATE_PLAYER
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
@@ -25,7 +25,7 @@ const globalEvents = [
 	PLAYER_KICKED,
 	PLAYER_LEAVED_ROOM,
 	REPLACE_ADMIN_ROOM,
-	STARTING_GAME_COUNTDOWN
+	STARTING_GAME
 ];
 
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {

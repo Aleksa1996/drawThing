@@ -122,7 +122,10 @@ class Room extends Model
      */
     public function getRandomPlayer($except = [])
     {
-        return $this->players()->active()->whereNotIn('players.id', $except)->inRandomOrder()->take(1)->first();
+        if (!is_array($except)) {
+            $except = [$except];
+        }
+        return $this->players()->active()->whereNotIn('players.id', $except)->doesntHave('rounds')->inRandomOrder()->take(1)->first();
     }
 
     /**
@@ -150,14 +153,31 @@ class Room extends Model
      *
      * @return \App\Models\Game
      */
-    public function createGame()
+    public function createGame($status = 'starting')
     {
         $game = new Game();
-        $game->number = (int)$this->getGamesCount() + 1;
         $game->number_of_rounds = $this->getPlayerCount();
-        $game->current_round = 1;
+        $game->status = $status;
 
         return $this->games()->save($game);
+    }
+
+    /**
+     * Get the game in progress
+     *
+     * @return Game
+     */
+    public function currentGame()
+    {
+        return $this->games()->active()->latest()->take(1)->first();
+    }
+
+    public function isPlayerDrawing(Player $player)
+    {
+        if (!($game = $this->currentGame())) return false;
+        if (!($round = $game->currentRound())) return false;
+
+        return $round->drawn_by == $player->id;
     }
 
     // scopes

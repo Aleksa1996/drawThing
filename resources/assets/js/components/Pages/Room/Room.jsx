@@ -94,7 +94,7 @@ class Room extends Component {
 	}
 
 	componentWillUnmount() {
-		const { game } = this.props.game;
+		const { game } = this.props;
 		const gameModel = new GameModel(game);
 
 		if (gameModel.notStarted()) {

@@ -1,47 +1,78 @@
-import { START_ROUND, TICK_ROUND, STARTING_ROUND } from '../../actions/types';
+import {
+	STARTING_GAME,
+	STARTING_ROUND,
+	PLAYER_CHOOSING_WORD,
+	PLAYER_CHOOSED_WORD,
+	START_ROUND,
+	TICK_ROUND,
+	CHOOSE_WORD,
+	FINISHING_ROUND,
+	CLEAR_ROUND_DATA
+} from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
 
 const initialState = {
-	duration: 1,
-	starting: false,
-	started: false,
-	finished: false,
+	id: null,
+	number: null,
+	timer: '00:00',
+	//
+	status: null,
+	localStatus: null,
+	// starting: false,
+	// started: false,
+	// finished: true,
 
-	startedAt: 0,
-	finishingAt: 0
+	// diffInSeconds: 0,
+	started_at: 0,
+	finishing_at: 0,
+	//
+	drawn_by: null,
+	//
+	words_to_choose: [],
+	chosed_word: null
 };
 
 const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case STARTING_ROUND: {
-			return updateRound(state, { starting: true });
+		case STARTING_GAME: {
+			return updateRound(state, { ...payload.round });
 		}
-
-		case START_ROUND: {
-			const startedAt = new Date().getTime();
+		case PLAYER_CHOOSING_WORD: {
 			return updateRound(state, {
-				...payload,
-				starting: false,
-				started: true,
-				finished: false,
-				startedAt,
-				// finishingAt: startedAt + 120000
-				finishingAt: startedAt + 22000
+				localStatus: 'PLAYER_CHOOSING_WORD'
 			});
 		}
-
-		// case STOP_ROUND: {
-		// 	return { ...initialState };
-		// }
-
-		// case FINISH_ROUND: {
-		// 	return { ...initialState };
-		// }
-
+		case CHOOSE_WORD: {
+			return updateRound(state, {
+				words_to_choose: payload.round.words_to_choose
+			});
+		}
+		case PLAYER_CHOOSED_WORD: {
+			return updateRound(state, {
+				localStatus: 'PLAYER_CHOOSED_WORD',
+				chosed_word: payload.word
+			});
+		}
+		case STARTING_ROUND: {
+			return updateRound(state, { ...payload.round, localStatus: 'STARTING_ROUND' });
+		}
 		case TICK_ROUND: {
-			const newDuration = state.finishingAt - new Date().getTime();
-			return updateRound(state, { duration: newDuration, finished: false });
+			return updateRound(state, {
+				...payload.round,
+				localStatus: 'ROUND_IN_PROGRESS'
+			});
+		}
+		case FINISHING_ROUND: {
+			return updateRound(state, {
+				drawn_by: payload.drawn_by,
+				chosed_word: null,
+				words_to_choose: [],
+				localStatus: 'ROUND_FINISHED'
+			});
+		}
+		case CLEAR_ROUND_DATA: {
+			return { ...initialState };
 		}
 
 		default:
