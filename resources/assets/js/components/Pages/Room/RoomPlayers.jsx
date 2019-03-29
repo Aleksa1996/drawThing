@@ -3,7 +3,7 @@ import React from 'react';
 import globals from '../../../globals';
 
 const RoomPlayers = React.forwardRef(
-	({ room, handleCopyToClipboard, isPlayerAdmin, player, handleKick }, joinLinkInputRef) => {
+	({ player, room, handleCopyToClipboard, handleKick }, joinLinkInputRef) => {
 		return (
 			<React.Fragment>
 				<div className="game-created-join-link">
@@ -42,7 +42,7 @@ const RoomPlayers = React.forwardRef(
 							<span className="game-created-user-username mx-3">
 								{p.username} {player.id == p.id ? <small> (you)</small> : null}
 							</span>
-							{isPlayerAdmin && !room.isPlayerAdmin(p) && (
+							{room.isPlayerAdmin(player) && !room.isPlayerAdmin(p) && (
 								<span onClick={e => handleKick(p.id)} className="game-created-user-kick ml-auto">
 									<button className="mybtn2" title="Kick">
 										<i className="fa fa-times" aria-hidden="true" />

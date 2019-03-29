@@ -77,6 +77,6 @@ class ChooseWordModal extends Component {
 }
 
 export default connect(
-	state => ({ words_to_choose: state.game.words_to_choose }),
+	state => ({ words_to_choose: state.round.words_to_choose }),
 	{ hideModal, chooseWord }
 )(ChooseWordModal);

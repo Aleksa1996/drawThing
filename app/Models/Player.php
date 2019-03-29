@@ -35,7 +35,7 @@ class Player extends Model
 
     public function rounds()
     {
-        return $this->belongsToMany('App\Models\Round');
+        return $this->hasMany('App\Models\Round', 'drawn_by');
     }
 
     // mutators
@@ -93,7 +93,7 @@ class Player extends Model
      */
     public function currentRoom()
     {
-        return $this->rooms()->latest()->first();
+        return $this->rooms()->latest()->take(1)->first();
     }
 
     /**
@@ -133,6 +133,18 @@ class Player extends Model
             ['username', $credentials['username']],
             ['password', $credentials['password']]
         ])->first();
+    }
+
+    /**
+     * Doing necessary updates to handle this type of problem
+     *
+     * @return boolean
+     */
+    public function handleUsernameOccupied()
+    {
+        $this->username .= $this->id;
+        $this->password = $this->username . '_' .  $this->id;
+        return $this->save();
     }
 
     /**

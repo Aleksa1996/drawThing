@@ -11,7 +11,7 @@ export const sockets = {};
 
 function connect(url, socketID) {
 	sockets[socketID] = {
-		connection: io(url, { transports: ['websocket'] })
+		connection: io(url, { transports: ['websocket'], reconnectionAttempts: 5 })
 	};
 }
 

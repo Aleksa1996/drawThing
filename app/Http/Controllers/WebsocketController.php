@@ -124,6 +124,24 @@ class WebsocketController extends Controller
             $websocket->emit($event, ['errors' => $errorCollection->values()]);
         } else {
             var_dump($exception->getMessage());
+            var_dump($exception->getLine());
+            var_dump($exception->getTrace());
         }
+    }
+
+    /**
+     * Start swoole ticking timer
+     *
+     * @param int $delay in ms
+     * @param callable $callback
+     * @return int $timer_id
+     */
+    protected function startTimer(int $delay, callable $callback)
+    {
+        return swoole_timer_tick($delay, function ($timerid) use ($callback) {
+            if ($callback()) {
+                swoole_timer_clear($timerid);
+            }
+        });
     }
 }

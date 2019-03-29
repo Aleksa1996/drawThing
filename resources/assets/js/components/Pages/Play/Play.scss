@@ -31,6 +31,9 @@
 				text-transform: uppercase;
 			}
 			.game-start-canvas-container {
+				width: 300px;
+				height: 300px;
+				margin: 0 auto;
 				text-align: center;
 				padding: 10px;
 				color: $mytheme-color-first;
@@ -46,7 +49,7 @@
 
 			.game-start-username-form-container {
 				text-align: center;
-				margin: 20px auto;
+				margin: 50px auto 25px;
 				.game-start-buttons {
 					display: flex;
 					justify-content: space-around;

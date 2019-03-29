@@ -5,17 +5,20 @@ import {
 	kickPlayer,
 	subscribeToChatGlobalEvents,
 	subscribeToRoomGlobalEvents,
-	clearStateAfterKick,
 	clearState,
+	clearSubscriptions,
 	showModal,
 	leaveRoom,
 	startGame,
-	clearChatMessages
+	clearChatMessages,
+	showCountdown,
+	hideCountdown
 } from '../../../actions';
 
 import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
 import { push, replace } from 'connected-react-router';
 
+import PlayerModel from '../../../utils/classes/Player';
 import RoomModel from '../../../utils/classes/Room';
 import ChatModel from '../../../utils/classes/Chat';
 import GameModel from '../../../utils/classes/Game';
@@ -27,8 +30,6 @@ import RoomChat from './RoomChat';
 import RoomPlayers from './RoomPlayers';
 
 import Button from '../../Form/Button';
-
-import Countdown from '../../Common/Countdown/Countdown';
 import Errors from '../../Common/Errors/Errors';
 
 class Room extends Component {
@@ -36,66 +37,73 @@ class Room extends Component {
 		super(props);
 		this.chatBodyRef = React.createRef();
 		this.joinLinkInputRef = React.createRef();
-		this.subscribedToRoomChat = false;
+		this.subscribed = false;
 	}
 
 	componentDidMount() {
-		const {
-			room,
-			replace,
-			socket,
-			subscribeToChatGlobalEvents,
-			subscribeToRoomGlobalEvents
-		} = this.props;
-
+		const { room, socket } = this.props;
 		const roomModel = new RoomModel(room);
+
 		try {
 			// redirect if socket is not connected
 			if (!socket.connected) throw new Error('Socket not connected');
 
 			// listen for chat and room events when room is created or joined
 			if (roomModel.isReady()) {
-				if (!this.subscribedToRoomChat) {
-					subscribeToChatGlobalEvents();
-					subscribeToRoomGlobalEvents();
-					this.subscribedToRoomChat = true;
+				if (!this.subscribed) {
+					this.props.subscribeToChatGlobalEvents();
+					this.props.subscribeToRoomGlobalEvents();
+					this.subscribed = true;
 				}
 			} else throw new Error('Room is not ready');
 		} catch (e) {
 			console.log(e);
-			replace('/play');
+			this.props.replace('/play');
 		}
 	}
 
 	componentDidUpdate(prevProps) {
+		const { player, room, chat, game, countdown } = this.props;
+		const roomModel = new RoomModel(room);
+		const gameModel = new GameModel(game);
 		// redirect player to play page and clear data if he is kicked by admin
-		if (this.props.room.lastKickedPlayer.id == this.props.player.id) {
-			this.props.clearStateAfterKick();
+		if (roomModel.isPlayerKicked(player)) {
+			this.props.clearState();
+			this.props.clearSubscriptions();
+
 			this.props.showModal({
 				modalType: INFO_MODAL,
 				modalProps: {
 					body: 'You were kicked from the room by admin'
 				}
 			});
-			this.props.push('/play');
-			return;
+			return this.props.replace('/play');
+		}
+
+		if (gameModel.starting() && !countdown.inProgress) {
+			this.props.showCountdown({ countdownFrom: 3, countdownEndText: 'START' }).then(() => {
+				this.props.clearChatMessages();
+				this.props.replace('/game');
+			});
 		}
 
 		// chat always scroll on new message to see the latest one
-		if (
-			this.props.chat.messages.length != prevProps.chat.messages.length &&
-			this.props.chat.messages.length > 0
-		) {
+		if (chat.messages.length != prevProps.chat.messages.length && chat.messages.length > 0) {
 			this.scrollToBottom();
 		}
 	}
 
 	componentWillUnmount() {
-		if (this.props.game.status == 'NOT_STARTED') {
+		const { game } = this.props;
+		const gameModel = new GameModel(game);
+
+		if (gameModel.notStarted()) {
 			// clear whole room state
 			this.props.leaveRoom();
 			this.props.clearState();
+			this.props.clearSubscriptions();
 		}
+		this.props.hideCountdown();
 	}
 
 	handleChatSend = (e, additionalData = null) => {
@@ -149,12 +157,15 @@ class Room extends Component {
 	};
 
 	render() {
-		const { player, room, chat, game, clearChatMessages, replace } = this.props;
+		const { player, room, chat, game } = this.props;
+		const playerModel = new PlayerModel(player);
 		const roomModel = new RoomModel(room);
 		const chatModel = new ChatModel(chat);
 		const gameModel = new GameModel(game);
 
-		const isPlayerAdmin = roomModel.isPlayerAdmin(player);
+		const startGameButtonStatus =
+			game.starting_game_request || roomModel.getActivePlayerCount() <= 1 || gameModel.starting();
+
 		if (!roomModel.isCreated() && !roomModel.isJoined()) {
 			return null;
 		}
@@ -169,9 +180,8 @@ class Room extends Component {
 								{roomModel.isJoined() && 'Successfully joined room'}
 							</h1>
 							<RoomPlayers
+								player={playerModel}
 								room={roomModel}
-								isPlayerAdmin={isPlayerAdmin}
-								player={player}
 								handleCopyToClipboard={this.handleCopyToClipboard}
 								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
@@ -185,16 +195,16 @@ class Room extends Component {
 								/>
 							</div>
 							<Errors errors={gameModel.starting_game_request_errors} />
-							{isPlayerAdmin && (
-								<div className="text-center">
+							{roomModel.isPlayerAdmin(player) && (
+								<div className="text-center mt-3">
 									<Button
 										onClick={this.handleStartGame}
 										type="button"
 										icon="fa-rocket"
 										className="mybtn2 my-auto"
-										disabled={game.starting_game_request || roomModel.getActivePlayerCount() <= 1}
+										disabled={startGameButtonStatus}
 									>
-										Start game
+										{roomModel.getActivePlayerCount() <= 1 ? 'Waiting...' : 'Start game'}
 									</Button>
 								</div>
 							)}
@@ -202,16 +212,6 @@ class Room extends Component {
 					</div>
 					<PlayRules />
 				</div>
-				<Countdown
-					countDownFrom={3}
-					shouldInitOnMount={false}
-					activate={gameModel.starting()}
-					countdownEndText="START"
-					onCountdownEnd={() => {
-						clearChatMessages();
-						replace('/game');
-					}}
-				/>
 			</Page>
 		);
 	}
@@ -223,7 +223,8 @@ export default connect(
 		room: state.room,
 		chat: state.chat,
 		socket: state.socket,
-		game: state.game
+		game: state.game,
+		countdown: state.countdown
 	}),
 	{
 		sendMessageRoom,
@@ -232,11 +233,13 @@ export default connect(
 		subscribeToChatGlobalEvents,
 		kickPlayer,
 		subscribeToRoomGlobalEvents,
-		clearStateAfterKick,
 		clearState,
+		clearSubscriptions,
 		showModal,
 		leaveRoom,
 		startGame,
-		clearChatMessages
+		clearChatMessages,
+		showCountdown,
+		hideCountdown
 	}
 )(Room);

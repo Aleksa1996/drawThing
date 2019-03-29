@@ -25,4 +25,6 @@ export default class Room extends Model {
 	getPlayerCount = () => this.players.length;
 
 	getActivePlayerCount = () => this.getActivePlayers().length;
+
+	isPlayerKicked = player => this.lastKickedPlayer.id == player.id;
 }

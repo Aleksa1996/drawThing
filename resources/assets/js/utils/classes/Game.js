@@ -1,12 +1,9 @@
 import Model from './Model';
 
 export default class Game extends Model {
-	isPlayerDrawing = player => this.drawn_by == player.id;
+	inProgress = () => this.status == 'in_progress';
+	starting = () => this.status == 'starting';
+	notStarted = () => this.status == null;
 
-	chosedWordToArrayOfLetters = () => [...this.chosed_word.word];
-
-	chosedWordExists = () => this.chosed_word && typeof this.chosed_word === 'object';
-
-	started = () => this.status == 'STARTED';
-	starting = () => this.status == 'STARTING';
+	isCanvasEmpty = () => this.drawing.items.length > 0;
 }

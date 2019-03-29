@@ -43,7 +43,6 @@ class RoomController extends Controller
             'uuid' => '',
             'active' => true,
             'number_of_games' => 3,
-            'current_game' => 0,
             'created_by' => $player->id,
             'administered_by' => $player->id
         ]);
@@ -107,20 +106,21 @@ class RoomController extends Controller
 
         // check if player username already exists in room
         if ($room->isPlayerUsernameOccupied($player->username)) {
-            $player->username .= $player->id;
-            $player->save();
+            $player->handleUsernameOccupied();
         }
 
         // joining player in room
         $room->players()->attach($player->id);
         WebsocketRoom::add($player->fd, $room->uuid);
 
+        $playerResource = new PlayerResource($player);
+
         // sending notification that new  player has joined to room
         Websocket::setSender($player->fd);
-        Websocket::broadcast()->to($room->uuid)->emit('PLAYER_JOINED_ROOM', ['player' => new PlayerResource($player)]);
+        Websocket::broadcast()->to($room->uuid)->emit('PLAYER_JOINED_ROOM', ['player' => $playerResource]);
 
         $room->loadActivePlayers();
-        return response()->json(['room' => new RoomResource($room)], 200);
+        return response()->json(['room' => new RoomResource($room), 'player' => $playerResource], 200);
     }
 
     public function kick(Request $request, Player $player)

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class Word extends Resource
+class Game extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,11 @@ class Word extends Resource
     {
         return [
             'id' => $this->id,
-            'word' => $this->word,
-            'points_worth' => $this->points_worth,
-            'type' => $this->type,
-            'clength' => $this->clength
+            'status' => $this->status,
+            'number_of_rounds' => $this->number_of_rounds,
+            'room_id' => $this->room_id,
+            'created_at' => $this->created_at,
+            'rounds' => Round::collection($this->whenLoaded('rounds')),
         ];
     }
 }

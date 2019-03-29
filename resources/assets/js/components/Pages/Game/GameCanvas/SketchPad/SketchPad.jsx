@@ -23,8 +23,6 @@ export const toolsMap = {
 
 export default class SketchPad extends Component {
 	static propTypes = {
-		width: PropTypes.number,
-		height: PropTypes.number,
 		items: PropTypes.array.isRequired,
 		animate: PropTypes.bool,
 		canvasClassName: PropTypes.string,
@@ -42,8 +40,6 @@ export default class SketchPad extends Component {
 	};
 
 	static defaultProps = {
-		width: 500,
-		height: 500,
 		color: '#000',
 		size: 5,
 		fillColor: '',
@@ -69,25 +65,34 @@ export default class SketchPad extends Component {
 
 		this.toolObj = null;
 		this.nterval = null;
+
+		this.canvasContainer = React.createRef();
 	}
 
 	componentDidMount() {
 		this.canvas = findDOMNode(this.canvasRef);
 		this.ctx = this.canvas.getContext('2d');
 		this.initTool(this.state.tool);
+
+		this.setCanvasSize();
 	}
 
 	componentDidUpdate({ tool, items }, prevState) {
 		if (this.props.items.length != items.length) {
-			this.redraw(this.props.items);
+			this.redraw(this.props.items, this.props.animate && this.props.items.length > items.length);
 		}
 	}
+
+	setCanvasSize = () => {
+		this.canvas.width = this.canvasContainer.current.offsetWidth;
+		this.canvas.height = this.canvasContainer.current.offsetHeight;
+	};
 
 	initTool = tool => (this.toolObj = this.props.toolsMap[tool](this.ctx));
 
 	clearCanvas = () => this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-	redraw = items => {
+	redraw = (items, animate) => {
 		this.clearCanvas();
 		const copiedItems = items.slice();
 		const lastCopiedItem = copiedItems.pop();
@@ -99,7 +104,7 @@ export default class SketchPad extends Component {
 
 		if (lastCopiedItem) {
 			this.initTool(lastCopiedItem.tool);
-			this.toolObj.draw(lastCopiedItem, this.props.animate);
+			this.toolObj.draw(lastCopiedItem, animate);
 		}
 	};
 
@@ -152,8 +157,12 @@ export default class SketchPad extends Component {
 	};
 
 	getCursorPosition = e => {
-		const { top, left } = this.canvas.getBoundingClientRect();
-		return [e.clientX - left, e.clientY - top];
+		// https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+		const rect = this.canvas.getBoundingClientRect();
+		const scaleX = this.canvas.width / rect.width;
+		const scaleY = this.canvas.height / rect.height;
+
+		return [(e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY];
 	};
 
 	handleTool = ({ name, value }) => {
@@ -169,10 +178,10 @@ export default class SketchPad extends Component {
 	};
 
 	render() {
-		const { width, height, canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
+		const { canvasClassName, children, gtShow, gtDefaultPosition } = this.props;
 		const { tool, size, color, fillColor, eraser } = this.state;
 		return (
-			<React.Fragment>
+			<div className="sketchpad-container" ref={this.canvasContainer} style={{ height: '100%' }}>
 				{!this.props.canvasDisabled && (
 					<GameTools
 						defaultPosition={gtDefaultPosition}
@@ -187,19 +196,16 @@ export default class SketchPad extends Component {
 				)}
 
 				<canvas
-					ref={canvas => {
-						this.canvasRef = canvas;
-					}}
+					ref={canvas => (this.canvasRef = canvas)}
 					className={canvasClassName}
 					onMouseDown={this.onMouseDown}
 					onMouseMove={this.onMouseMove}
 					onMouseOut={this.onMouseUp}
 					onMouseUp={this.onMouseUp}
-					width={width}
-					height={height}
+					style={{ width: '100%', height: '100%' }}
 				/>
 				{children}
-			</React.Fragment>
+			</div>
 		);
 	}
 }

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { v4 } from 'uuid';
 import RoomChatMessage from '../../Room/RoomChatMessage';
-import { split as _split, find as _find, get as _get } from 'lodash';
+import { get as _get } from 'lodash';
 
-const GameChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) => {
+const GameChat = React.forwardRef(({ player, room, chat, round, handleChatSend }, chatBodyRef) => {
 	return (
-		<div className="col-md-3">
+		<div className="col-md-3 order-2 order-md-3 my-md-0 my-3">
 			<div className="game-board-container-right">
 				<div className="game-board-chat shadow rounded">
 					<div className="game-board-chat-header rounded">
@@ -34,13 +34,17 @@ const GameChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 								className="form-control"
 								id="game-board-chat-input"
 								placeholder="Type word..."
+								disabled={round.isPlayerDrawing(player) || round.isPlayerChoosingWord()}
+								autoComplete="off"
 							/>
 						</form>
 
 						<div className="game-board-chat-emojis">
 							<div className="dropdown dropup">
 								<a
-									className="btn btn-secondary dropdown-toggle"
+									className={`btn btn-secondary dropdown-toggle ${
+										round.isPlayerDrawing(player) || round.isPlayerChoosingWord() ? 'disabled' : ''
+									}`}
 									href="javascript:void(0)"
 									role="button"
 									id="game-board-chat-emojis-dropdown"

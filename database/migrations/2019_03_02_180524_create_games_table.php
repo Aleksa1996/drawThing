@@ -16,9 +16,8 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('number')->default(1);
             $table->integer('number_of_rounds');
-            $table->integer('current_round');
+            $table->enum('status', ['starting', 'in_progress', 'finished']);
 
             $table->unsignedInteger('room_id');
 

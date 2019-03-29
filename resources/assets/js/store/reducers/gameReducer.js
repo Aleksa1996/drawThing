@@ -8,11 +8,11 @@ import {
 	STARTING_GAME_REQUEST_SUCCESS,
 	STARTING_GAME_REQUEST_FAILURE,
 	//
-	STARTING_GAME_COUNTDOWN,
-	PLAYER_CHOOSING_WORD,
-	CHOSED_WORD,
+	STARTING_GAME,
 	//
-	CHOOSE_WORD,
+	FINISHING_ROUND,
+	//
+	FINISHING_GAME,
 	//
 	CLEAR_GAME_DATA
 } from '../../actions/types';
@@ -27,12 +27,16 @@ const initialState = {
 	drawing: {
 		items: []
 	},
-	status: 'NOT_STARTED',
 	//
-	drawn_by: null,
+	id: null,
+	status: null,
+	number_of_rounds: null,
+	room_id: null,
+	created_at: null,
 	//
-	words_to_choose: [],
-	chosed_word: null
+	isThereNextGame: false,
+	//
+	rounds: []
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -68,28 +72,22 @@ const reducer = (state = initialState, { type, payload }) => {
 				starting_game_request_errors: payload.errors
 			});
 		}
-		// REAL GAME STATUSES
-		case STARTING_GAME_COUNTDOWN: {
-			return updateGame(state, { status: 'STARTING', drawn_by: payload.drawn_by });
-		}
-		case PLAYER_CHOOSING_WORD: {
-			return updateGame(state, {
-				status: 'CHOOSING_WORD'
-			});
-		}
-		case CHOSED_WORD: {
-			return updateGame(state, {
-				status: 'STARTED',
-				chosed_word: payload.word
-			});
+		//
+		case STARTING_GAME: {
+			return updateGame(state, { ...payload.game });
 		}
 		//
-		case CHOOSE_WORD: {
+		case FINISHING_ROUND: {
+			return updateGame(state, { rounds: payload.rounds });
+		}
+		//
+		case FINISHING_GAME: {
 			return updateGame(state, {
-				words_to_choose: payload.game.words_to_choose
+				...payload.game,
+				rounds: payload.rounds,
+				isThereNextGame: payload.isThereNextGame
 			});
 		}
-
 		case CLEAR_GAME_DATA: {
 			return { ...initialState };
 		}
