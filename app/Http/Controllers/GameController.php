@@ -127,7 +127,7 @@ class GameController extends WebsocketController
                 throw ValidationException::withMessages(['_general_error' => ['You dont have permissions to do that!']]);
             }
 
-            $words_to_choose = ['words_to_choose' => WordResoruce::collection(Word::getWordsToChoose())];
+            $words_to_choose = ['words_to_choose' => WordResoruce::collection(Word::getWordsToChoose($room))];
 
             $websocket->broadcast()->to($data['room']['uuid'])->emit('PLAYER_CHOOSING_WORD', []);
             $websocket->emit('CHOOSE_WORD', ['round' => $words_to_choose]);
@@ -157,10 +157,12 @@ class GameController extends WebsocketController
             $round = null;
 
             if (empty($game)) {
+                var_dump('game empty');
                 $game = $room->createGame();
                 $round = $game->startNextRound($player, $word);
             } elseif (!$game->canContinue()) {
                 // TODO: ZAVRSITI I RUNDU
+                var_dump('game cannot continiue');
                 $game->finish();
                 $game = $room->createGame();
                 $round = $game->startNextRound($player, $word);
@@ -174,8 +176,10 @@ class GameController extends WebsocketController
             $word->word = str_repeat('_', $word->clength);
             $websocket->broadcast()->to($room->uuid)->emit('PLAYER_CHOOSED_WORD', ['word' => new WordResoruce($word)]);
 
+            // starting game
+            $game->start();
             // starting round
-            $round->start();
+            $round->start($word);
             $websocket->to($room->uuid)->emit('STARTING_ROUND', ['round' => new RoundResource($round)]);
 
             // starting round timer
@@ -185,11 +189,33 @@ class GameController extends WebsocketController
                 $websocket->to($room->uuid)->emit('TICK_ROUND', ['round' => new RoundResource($round)]);
 
                 if ($round->finished()) {
+                    $round->finish();
                     $nextPlayer = $room->getRandomPlayer();
+
+                    // there is no players in queue to play current game so we end game
                     if ($nextPlayer == null) {
                         //TODO: game finished not round because we dont have next player : ALL PLAYER WERE DRAWING
+                        $game->finish();
+
+                        $finishingGameData = ['isThereNextGame' => false, 'rounds' => RoundResource::collection($game->getRounds())];
+
+                        // if we have next game then we should create and start it
+                        if ($room->isThereNextGame()) {
+                            $game = $room->createGame();
+                            $randomPlayer = $room->getRandomPlayer();
+                            $round = $game->createRound($randomPlayer);
+
+                            $finishingGameData['isThereNextGame'] = true;
+                            $finishingGameData['game'] = new GameResource($game);
+                            $finishingGameData['round'] = new RoundResource($round);
+                        }
+                        // summary of the game through rounds and flag is there new game or not
+                        $websocket->to($room->uuid)->emit('FINISHING_GAME', $finishingGameData);
+
                         return $round->finished();
                     }
+
+                    $round = $game->createRound($nextPlayer);
                     // TODO: SENDING FINAL SCORES AND DISPLAYING TABLE IN ROUND SUMMARY
                     $finishingRoundData = ['drawn_by' => $nextPlayer->id, 'rounds' => RoundResource::collection($game->getRounds())];
                     $websocket->to($room->uuid)->emit('FINISHING_ROUND', $finishingRoundData);

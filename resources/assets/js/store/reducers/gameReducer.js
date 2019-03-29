@@ -12,6 +12,8 @@ import {
 	//
 	FINISHING_ROUND,
 	//
+	FINISHING_GAME,
+	//
 	CLEAR_GAME_DATA
 } from '../../actions/types';
 
@@ -31,6 +33,8 @@ const initialState = {
 	number_of_rounds: null,
 	room_id: null,
 	created_at: null,
+	//
+	isThereNextGame: false,
 	//
 	rounds: []
 };
@@ -77,6 +81,13 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateGame(state, { rounds: payload.rounds });
 		}
 		//
+		case FINISHING_GAME: {
+			return updateGame(state, {
+				...payload.game,
+				rounds: payload.rounds,
+				isThereNextGame: payload.isThereNextGame
+			});
+		}
 		case CLEAR_GAME_DATA: {
 			return { ...initialState };
 		}

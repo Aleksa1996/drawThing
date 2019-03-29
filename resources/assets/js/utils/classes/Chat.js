@@ -3,10 +3,6 @@ import Model from './Model';
 import { split as _split, find as _find } from 'lodash';
 
 export default class Chat extends Model {
-	parseMessage = () => {
-		this.emojis.reduce;
-	};
-
 	parseEmojis = (message, callback) => {
 		return this.splitWordsFromMessage(message).map(word => {
 			const emoji = _find(this.emojis, e => e.text == word.trim());
@@ -23,4 +19,6 @@ export default class Chat extends Model {
 			),
 			/\s+/g
 		);
+
+	hasMessages = () => this.messages.length > 0;
 }

@@ -384,7 +384,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"]];
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_DRAWING_GAME"], _types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]];
 var subscribeToGameGlobalEvents = function subscribeToGameGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -1033,7 +1033,7 @@ var roundStart = function roundStart(word) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, FINISHING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1083,6 +1083,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST_SUCCESS", function() { return STARTING_GAME_REQUEST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME_REQUEST_FAILURE", function() { return STARTING_GAME_REQUEST_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STARTING_GAME", function() { return STARTING_GAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FINISHING_GAME", function() { return FINISHING_GAME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_GAME_DATA", function() { return CLEAR_GAME_DATA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_CHOOSING_WORD", function() { return PLAYER_CHOOSING_WORD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOOSED_WORD", function() { return CHOOSED_WORD; });
@@ -1158,6 +1159,7 @@ var STARTING_GAME_REQUEST_SUCCESS = 'STARTING_GAME_REQUEST_SUCCESS';
 var STARTING_GAME_REQUEST_FAILURE = 'STARTING_GAME_REQUEST_FAILURE'; //
 
 var STARTING_GAME = 'STARTING_GAME';
+var FINISHING_GAME = 'FINISHING_GAME';
 var CLEAR_GAME_DATA = 'CLEAR_GAME_DATA'; //
 
 var PLAYER_CHOOSING_WORD = 'PLAYER_CHOOSING_WORD';
@@ -3140,6 +3142,8 @@ function (_Component) {
           })
         };
       });
+
+      _this.props.sketchClear();
     };
 
     _this.onCompleteDrawing = function (item) {
@@ -3237,14 +3241,22 @@ function (_Component) {
       // chat always scroll on new message to see the latest one
       var _this$props4 = this.props,
           chat = _this$props4.chat,
+          game = _this$props4.game,
           round = _this$props4.round;
+      var chatModel = new _utils_classes_Chat__WEBPACK_IMPORTED_MODULE_5__["default"](chat);
+      var gameModel = new _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__["default"](game);
+      var roundModel = new _utils_classes_Round__WEBPACK_IMPORTED_MODULE_8__["default"](round);
 
-      if (chat.messages.length != prevProps.chat.messages.length && chat.messages.length > 0) {
+      if (chat.messages.length != prevProps.chat.messages.length && chatModel.hasMessages()) {
         this.scrollToBottom();
       }
 
-      if (prevProps.round.drawn_by != round.drawn_by) {
+      if (prevProps.round.drawn_by != round.drawn_by || prevProps.game.id != game.id) {
         this.updateDrawingUI();
+      }
+
+      if (roundModel.finished() && gameModel.isCanvasEmpty()) {
+        this.props.sketchClear();
       }
     }
   }, {
@@ -4548,7 +4560,7 @@ var GameToolBar = function GameToolBar(_ref) {
     className: "col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "game-board-rounds m-1"
-  }, "Round: 1 of 3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, "Round: 1 of 3"), !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "game-board-clock m-1 d-block ".concat(round.nearEnd() ? 'bounceAnimation' : '')
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-clock-o",
@@ -6705,6 +6717,8 @@ var initialState = {
   room_id: null,
   created_at: null,
   //
+  isThereNextGame: false,
+  //
   rounds: []
 };
 
@@ -6794,6 +6808,14 @@ var reducer = function reducer() {
         });
       }
     //
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
+      {
+        return updateGame(state, _objectSpread({}, payload.game, {
+          rounds: payload.rounds,
+          isThereNextGame: payload.isThereNextGame
+        }));
+      }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_GAME_DATA"]:
       {
@@ -7192,6 +7214,7 @@ var initialState = {
   id: null,
   number: null,
   timer: '00:00',
+  seconds: null,
   //
   status: null,
   localStatus: null,
@@ -7246,7 +7269,7 @@ var reducer = function reducer() {
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["STARTING_ROUND"]:
       {
         return updateRound(state, _objectSpread({}, payload.round, {
-          localStatus: 'STARTING_ROUND'
+          localStatus: 'ROUND_STARTING'
         }));
       }
 
@@ -7265,6 +7288,14 @@ var reducer = function reducer() {
           words_to_choose: [],
           localStatus: 'ROUND_FINISHED'
         });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
+      {
+        return updateRound(state, _objectSpread({}, payload.round, {
+          chosed_word: null,
+          words_to_choose: []
+        }));
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROUND_DATA"]:
@@ -7575,9 +7606,7 @@ function (_Model) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Chat)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.parseMessage = function () {
-      _this.emojis.reduce;
-    }, _this.parseEmojis = function (message, callback) {
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Chat)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.parseEmojis = function (message, callback) {
       return _this.splitWordsFromMessage(message).map(function (word) {
         var emoji = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["find"])(_this.emojis, function (e) {
           return e.text == word.trim();
@@ -7589,6 +7618,8 @@ function (_Model) {
       return Object(lodash__WEBPACK_IMPORTED_MODULE_1__["split"])(_this.emojis.reduce(function (accumulator, currentValue) {
         return accumulator.replace(currentValue.text, " ".concat(currentValue.text, " "));
       }, message), /\s+/g);
+    }, _this.hasMessages = function () {
+      return _this.messages.length > 0;
     }, _temp));
   }
 
@@ -7810,8 +7841,8 @@ function (_Model) {
       return _this.status == 'starting';
     }, _this.notStarted = function () {
       return _this.status == null;
-    }, _this.startingRound = function () {
-      return _this.status == 'STARTING_ROUND';
+    }, _this.isCanvasEmpty = function () {
+      return _this.drawing.items.length > 0;
     }, _temp));
   }
 
@@ -8092,14 +8123,22 @@ function (_Model) {
       return _this.drawn_by && _this.drawn_by == player.id;
     }, _this.isPlayerChoosingWord = function () {
       return _this.localStatus == 'PLAYER_CHOOSING_WORD';
+    }, _this.isPlayerChoosedWord = function () {
+      return _this.localStatus == 'PLAYER_CHOOSED_WORD';
     }, _this.chosedWordToArrayOfLetters = function () {
       return _toConsumableArray(_this.chosed_word.word);
     }, _this.chosedWordExists = function () {
       return _this.chosed_word && _typeof(_this.chosed_word) === 'object';
+    }, _this.starting = function () {
+      return _this.localStatus == 'ROUND_STARTING';
+    }, _this.inProgress = function () {
+      return _this.localStatus == 'ROUND_IN_PROGRESS';
+    }, _this.finished = function () {
+      return _this.localStatus == 'ROUND_FINISHED';
     }, _this.getFormattedTimer = function () {
       return _this.timer;
     }, _this.nearEnd = function () {
-      return _this.started && !_this.finished && _this.diffInSeconds <= 15;
+      return _this.inProgress() && !_this.finished() && _this.seconds <= 5;
     }, _temp));
   }
 

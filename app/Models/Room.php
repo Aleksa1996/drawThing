@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $active
  * @property integer $number_of_games
  *
- * @property integer $current_game
  * @property integer $created_by
  * @property integer $administered_by
  *
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     // options
-    protected $fillable = ['uuid', 'active', 'number_of_games', 'current_game', 'created_by', 'administered_by'];
+    protected $fillable = ['uuid', 'active', 'number_of_games', 'created_by', 'administered_by'];
 
     // relationships
     public function players()
@@ -125,7 +124,13 @@ class Room extends Model
         if (!is_array($except)) {
             $except = [$except];
         }
-        return $this->players()->active()->whereNotIn('players.id', $except)->doesntHave('rounds')->inRandomOrder()->take(1)->first();
+        $currentGame = $this->currentGame();
+        // player koji nije igrao u rundama trenutnog game-a
+        return $this->players()->active()
+            ->whereNotIn('players.id', $except)
+            ->whereDoesntHave('rounds', function ($query) use ($currentGame) {
+                if (!empty($currentGame)) $query->where('game_id', $currentGame->id);
+            })->inRandomOrder()->take(1)->first();
     }
 
     /**
@@ -139,7 +144,7 @@ class Room extends Model
     }
 
     /**
-     * Get number of games that was played in room
+     * Get number of games that were played in room
      *
      * @return int
      */
@@ -172,12 +177,28 @@ class Room extends Model
         return $this->games()->active()->latest()->take(1)->first();
     }
 
+    /**
+     * Is player drawing in current round
+     *
+     * @param Player $player
+     * @return boolean
+     */
     public function isPlayerDrawing(Player $player)
     {
         if (!($game = $this->currentGame())) return false;
         if (!($round = $game->currentRound())) return false;
 
         return $round->drawn_by == $player->id;
+    }
+
+    /**
+     * Checks if we can start new game in room
+     *
+     * @return boolean
+     */
+    public function isThereNextGame()
+    {
+        return $this->number_of_games > $this->getGamesCount();
     }
 
     // scopes

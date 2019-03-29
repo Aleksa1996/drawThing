@@ -5,5 +5,5 @@ export default class Game extends Model {
 	starting = () => this.status == 'starting';
 	notStarted = () => this.status == null;
 
-	startingRound = () => this.status == 'STARTING_ROUND';
+	isCanvasEmpty = () => this.drawing.items.length > 0;
 }

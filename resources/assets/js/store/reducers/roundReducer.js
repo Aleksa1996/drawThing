@@ -7,7 +7,8 @@ import {
 	TICK_ROUND,
 	CHOOSE_WORD,
 	FINISHING_ROUND,
-	CLEAR_ROUND_DATA
+	CLEAR_ROUND_DATA,
+	FINISHING_GAME
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -16,6 +17,7 @@ const initialState = {
 	id: null,
 	number: null,
 	timer: '00:00',
+	seconds: null,
 	//
 	status: null,
 	localStatus: null,
@@ -55,7 +57,7 @@ const reducer = (state = initialState, { type, payload }) => {
 			});
 		}
 		case STARTING_ROUND: {
-			return updateRound(state, { ...payload.round, localStatus: 'STARTING_ROUND' });
+			return updateRound(state, { ...payload.round, localStatus: 'ROUND_STARTING' });
 		}
 		case TICK_ROUND: {
 			return updateRound(state, {
@@ -69,6 +71,13 @@ const reducer = (state = initialState, { type, payload }) => {
 				chosed_word: null,
 				words_to_choose: [],
 				localStatus: 'ROUND_FINISHED'
+			});
+		}
+		case FINISHING_GAME: {
+			return updateRound(state, {
+				...payload.round,
+				chosed_word: null,
+				words_to_choose: []
 			});
 		}
 		case CLEAR_ROUND_DATA: {

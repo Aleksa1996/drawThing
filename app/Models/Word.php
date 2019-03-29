@@ -39,6 +39,12 @@ class Word extends Model
     // mutators
 
     // accessors
+
+    /**
+     * Get length of characters in a word
+     *
+     * @return integer
+     */
     public function getClengthAttribute()
     {
         return strlen($this->word);
@@ -51,14 +57,24 @@ class Word extends Model
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function getWordsToChoose()
+    public static function getWordsToChoose(Room $room)
     {
         $words = [];
-        $words[] = self::where('type', 'easy')->inRandomOrder()->take(1)->first();
-        $words[] = self::where('type', 'medium')->inRandomOrder()->take(1)->first();
-        $words[] = self::where('type', 'hard')->inRandomOrder()->take(1)->first();
+        $except = $room->games()->with('rounds.word:id')->get()->pluck('rounds.*.word.id')->flatten()->filter();
+
+        $words[] = self::getWords('easy', $except)->first();
+        $words[] = self::getWords('medium', $except)->first();
+        $words[] = self::getWords('hard', $except)->first();
         return collect($words);
     }
 
     //scopes
+    public function scopeGetWords($query, $type, $except = null)
+    {
+        if (!empty($except)) {
+            $query->whereNotIn('id', $except->toArray());
+        }
+
+        return $query->where('type', $type)->inRandomOrder()->take(1);
+    }
 }

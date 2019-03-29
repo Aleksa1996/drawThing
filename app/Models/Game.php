@@ -8,10 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Game
  *
  * @property integer $id
- * @property integer $number
  * @property integer $number_of_rounds
- *
- * @property integer $current_round
+ * @property string $status
  * @property integer $room_id
  *
  * @property \Carbon\Carbon $created_at
@@ -20,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
     // options
-    protected $fillable = ['number', 'number_of_rounds', 'current_round', 'room_id'];
+    protected $fillable = ['number_of_rounds', 'status', 'room_id'];
 
     // relationships
     public function room()
@@ -45,7 +43,7 @@ class Game extends Model
     // methods
 
     /**
-     * Get number of games that was played in room
+     * Get number of games that were played in room
      *
      * @return int
      */
@@ -65,7 +63,24 @@ class Game extends Model
     }
 
     /**
-     * Creating and starting new round
+     * Creating bare round and associating it with a player
+     *
+     * @param Player $player
+     * @return Round
+     */
+    public function createRound(Player $player)
+    {
+        $round = new Round();
+        $round->number = (int)$this->getRoundsCount() + 1;
+        $round->status = 'starting';
+
+        $round->player()->associate($player);
+
+        return $this->rounds()->save($round);
+    }
+
+    /**
+     * Creating round and associating it with player and word
      *
      * @param Player $player
      * @param Word $word
@@ -76,21 +91,13 @@ class Game extends Model
         $round = new Round();
         $round->number = (int)$this->getRoundsCount() + 1;
         $round->status = 'starting';
-        $round->word_id = $word->id;
-        $round->drawn_by = $player->id;
+
+        $round->player()->associate($player);
+        $round->word()->associate($word);
 
         return $this->rounds()->save($round);
     }
 
-    public function createRound($player)
-    {
-        $round = new Round();
-        $round->number = (int)$this->getRoundsCount() + 1;
-        $round->status = 'starting';
-        $round->drawn_by = $player->id;
-
-        return $this->rounds()->save($round);
-    }
     /**
      * Get current round in game
      *
@@ -108,9 +115,25 @@ class Game extends Model
      */
     public function canContinue()
     {
-        return $this->number_of_rounds < $this->getRoundsCount();
+        return $this->number_of_rounds >= $this->getRoundsCount();
     }
 
+    /**
+     * Starting round (changing status etc...)
+     *
+     * @return boolean
+     */
+    public function start()
+    {
+        $this->status = 'in_progress';
+        return $this->save();
+    }
+
+    /**
+     * Finishing round (changing status etc..)
+     *
+     * @return boolean
+     */
     public function finish()
     {
         $this->status = 'finished';

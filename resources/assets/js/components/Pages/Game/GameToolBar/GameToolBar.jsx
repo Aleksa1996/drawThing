@@ -9,12 +9,16 @@ const GameToolBar = ({ player, round }) => {
 				<div className="row">
 					<div className="col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center">
 						<p className="game-board-rounds m-1">Round: 1 of 3</p>
-						<p
-							className={`game-board-clock m-1 d-block ${round.nearEnd() ? 'bounceAnimation' : ''}`}
-						>
-							<i className="fa fa-clock-o" aria-hidden="true" /> &nbsp;
-							{round.getFormattedTimer()}
-						</p>
+						{!round.inProgress() ? null : (
+							<p
+								className={`game-board-clock m-1 d-block ${
+									round.nearEnd() ? 'bounceAnimation' : ''
+								}`}
+							>
+								<i className="fa fa-clock-o" aria-hidden="true" /> &nbsp;
+								{round.getFormattedTimer()}
+							</p>
+						)}
 					</div>
 					<div className="col-6 col-sm-8 col-md-6 col-lg-6 game-board-guessing-word-container d-flex justify-content-center align-items-center">
 						<div className="">

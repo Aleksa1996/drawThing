@@ -91,14 +91,22 @@ class Game extends Component {
 
 	componentDidUpdate(prevProps) {
 		// chat always scroll on new message to see the latest one
-		const { chat, round } = this.props;
+		const { chat, game, round } = this.props;
 
-		if (chat.messages.length != prevProps.chat.messages.length && chat.messages.length > 0) {
+		const chatModel = new ChatModel(chat);
+		const gameModel = new GameModel(game);
+		const roundModel = new RoundModel(round);
+
+		if (chat.messages.length != prevProps.chat.messages.length && chatModel.hasMessages()) {
 			this.scrollToBottom();
 		}
 
-		if (prevProps.round.drawn_by != round.drawn_by) {
+		if (prevProps.round.drawn_by != round.drawn_by || prevProps.game.id != game.id) {
 			this.updateDrawingUI();
+		}
+
+		if (roundModel.finished() && gameModel.isCanvasEmpty()) {
+			this.props.sketchClear();
 		}
 	}
 
@@ -141,6 +149,8 @@ class Game extends Component {
 				animate: !isPlayerDrawing
 			}
 		}));
+
+		this.props.sketchClear();
 	};
 
 	onCompleteDrawing = item => this.props.sketchDraw(item);

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property integer $id
  * @property integer $number
+ * @property string $status
 
  * @property integer $game_id
  * @property integer $word_id
@@ -17,12 +18,15 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ *
+ * @property \Carbon\Carbon $finishing_at
+ * @property \Carbon\Carbon $started_at
  */
 class Round extends Model
 {
 
     // options
-    protected $fillable = ['number', 'game_id', 'word_id', 'drawn_by'];
+    protected $fillable = ['number', 'status', 'game_id', 'word_id', 'drawn_by'];
 
     protected $dates = ['finishing_at', 'started_at'];
 
@@ -48,45 +52,95 @@ class Round extends Model
 
     // methods
 
+    /**
+     * Get ATOM format for started_at column
+     *
+     * @return string
+     */
     public function startedAtAtomFormat()
     {
         return empty($this->started_at) ? null : $this->started_at->toAtomString();
     }
 
+    /**
+     * Get ATOM format for finishing_at column
+     *
+     * @return string
+     */
     public function finishingAtAtomFormat()
     {
         return empty($this->finishing_at) ? null : $this->finishing_at->toAtomString();
     }
 
+    /**
+     * Difference in seconds between starting and finishing time
+     *
+     * @return int|null
+     */
     public function diffBetweenStartingAndFinishingInSec()
     {
         return empty($this->started_at) ? null : $this->started_at->diffInSeconds($this->finishing_at);
     }
 
+    /**
+     * Format difference in minute between starting and finishing time
+     *
+     * @return string
+     */
     public function timer()
     {
         return empty($this->started_at) ? null : $this->started_at->diffAsCarbonInterval($this->finishing_at)->format('%I:%S');
     }
 
+    /**
+     * Substracts second from finishing_at
+     *
+     * @return \Carbon\Carbon
+     */
     public function tick()
     {
         return $this->finishing_at = $this->finishing_at->subSecond();
     }
 
-    public function start()
+    /**
+     * Starting round (changing status, associating with word etc...)
+     *
+     * @param Word $word
+     * @return void
+     */
+    public function start(Word $word)
     {
+        $this->status = 'in_progress';
         $this->started_at = Carbon::now();
-        $this->finishing_at = $this->started_at->copy()->addMinute(1)->addSecond();
+        //TODO: VRATI NA MINUT POSLE TESTIRANJA
+        // $this->finishing_at = $this->started_at->copy()->addMinute(1)->addSecond();
+        $this->finishing_at = $this->started_at->copy()->addSecond(15);
+        $this->word()->associate($word);
         return $this->save();
     }
 
+    /**
+     * Is round finished
+     *
+     * @return boolean
+     */
     public function finished()
     {
         return $this->diffBetweenStartingAndFinishingInSec() == 0;
     }
 
-    // scopes
+    /**
+     * Finishing round (changing status etc...)
+     *
+     * @return boolean
+     */
+    public function finish()
+    {
+        $this->status = 'finished';
+        return $this->save();
+    }
 
+    // scopes
     public function scopeActive($query)
     {
         return $query->whereIn('status', ['starting', 'in_progress']);

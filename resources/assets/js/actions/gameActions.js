@@ -9,12 +9,14 @@ import {
 	STARTING_GAME_REQUEST_SUCCESS,
 	STARTING_GAME_REQUEST_FAILURE,
 	//
+	FINISHING_GAME,
+	//
 	CLEAR_GAME_DATA
 } from './types';
 
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
-const globalEvents = [RECEIVE_DRAWING_GAME];
+const globalEvents = [RECEIVE_DRAWING_GAME, FINISHING_GAME];
 
 export const subscribeToGameGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
 	globalEvents.forEach(e => dispatch(ws_subscribe('game', e)));
