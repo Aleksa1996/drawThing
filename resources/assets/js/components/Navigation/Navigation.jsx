@@ -1,40 +1,42 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { routes } from '../../Router';
 
 import { debounce as _debounce } from 'lodash';
 
 class Navigation extends Component {
 	state = {
-		scrollTop: 0
+		pageYOffset: 0,
+		scrolled: false
 	};
 
 	componentDidMount() {
-		window.addEventListener('scroll', _debounce(this.handleScroll, 70));
+		window.addEventListener('scroll', _debounce(this.onScroll, 90));
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('scroll', this.handleScroll);
+		window.removeEventListener('scroll', this.onScroll);
 	}
 
-	handleScroll = ev => {
-		if (this.props.location.pathname == '/') {
-			this.setState({ scrollTop: window.pageYOffset });
-		}
+	onScroll = ev => {
+		this.setState(prevState => ({
+			scrolled: prevState.pageYOffset < window.pageYOffset,
+			pageYOffset: window.pageYOffset
+		}));
 	};
 
 	render() {
-		let isHomePage = this.props.location.pathname == '/';
-		let isGamePage = this.props.location.pathname == '/game';
-		let isPlayPage = this.props.location.pathname == '/play';
+		const { location } = this.props;
+		const disappearOnPage = ['/game', '/play'];
 
-		let isScrolled = this.state.scrollTop >= 20;
-
-		if (isGamePage || isPlayPage) return null;
+		if (disappearOnPage.includes(location.pathname)) {
+			return null;
+		}
 
 		return (
 			<nav
-				className={`main-nav navbar navbar-expand-lg fixed-top ${
-					isHomePage ? (isScrolled ? 'main-nav-scrolled' : '') : 'main-nav-scrolled'
+				className={`main-nav navbar navbar-expand-lg fixed-top shadow ${
+					this.state.scrolled ? 'main-nav-scrolled' : ''
 				}`}
 			>
 				<Link to="/" className="navbar-brand text-uppercase my-3">
@@ -55,33 +57,16 @@ class Navigation extends Component {
 				</button>
 				<div className="navbar-collapse collapse" id="mainnavbarToggler">
 					<ul className="navbar-nav ml-auto">
-						<li className="nav-item active mx-2">
-							<Link to="/" className="nav-link">
-								Home <span className="sr-only">(current)</span>
-							</Link>
-						</li>
-						<li className="nav-item mx-2">
-							<Link to="/about" className="nav-link">
-								About
-							</Link>
-						</li>
-						<li className="nav-item mx-2">
-							<Link to="/contact" className="nav-link">
-								Contact
-							</Link>
-						</li>
-						<li className="nav-item mx-2">
-							<Link to="/play" className="nav-link">
-								Play now !
-							</Link>
-						</li>
+						{routes
+							.filter(r => r.mainNav.show)
+							.map(r => (
+								<li key={r.id} className="nav-item active mx-2">
+									<NavLink activeClassName="nav-link-active" exact to={r.link} className="nav-link">
+										{r.mainNav.text}
+									</NavLink>
+								</li>
+							))}
 					</ul>
-					{/* <form className="form-inline mt-2 mt-md-0">
-					<input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />>
-					<button className="btn btn-outline-success my-2 my-sm-0" type="submit">
-						Search
-					</button>
-				</form> */}
 				</div>
 			</nav>
 		);

@@ -12,23 +12,23 @@ class About extends Component {
 				items: [
 					{
 						heading: `Laravel`,
-						description: `Main component that connects other components, handles whole game (routing, authentication, restfull API...).
-						I chose him because he is much simpler than the other frameworks, code is very intuitive and there is nothing that you can't do with him.`,
+						description: `Main component that connects other components, handles the whole game (routing, authentication, restfull API...).
+						I chose this framework because it is much simpler than the others, do complex things without pain, written code is very intuitive.`,
 						img: `/img/laravel.png`,
 						link: 'https://laravel.com/'
 					},
 					{
 						heading: `Swoole`,
 						description: `Provides HTTP and WebSocket Server. Responds to requests from outside with help of NGINX's reverse proxy.
-						Powers up Laravel (giving him huge speed) by keeping his bootstrap in memory,
+						Powers up Laravel (giving him huge speed) by keeping bootstrap files in memory,
 						giving PHP possibility to do tasks asynchronously.`,
 						img: `/img/swoole.png`,
 						link: 'https://www.swoole.co.uk/'
 					},
 					{
 						heading: `Node.js`,
-						description: `Primarily used for server side rendering. To render HTML from React.js app, so we can solve
-						SEO problem by not providing blank page, also i used it alot in dev environment.`,
+						description: `Primarily used for server side rendering (SSR). Render HTML from React.js app, so we can solve
+						SEO problem by not providing blank page, also used in dev environment.`,
 						img: `/img/nodejs.png`,
 						link: 'https://nodejs.org/'
 					}
@@ -39,16 +39,16 @@ class About extends Component {
 				items: [
 					{
 						heading: `React.js`,
-						description: `This project was imagined to be Single Page Application (SPA) and that wouldn't be possible without React.
-						All HTML elements, all forms, the whole game ui that you see here is rendered by React`,
+						description: `This project was imagined to be Single Page Application (SPA) and that wouldn't be possible without React.js
+						All HTML elements, all forms, the whole game UI that you see here is rendered by React.js.`,
 						img: `/img/react.png`,
 						link: 'https://reactjs.org/'
 					},
 					{
 						heading: `Redux.js`,
 						description: `Used in combination with React. manages application state.
-						Thanks to redux i have access to data in any React component without (passing props) pain
-						the pattern that it provides is really awesome, it gives you ability to separate your code logic from view.`,
+						Thanks to redux i have access to data in any React component without (passing props) pain.
+						Gives you ability to separate your code logic from view.`,
 						img: `/img/redux.png`,
 						link: 'https://redux.js.org/'
 					}
@@ -79,25 +79,31 @@ class About extends Component {
 				<div className="page-padding">
 					<div className="impact">
 						<div className="impact-inner">
-							<h1 className="page-about-heading">About project</h1>
-							<p className="page-about-description">
-								The main concept and idea of this project is learning and discovering the ways in which new and modern web
-								technologies work, the way that they cooperate with each other in order to breathe life into today's modern web
-								applications. The main focus in this application is real-time communication between server and clients provided by
-								WebSockets. In the process of creating this web application I have tried to explore all the possibilities and
-								benefits that WebSockets offer. WebSockets are interesting and popular on the web today, also they are relatively
-								new to me and that's the reasons why I chose this kind of project. Large number of guides that I've run into led
-								me to Node.js, but I wanted to do it in PHP, and then I met Swoole (PHP framework). It supports WebSockets along
-								with a bunch of other stuff. Been playing with it for three days, and all I can say is that it's really amazing. I
-								want to point out that these technologies are not randomly selected. Each of them has its own purpose, and task to
-								do (problem to solve). Below you can read more about what they do in this application.
+							<h1 className="page-about-heading">About Drawthing</h1>
+							<p className="page-about-description special-text">
+								The main concept and idea of this project is learning and discovering the ways in
+								which new and modern web technologies work, the way that they cooperate with each
+								other in order to breathe life into today's modern web applications. The main focus
+								in this application is real-time communication between server and clients provided
+								by WebSockets. In the process of creating this web application I have tried to
+								explore all the possibilities and benefits that WebSockets offer. WebSockets are
+								interesting and popular on the web today, also they are relatively new to me and
+								that's the reasons why I chose this kind of project. Large number of guides that
+								I've run into led me to Node.js, but I wanted to do it in PHP, and then I met Swoole
+								(PHP framework). It supports WebSockets along with a bunch of other stuff. Been
+								playing with it for three days, and all I can say is that it's really amazing. I
+								want to point out that these technologies are not randomly selected. Each of them
+								has its own purpose, and task to do (problem to solve). Below you can read more
+								about what they do in this application.
 							</p>
 						</div>
 					</div>
 				</div>
 
 				<div className="container page-about-tech">
-					<h2 className="page-about-tech-heading">Technologies that made this project possible:</h2>
+					<h2 className="page-about-tech-heading">
+						Technologies that made Drawthing project possible:
+					</h2>
 
 					{this.state.technologies.map(t => (
 						<div className="page-about-tech-row" key={v4()}>

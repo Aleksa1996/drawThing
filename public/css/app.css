@@ -125,6 +125,22 @@
   }
 }
 
+.spinner-icon {
+  display: inline-block;
+  color: #ced4da;
+  -webkit-animation-name: spinnerAnimation;
+          animation-name: spinnerAnimation;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
+          animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+  text-align: left;
+}
+
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -10744,7 +10760,6 @@ button.bg-dark:focus {
 }
 
 .shadow,
-.main-nav-scrolled,
 .impact .impact-inner {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
@@ -12856,22 +12871,6 @@ body {
   box-shadow: none;
 }
 
-.spinner-icon {
-  display: inline-block;
-  color: #ced4da;
-  -webkit-animation-name: spinnerAnimation;
-          animation-name: spinnerAnimation;
-  -webkit-animation-duration: 3s;
-          animation-duration: 3s;
-  -webkit-animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
-          animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
-  text-align: left;
-}
-
 input[type=button]:disabled,
 input[type=submit]:disabled,
 input[type=reset]:disabled,
@@ -12884,6 +12883,11 @@ select[disabled] > option {
   border-color: #ced4da !important;
   color: #ced4da !important;
   pointer-events: none;
+}
+
+.special-text {
+  word-spacing: 1.1px;
+  letter-spacing: 0.6px;
 }
 
 .input-material-wrapper {
@@ -12930,14 +12934,22 @@ select[disabled] > option {
 .main-nav {
   font-size: 1.2rem;
   height: 65px;
+  background: rgba(255, 255, 255, 0.95);
+  transition: 0.2s all cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .main-nav .navbar-brand {
-  color: #fff;
+  color: #25313d;
 }
 
 .main-nav .nav-item {
   position: relative;
+}
+
+.main-nav .nav-item .nav-link-active:before {
+  opacity: 1 !important;
+  transition: all 0.3s;
+  width: 100% !important;
 }
 
 .main-nav .nav-item:hover .nav-link:before {
@@ -12947,7 +12959,7 @@ select[disabled] > option {
 }
 
 .main-nav .nav-item .nav-link {
-  color: #fff;
+  color: #25313d;
 }
 
 .main-nav .nav-item .nav-link::before {
@@ -12958,46 +12970,15 @@ select[disabled] > option {
           transform: translateX(-50%);
   width: 100%;
   height: 4px;
-  background: #fff;
+  background: #37ca8a;
   content: "";
   opacity: 0;
   width: 10%;
 }
 
 .main-nav-scrolled {
-  opacity: 0;
-  -webkit-animation: nav-slide 0.2s ease-in-out 0.4s forwards;
-          animation: nav-slide 0.2s ease-in-out 0.4s forwards;
-}
-
-.main-nav-scrolled .navbar-brand {
-  color: #25313d !important;
-}
-
-.main-nav-scrolled .navbar-brand:hover {
-  color: #37ca8a !important;
-}
-
-.main-nav-scrolled .nav-link {
-  color: #25313d !important;
-}
-
-.main-nav-scrolled .nav-link::before {
-  background: #37ca8a !important;
-}
-
-@-webkit-keyframes nav-slide {
-  100% {
-    opacity: 1;
-    background: #fff;
-  }
-}
-
-@keyframes nav-slide {
-  100% {
-    opacity: 1;
-    background: #fff;
-  }
+  -webkit-transform: translate3d(0px, -80px, 0px);
+          transform: translate3d(0px, -80px, 0px);
 }
 
 .main-footer {
@@ -13031,6 +13012,11 @@ select[disabled] > option {
 }
 
 .main-footer .main-footer-icons li a:hover {
+  color: #37ca8a;
+}
+
+.page-home h1,
+.page-home h2 {
   color: #37ca8a;
 }
 
@@ -13075,6 +13061,7 @@ select[disabled] > option {
 .page-home .page-home-rules {
   position: relative;
   background: #fff;
+  margin-top: 90px;
 }
 
 .page-home .page-home-rules .page-home-rules-map {
@@ -13133,6 +13120,17 @@ select[disabled] > option {
   right: -18px;
 }
 
+.page-home .page-home-rules .page-home-rules-item-container .page-home-playnow-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page-home .page-home-rules .page-home-rules-item-container .page-home-playnow-container .page-home-main-txt {
+  max-width: 800px;
+}
+
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-text {
   display: flex;
   align-items: center;
@@ -13141,7 +13139,7 @@ select[disabled] > option {
 }
 
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-text p {
-  padding: 40px;
+  padding: 10px 40px 40px 40px;
 }
 
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-image {
@@ -13158,6 +13156,10 @@ select[disabled] > option {
 .page-home .page-home-rules .page-home-rules-item-container .page-home-rules-item-image img:hover {
   -webkit-transform: translateZ(2px);
           transform: translateZ(2px);
+}
+
+.page-home .page-home-max-width-800 {
+  max-width: 800px;
 }
 
 @-webkit-keyframes rules-button-animation {
@@ -13266,7 +13268,7 @@ select[disabled] > option {
 .page-about .page-about-tech .page-about-tech-row .page-about-tech-card-wrapper-link .page-about-tech-card {
   padding: 25px;
   position: relative;
-  height: 215px;
+  height: 230px;
   box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -14022,21 +14024,29 @@ select[disabled] > option {
 }
 
 .page-start-game .game-start-container .game-start-rules-container {
-  background: #25313d;
-  color: #fff;
+  background: #fff;
+  color: #25313d;
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-  right: 7%;
+  right: 0%;
   width: 55%;
-  height: 740px;
-  padding: 20px 30px 0px 14%;
+  height: 100%;
+  padding: 10px 5% 0px 9%;
   z-index: 1;
 }
 
 .page-start-game .game-start-container .game-start-rules-container .game-start-rules-heading {
   text-align: center;
+  color: #37ca8a;
+}
+
+.page-start-game .game-start-container .game-start-rules-container > div {
+  max-height: 762px;
+}
+
+.page-start-game .game-start-container .game-start-rules-container .game-start-rules-list h4 {
   color: #37ca8a;
 }
 
