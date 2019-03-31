@@ -12,6 +12,12 @@ class Contact extends Component {
 		console.log(values);
 	};
 
+	handleMailTo = e => {
+		e.preventDefault();
+		window.location.href =
+			'mailto:&#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;?Subject=Hello';
+	};
+
 	render() {
 		return (
 			<Page title="Contact me - Drawthing" className="page-contact">
@@ -35,11 +41,7 @@ class Contact extends Component {
 								<div className="page-contact-icons">
 									<ul>
 										<li>
-											<a
-												target="_blank"
-												href="mailto:aleksa.j.1996@gmail.com?Subject=Hello"
-												className="mybtn1"
-											>
+											<a href="javascript:void(0)" onClick={this.handleMailTo} className="mybtn1">
 												<i className="fa fa-envelope-o" aria-hidden="true" />
 											</a>
 										</li>

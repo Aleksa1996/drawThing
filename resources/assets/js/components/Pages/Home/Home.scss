@@ -1,4 +1,8 @@
 .page-home {
+	h1,
+	h2 {
+		color: $mytheme-color-first;
+	}
 	.page-home-banner {
 		background-image: url('/img/_background.jpg');
 		background-repeat: no-repeat;
@@ -32,6 +36,7 @@
 	.page-home-rules {
 		position: relative;
 		background: #fff;
+		margin-top: 90px;
 		.page-home-rules-map {
 			position: absolute;
 			height: 100%;
@@ -79,13 +84,22 @@
 		}
 
 		.page-home-rules-item-container {
+			.page-home-playnow-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				.page-home-main-txt {
+					max-width: 800px;
+				}
+			}
 			.page-home-rules-item-text {
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
 				p {
-					padding: 40px;
+					padding: 10px 40px 40px 40px;
 				}
 			}
 			.page-home-rules-item-image {
@@ -101,6 +115,9 @@
 				}
 			}
 		}
+	}
+	.page-home-max-width-800 {
+		max-width: 800px;
 	}
 }
 

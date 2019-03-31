@@ -79207,33 +79207,63 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [{
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/',
+  link: '/',
   component: _components_Pages_Home_Home__WEBPACK_IMPORTED_MODULE_4__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: true,
+    text: 'Home'
+  }
 }, {
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/about',
+  link: '/about',
   component: _components_Pages_About_About__WEBPACK_IMPORTED_MODULE_5__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: true,
+    text: 'About'
+  }
 }, {
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/contact',
+  link: '/contact',
   component: _components_Pages_Contact_Contact__WEBPACK_IMPORTED_MODULE_6__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: true,
+    text: 'Contact'
+  }
 }, {
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/game',
+  link: '/game',
   component: _components_Pages_Game_Game__WEBPACK_IMPORTED_MODULE_7__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: false,
+    text: ''
+  }
 }, {
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/play/:roomUUID?',
+  link: '/play',
   component: _components_Pages_Play_Play__WEBPACK_IMPORTED_MODULE_8__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: true,
+    text: 'Play now!'
+  }
 }, {
   id: Object(uuid__WEBPACK_IMPORTED_MODULE_3__["v4"])(),
   path: '/room',
+  link: '/room',
   component: _components_Pages_Room_Room__WEBPACK_IMPORTED_MODULE_9__["default"],
-  exact: true
+  exact: true,
+  mainNav: {
+    show: false,
+    text: ''
+  }
 }];
 
 var Router = function Router(props) {
@@ -81400,12 +81430,7 @@ function (_Component) {
         scrollTop: this.state.scrollTop
       }, this.props)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "main-container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_4__["TransitionGroup"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_4__["CSSTransition"], {
-        key: currentKey,
-        classNames: "fade",
-        timeout: timeout,
-        appear: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Router__WEBPACK_IMPORTED_MODULE_3__["default"], this.props)))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Modal_ModalRoot__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Countdown_Countdown__WEBPACK_IMPORTED_MODULE_6__["default"], null));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Router__WEBPACK_IMPORTED_MODULE_3__["default"], this.props)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Footer_Footer__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Modal_ModalRoot__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Countdown_Countdown__WEBPACK_IMPORTED_MODULE_6__["default"], null));
     }
   }]);
 
@@ -81428,8 +81453,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Router */ "./resources/assets/js/Router.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -81452,6 +81478,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Navigation =
 /*#__PURE__*/
 function (_Component) {
@@ -81469,36 +81496,40 @@ function (_Component) {
     }
 
     return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Navigation)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
-      scrollTop: 0
-    }, _this.handleScroll = function (ev) {
-      if (_this.props.location.pathname == '/') {
-        _this.setState({
-          scrollTop: window.pageYOffset
-        });
-      }
+      pageYOffset: 0,
+      scrolled: false
+    }, _this.onScroll = function (ev) {
+      _this.setState(function (prevState) {
+        return {
+          scrolled: prevState.pageYOffset < window.pageYOffset,
+          pageYOffset: window.pageYOffset
+        };
+      });
     }, _temp));
   }
 
   _createClass(Navigation, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      window.addEventListener('scroll', Object(lodash__WEBPACK_IMPORTED_MODULE_2__["debounce"])(this.handleScroll, 70));
+      window.addEventListener('scroll', Object(lodash__WEBPACK_IMPORTED_MODULE_3__["debounce"])(this.onScroll, 90));
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('scroll', this.onScroll);
     }
   }, {
     key: "render",
     value: function render() {
-      var isHomePage = this.props.location.pathname == '/';
-      var isGamePage = this.props.location.pathname == '/game';
-      var isPlayPage = this.props.location.pathname == '/play';
-      var isScrolled = this.state.scrollTop >= 20;
-      if (isGamePage || isPlayPage) return null;
+      var location = this.props.location;
+      var disappearOnPage = ['/game', '/play'];
+
+      if (disappearOnPage.includes(location.pathname)) {
+        return null;
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
-        className: "main-nav navbar navbar-expand-lg fixed-top ".concat(isHomePage ? isScrolled ? 'main-nav-scrolled' : '' : 'main-nav-scrolled')
+        className: "main-nav navbar navbar-expand-lg fixed-top shadow ".concat(this.state.scrolled ? 'main-nav-scrolled' : '')
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/",
         className: "navbar-brand text-uppercase my-3"
@@ -81520,29 +81551,19 @@ function (_Component) {
         id: "mainnavbarToggler"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
         className: "navbar-nav ml-auto"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "nav-item active mx-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/",
-        className: "nav-link"
-      }, "Home ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "sr-only"
-      }, "(current)"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "nav-item mx-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/about",
-        className: "nav-link"
-      }, "About")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "nav-item mx-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/contact",
-        className: "nav-link"
-      }, "Contact")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-        className: "nav-item mx-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/play",
-        className: "nav-link"
-      }, "Play now !")))));
+      }, _Router__WEBPACK_IMPORTED_MODULE_2__["routes"].filter(function (r) {
+        return r.mainNav.show;
+      }).map(function (r) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          key: r.id,
+          className: "nav-item active mx-2"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["NavLink"], {
+          activeClassName: "nav-link-active",
+          exact: true,
+          to: r.link,
+          className: "nav-link"
+        }, r.mainNav.text));
+      }))));
     }
   }]);
 
@@ -81612,17 +81633,17 @@ function (_Component) {
         type: 'Backend',
         items: [{
           heading: "Laravel",
-          description: "Main component that connects other components, handles whole game (routing, authentication, restfull API...).\n\t\t\t\t\t\tI chose him because he is much simpler than the other frameworks, code is very intuitive and there is nothing that you can't do with him.",
+          description: "Main component that connects other components, handles the whole game (routing, authentication, restfull API...).\n\t\t\t\t\t\tI chose this framework because it is much simpler than the others, do complex things without pain, written code is very intuitive.",
           img: "/img/laravel.png",
           link: 'https://laravel.com/'
         }, {
           heading: "Swoole",
-          description: "Provides HTTP and WebSocket Server. Responds to requests from outside with help of NGINX's reverse proxy.\n\t\t\t\t\t\tPowers up Laravel (giving him huge speed) by keeping his bootstrap in memory,\n\t\t\t\t\t\tgiving PHP possibility to do tasks asynchronously.",
+          description: "Provides HTTP and WebSocket Server. Responds to requests from outside with help of NGINX's reverse proxy.\n\t\t\t\t\t\tPowers up Laravel (giving him huge speed) by keeping bootstrap files in memory,\n\t\t\t\t\t\tgiving PHP possibility to do tasks asynchronously.",
           img: "/img/swoole.png",
           link: 'https://www.swoole.co.uk/'
         }, {
           heading: "Node.js",
-          description: "Primarily used for server side rendering. To render HTML from React.js app, so we can solve\n\t\t\t\t\t\tSEO problem by not providing blank page, also i used it alot in dev environment.",
+          description: "Primarily used for server side rendering (SSR). Render HTML from React.js app, so we can solve\n\t\t\t\t\t\tSEO problem by not providing blank page, also used in dev environment.",
           img: "/img/nodejs.png",
           link: 'https://nodejs.org/'
         }]
@@ -81630,12 +81651,12 @@ function (_Component) {
         type: 'Frontend',
         items: [{
           heading: "React.js",
-          description: "This project was imagined to be Single Page Application (SPA) and that wouldn't be possible without React.\n\t\t\t\t\t\tAll HTML elements, all forms, the whole game ui that you see here is rendered by React",
+          description: "This project was imagined to be Single Page Application (SPA) and that wouldn't be possible without React.js\n\t\t\t\t\t\tAll HTML elements, all forms, the whole game UI that you see here is rendered by React.js.",
           img: "/img/react.png",
           link: 'https://reactjs.org/'
         }, {
           heading: "Redux.js",
-          description: "Used in combination with React. manages application state.\n\t\t\t\t\t\tThanks to redux i have access to data in any React component without (passing props) pain\n\t\t\t\t\t\tthe pattern that it provides is really awesome, it gives you ability to separate your code logic from view.",
+          description: "Used in combination with React. manages application state.\n\t\t\t\t\t\tThanks to redux i have access to data in any React component without (passing props) pain.\n\t\t\t\t\t\tGives you ability to separate your code logic from view.",
           img: "/img/redux.png",
           link: 'https://redux.js.org/'
         }]
@@ -81670,13 +81691,13 @@ function (_Component) {
         className: "impact-inner"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         className: "page-about-heading"
-      }, "About project"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        className: "page-about-description"
+      }, "About Drawthing"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-about-description special-text"
       }, "The main concept and idea of this project is learning and discovering the ways in which new and modern web technologies work, the way that they cooperate with each other in order to breathe life into today's modern web applications. The main focus in this application is real-time communication between server and clients provided by WebSockets. In the process of creating this web application I have tried to explore all the possibilities and benefits that WebSockets offer. WebSockets are interesting and popular on the web today, also they are relatively new to me and that's the reasons why I chose this kind of project. Large number of guides that I've run into led me to Node.js, but I wanted to do it in PHP, and then I met Swoole (PHP framework). It supports WebSockets along with a bunch of other stuff. Been playing with it for three days, and all I can say is that it's really amazing. I want to point out that these technologies are not randomly selected. Each of them has its own purpose, and task to do (problem to solve). Below you can read more about what they do in this application.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container page-about-tech"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
         className: "page-about-tech-heading"
-      }, "Technologies that made this project possible:"), this.state.technologies.map(function (t) {
+      }, "Technologies that made Drawthing project possible:"), this.state.technologies.map(function (t) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "page-about-tech-row",
           key: Object(uuid__WEBPACK_IMPORTED_MODULE_1__["v4"])()
@@ -81728,7 +81749,7 @@ var TechCard = function TechCard(_ref) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
     className: "page-about-tech-card-heading"
   }, heading), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "page-about-tech-card-description"
+    className: "page-about-tech-card-description special-text"
   }, description), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     src: img,
     className: "img-fluid page-about-tech-card-image"
@@ -81794,6 +81815,9 @@ function (_Component) {
 
     return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Contact)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _this.handleSubmitContactForm = function (values) {
       console.log(values);
+    }, _this.handleMailTo = function (e) {
+      e.preventDefault();
+      window.location.href = 'mailto:&#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;?Subject=Hello';
     }, _temp));
   }
 
@@ -81823,8 +81847,8 @@ function (_Component) {
       }, "Aleksa Jovanovic")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "page-contact-icons"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        target: "_blank",
-        href: "mailto:aleksa.j.1996@gmail.com?Subject=Hello",
+        href: "javascript:void(0)",
+        onClick: this.handleMailTo,
         className: "mybtn1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-envelope-o",
@@ -83681,72 +83705,72 @@ function (_Component) {
         title: "Home - Drawthing",
         className: "page-home"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "page-home-banner text-center"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "page-padding"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-        to: "/play",
-        className: "mybtn1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-play mr-2",
-        "aria-hidden": "true"
-      }), "Play now !"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
-        className: "text-center rules-button"
-      }, "Rules", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-chevron-down",
-        "aria-hidden": "true"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "page-home-rules container-fluid"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "page-home-rules-map"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row page-home-rules-item-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 page-home-rules-item-text"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Some heading 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure esse, beatae et animi error itaque atque deserunt? Esse qui harum laudantium fugiat. Perferendis, at obcaecati voluptates eius aliquam necessitatibus autem!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "page-home-rules-pulse page-home-rules-pulse-right rounded-circle"
+        className: "col-md-12 page-home-playnow-container text-center bg-white"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "page-home-main-txt mb-2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Drawthing"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "special-text"
+      }, "Join players from around the world in this weird and wild online game. Can you figure out the secret word or phrase that will be drawn during each round? You can join in the fun by drawing one too.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: "/game",
+        className: "mybtn2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-question",
+        className: "fa fa-play mr-2",
         "aria-hidden": "true"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 page-home-rules-item-image"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "/img/placeholder.png",
-        className: "img-fluid shadow"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 page-home-rules-item-image"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: "/img/placeholder.png",
-        className: "img-fluid shadow"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), "Play now!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 page-home-rules-item-text"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Maybe next heading over here!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "page-home-rules-pulse page-home-rules-pulse-left rounded-circle"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-exclamation",
-        "aria-hidden": "true"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-6 page-home-rules-item-text"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "And here is our last heading"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quisquam, iusto modi unde minima asperiores eum nesciunt voluptatem itaque iste sequi voluptates, laborum deleniti maiores inventore laudantium quis tempora esse."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Draw your avatar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-home-max-width-800 special-text"
+      }, "Your first step is to draw your avatar on canvas, personalize your avatar however you wish. Next to avatar canvas, you have field for your username. Just type in your username there, and you are good to go!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "page-home-rules-pulse page-home-rules-pulse-right rounded-circle"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-paint-brush",
         "aria-hidden": "true"
       }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "javascript:void(0)"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "/img/placeholder.png",
         className: "img-fluid shadow"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-12 text-center bg-white"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
-        to: "/game",
-        className: "mybtn2 mb-4"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "javascript:void(0)"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "/img/placeholder.png",
+        className: "img-fluid shadow"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-text"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Create / Join room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-home-max-width-800 special-text"
+      }, "Choose whether you want to create private room, and invite your friends or you want to play in a public room. Note that if you choose to create private room, you will automatically become room admin, so you can control which players may play and which don't."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "page-home-rules-pulse page-home-rules-pulse-left rounded-circle"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-play mr-2",
+        className: "fa fa-users",
         "aria-hidden": "true"
-      }), "Play now !")))));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-text"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Draw / Guess"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "page-home-max-width-800 special-text"
+      }, "Finally, the game starts! After the countdown is over, one random player needs to choose 1 out of 3 words. Game round begins, your concentration to the maximum. You need to guess what others draw or to draw chosen word. For better score you need to do that as fast as possible, or you will loose!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "page-home-rules-pulse page-home-rules-pulse-right rounded-circle"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-play-circle",
+        "aria-hidden": "true"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 page-home-rules-item-image"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "javascript:void(0)"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        src: "/img/placeholder.png",
+        className: "img-fluid shadow"
+      }))))));
     }
   }]);
 
@@ -84354,16 +84378,38 @@ var PlayAvatarForm = function PlayAvatarForm(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 
 
 var PlayRules = function PlayRules(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-start-rules-container"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     className: "game-start-rules-heading"
-  }, "Game Rules"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "game-start-rules-text"
-  }, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 2"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 4"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Rule 5")));
+  }, "Drawthing Info"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "game-start-rules-text special-text"
+  }, "This is a very addictive multiplayer game which is suitable for everyone who loves art. No matter who you are, whether you are good or bad at drawing, you can still enjoy the game and have the fun time."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+    className: "game-start-rules-list"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, " Draw your avatar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "Your first step is to draw your avatar on canvas, personalize your avatar however you wish. Next to avatar canvas, you have field for your username. Just type in your username there, and you are good to go!")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, " Create / Join room"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "Choose whether you want to create private room, and invite your friends or you want to play in a public room. Note that if you choose to create private room, you will automatically become room admin, so you can control which players may play and which don't.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, " Draw / Guess"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "Finally, the game starts! After the countdown is over, one random player needs to choose 1 out of 3 words. Game round begins, your concentration to the maximum. You need to guess what others draw or to draw chosen word. For better score you need to do that as fast as possible, or you will loose!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "Notices:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
+    className: "mb-3 special-text"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "In every game you play number of rounds equal to number of players"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Each round lasts for 60 secs or 1 minute"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "As soon as you guess word you get more points"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Bugs, bugs and bugs... if you see one "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "You can send me a message through out contact form on ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    to: "/contact"
+  }, "this "), "page, or you can contact me directly via", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    dangerouslySetInnerHTML: {
+      __html: '&nbsp;&#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;'
+    }
+  }))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (PlayRules);

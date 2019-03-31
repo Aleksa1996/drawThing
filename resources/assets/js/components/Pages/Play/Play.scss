@@ -144,20 +144,31 @@
 		}
 
 		.game-start-rules-container {
-			background: $mytheme-color-second;
-			color: #fff;
+			background: #fff;
+			color: $mytheme-color-second;
+
 			position: absolute;
 			top: 50%;
 			transform: translateY(-50%);
-			right: 7%;
+			right: 0%;
 			width: 55%;
-			height: 740px;
-			padding: 20px 30px 0px 14%;
+			height: 100%;
+			padding: 40px 5% 0px 9%;
 			z-index: 1;
+			overflow-y: auto;
 
 			.game-start-rules-heading {
 				text-align: center;
 				color: $mytheme-color-first;
+			}
+
+			& > div {
+				max-height: 762px;
+			}
+			.game-start-rules-list {
+				h4 {
+					color: $mytheme-color-first;
+				}
 			}
 		}
 	}

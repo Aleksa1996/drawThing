@@ -43,3 +43,14 @@
 		transform: translate(0, 0);
 	}
 }
+
+.spinner-icon {
+	display: inline-block;
+	color: #ced4da;
+	animation-name: spinnerAnimation;
+	animation-duration: 3s;
+	animation-timing-function: cubic-bezier(0.99, -0.07, 0.67, 1.53);
+	animation-iteration-count: infinite;
+	animation-delay: 0.4s;
+	text-align: left;
+}

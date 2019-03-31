@@ -34,38 +34,68 @@ export const routes = [
 	{
 		id: v4(),
 		path: '/',
+		link: '/',
 		component: Home,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: true,
+			text: 'Home'
+		}
 	},
 	{
 		id: v4(),
 		path: '/about',
+		link: '/about',
 		component: About,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: true,
+			text: 'About'
+		}
 	},
 	{
 		id: v4(),
 		path: '/contact',
+		link: '/contact',
 		component: Contact,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: true,
+			text: 'Contact'
+		}
 	},
 	{
 		id: v4(),
 		path: '/game',
+		link: '/game',
 		component: Game,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: false,
+			text: ''
+		}
 	},
 	{
 		id: v4(),
 		path: '/play/:roomUUID?',
+		link: '/play',
 		component: Play,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: true,
+			text: 'Play now!'
+		}
 	},
 	{
 		id: v4(),
 		path: '/room',
+		link: '/room',
 		component: Room,
-		exact: true
+		exact: true,
+		mainNav: {
+			show: false,
+			text: ''
+		}
 	}
 ];
 
