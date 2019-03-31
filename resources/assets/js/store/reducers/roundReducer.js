@@ -12,6 +12,7 @@ import {
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
+import { get as _get } from 'lodash';
 
 const initialState = {
 	id: null,
@@ -21,18 +22,17 @@ const initialState = {
 	//
 	status: null,
 	localStatus: null,
-	// starting: false,
-	// started: false,
-	// finished: true,
-
-	// diffInSeconds: 0,
+	//
 	started_at: 0,
 	finishing_at: 0,
 	//
 	drawn_by: null,
 	//
 	words_to_choose: [],
-	chosed_word: null
+	chosed_word: null,
+	//
+	guessed_word: null,
+	score: null
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -75,7 +75,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 		case FINISHING_GAME: {
 			return updateRound(state, {
-				...payload.round,
+				..._get(payload, 'round', {}),
 				chosed_word: null,
 				words_to_choose: []
 			});

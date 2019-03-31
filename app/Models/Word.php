@@ -50,6 +50,11 @@ class Word extends Model
         return strlen($this->word);
     }
 
+    public function getWordAttribute($value)
+    {
+        return strtolower($value);
+    }
+
     // methods
 
     /**

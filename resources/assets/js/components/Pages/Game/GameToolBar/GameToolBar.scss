@@ -21,6 +21,9 @@
 					display: inline-block;
 					text-align: center;
 					height: 35px;
+					&.whitespace {
+						border-bottom: none !important;
+					}
 				}
 			}
 			.info-tooltip {

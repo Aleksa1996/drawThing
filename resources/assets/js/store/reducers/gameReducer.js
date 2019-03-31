@@ -18,6 +18,7 @@ import {
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
+import { get as _get } from 'lodash';
 
 const initialState = {
 	starting_game_request: false,
@@ -83,7 +84,7 @@ const reducer = (state = initialState, { type, payload }) => {
 		//
 		case FINISHING_GAME: {
 			return updateGame(state, {
-				...payload.game,
+				..._get(payload, 'game', {}),
 				rounds: payload.rounds,
 				isThereNextGame: payload.isThereNextGame
 			});
