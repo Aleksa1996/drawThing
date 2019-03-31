@@ -33,9 +33,14 @@ class Player extends Model
         return $this->belongsToMany('App\Models\Game');
     }
 
-    public function rounds()
+    public function drawnInRounds()
     {
         return $this->hasMany('App\Models\Round', 'drawn_by');
+    }
+
+    public function rounds()
+    {
+        return $this->belongsToMany('App\Models\Round')->withPivot('id', 'guessed', 'score')->as('score');
     }
 
     // mutators
@@ -93,7 +98,7 @@ class Player extends Model
      */
     public function currentRoom()
     {
-        return $this->rooms()->latest()->take(1)->first();
+        return $this->rooms()->active()->latest()->take(1)->first();
     }
 
     /**
@@ -153,9 +158,30 @@ class Player extends Model
      * @param int $fd
      * @return $this
      */
-    public static function findByFd($fd)
+    public static function findByFd(int $fd)
     {
         return self::active()->where('fd', $fd)->first();
+    }
+
+    public function getScoreForRound(Round $round)
+    {
+        $round_player = $this->rounds()->where('round_id', $round->id)->first();
+
+        if (empty($round)) return [];
+
+        return $round_player;
+    }
+
+    public function hasGuessedWord(Round $round, int $score)
+    {
+        return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'score' => $score]);
+    }
+
+    public function guessedWord(Round $round)
+    {
+        $round_player = $this->rounds()->wherePivot('round_id', $round->id)->first();
+        if (empty($round_player)) return false;
+        return (bool)$round_player->score->guessed;
     }
 
     // scopes

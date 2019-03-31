@@ -13785,6 +13785,10 @@ select[disabled] > option {
   height: 35px;
 }
 
+.game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word .game-board-guessing-word-letter.whitespace {
+  border-bottom: none !important;
+}
+
 .game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .info-tooltip {
   border-radius: 50%;
   padding: 0px 8px;

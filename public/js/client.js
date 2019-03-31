@@ -215,6 +215,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendMessageRoom", function() { return sendMessageRoom; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"], _types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_FAILURE"], _types__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_MESSAGE_ROOM"]];
@@ -255,24 +258,24 @@ var sendMessageRoom = function sendMessageRoom(data) {
     });
 
     if (sockets.game.connection.connected) {
-      var _getState$player = getState().player,
-          id = _getState$player.id,
-          username = _getState$player.username,
-          password = _getState$player.password;
-      var uuid = getState().room.uuid;
+      var player = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["pick"])(getState().player, ['id', 'username', 'password']);
+
+      var room = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["pick"])(getState().room, ['uuid']);
+
+      var game = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["pick"])(getState().game, ['id', 'status']); // const round = _pick(getState().round, ['id', 'status']);
+
+
       var dataMessage = {
         message: {
           text: data.text
         },
-        player: {
-          id: id,
-          username: username,
-          password: password
-        },
-        room: {
-          uuid: uuid
-        }
-      };
+        player: player,
+        room: room,
+        game: game
+      }; // if (game.id && game.status) {
+      // 	dataMessage['game'] = game;
+      // }
+
       dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', 'SEND_MESSAGE_ROOM', dataMessage));
     }
   };
@@ -3310,6 +3313,7 @@ function (_Component) {
         className: "container-fluid page-game"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameLayout__WEBPACK_IMPORTED_MODULE_10__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameToolBar_GameToolBar__WEBPACK_IMPORTED_MODULE_11__["default"], {
         player: playerModel,
+        game: gameModel,
         round: roundModel
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row no-gutters"
@@ -4573,6 +4577,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var GameToolBar = function GameToolBar(_ref) {
   var player = _ref.player,
+      game = _ref.game,
       round = _ref.round;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-toolbar-container container-fluid"
@@ -4582,9 +4587,9 @@ var GameToolBar = function GameToolBar(_ref) {
     className: "row"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "game-board-rounds m-1"
-  }, "Round: 1 of 3"), !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, "Round: ", round.number, " of ", game.number_of_rounds), !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "game-board-clock m-1 d-block ".concat(round.nearEnd() ? 'bounceAnimation' : '')
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-clock-o",
@@ -4598,7 +4603,7 @@ var GameToolBar = function GameToolBar(_ref) {
   }, round.chosedWordExists() ? round.chosedWordToArrayOfLetters().map(function (letter, key) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       key: key,
-      className: "game-board-guessing-word-letter"
+      className: "game-board-guessing-word-letter ".concat(letter.trim() ? '' : 'whitespace')
     }, round.isPlayerDrawing(player) ? letter : ' ');
   }) : round.isPlayerChoosingWord() && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "bounceAnimation d-block"
@@ -6528,6 +6533,7 @@ var reducer = function reducer() {
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]:
       {
         var newMessages = addMessage(state.messages, payload.message);
+        console.log(payload);
         return updateChat(state, {
           sending: false,
           messages: newMessages
@@ -6734,6 +6740,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -6745,6 +6753,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -6857,7 +6866,7 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
       {
-        return updateGame(state, _objectSpread({}, payload.game, {
+        return updateGame(state, _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'game', {}), {
           rounds: payload.rounds,
           isThereNextGame: payload.isThereNextGame
         }));
@@ -7250,9 +7259,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -7264,17 +7276,17 @@ var initialState = {
   //
   status: null,
   localStatus: null,
-  // starting: false,
-  // started: false,
-  // finished: true,
-  // diffInSeconds: 0,
+  //
   started_at: 0,
   finishing_at: 0,
   //
   drawn_by: null,
   //
   words_to_choose: [],
-  chosed_word: null
+  chosed_word: null,
+  //
+  guessed_word: null,
+  score: null
 };
 
 var reducer = function reducer() {
@@ -7338,7 +7350,7 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
       {
-        return updateRound(state, _objectSpread({}, payload.round, {
+        return updateRound(state, _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'round', {}), {
           chosed_word: null,
           words_to_choose: []
         }));

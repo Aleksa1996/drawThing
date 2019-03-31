@@ -125,10 +125,10 @@ class Room extends Model
             $except = [$except];
         }
         $currentGame = $this->currentGame();
-        // player koji nije igrao u rundama trenutnog game-a
+
         return $this->players()->active()
             ->whereNotIn('players.id', $except)
-            ->whereDoesntHave('rounds', function ($query) use ($currentGame) {
+            ->whereDoesntHave('drawnInRounds', function ($query) use ($currentGame) {
                 if (!empty($currentGame)) $query->where('game_id', $currentGame->id);
             })->inRandomOrder()->take(1)->first();
     }
@@ -209,6 +209,6 @@ class Room extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('active', true);
+        return $query->where('rooms.active', true);
     }
 }

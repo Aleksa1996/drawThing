@@ -123,9 +123,7 @@ class WebsocketController extends Controller
             // emit error
             $websocket->emit($event, ['errors' => $errorCollection->values()]);
         } else {
-            var_dump($exception->getMessage());
-            var_dump($exception->getLine());
-            var_dump($exception->getTrace());
+            print_r(['file' => $exception->getFile(), 'message' => $exception->getMessage(), 'line' => $exception->getLine()]);
         }
     }
 

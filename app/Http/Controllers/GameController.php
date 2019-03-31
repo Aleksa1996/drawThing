@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Validator;
+
 use App\Models\Game;
-
 use App\Models\Room;
-
+use App\Models\Round;
 use App\Models\Word;
 use App\Models\Player;
 
@@ -17,12 +17,14 @@ use App\Http\Resources\Room as RoomResource;
 use App\Http\Resources\Game as GameResource;
 use App\Http\Resources\Round as RoundResource;
 use App\Http\Resources\Word as WordResoruce;
+use App\Http\Resources\Score as ScoreResoruce;
 
 
 use Illuminate\Validation\ValidationException;
 use SwooleTW\Http\Websocket\Facades\Websocket;
 use App\Http\Resources\Player as PlayerResource;
 use SwooleTW\Http\Websocket\Facades\Room as WebsocketRoom;
+use App\Custom\Tools;
 
 class GameController extends WebsocketController
 {
@@ -38,7 +40,9 @@ class GameController extends WebsocketController
         try {
             $validator = Validator::make($data, [
                 'room.uuid' => 'required|string|min:1',
-                'message.text' => 'required|string|min:1'
+                'message.text' => 'required|string|min:1',
+                'game.id' => 'present|numeric|nullable',
+                'game.status' => 'present|string|nullable'
             ]);
 
             if ($validator->fails()) {
@@ -47,7 +51,37 @@ class GameController extends WebsocketController
 
             $player = $this->validatePlayer($data);
 
-            // TODO: CHECK MESSAGE WHEN GAME IS IN PROGRESS AND ADD POINTS TO PLAYER IF HE GUESSED
+            $roundData = ['round' => false];
+            if ($data['game']['id'] != null && $data['game']['status'] != null) {
+
+                $room = $player->currentRoom();
+                if (empty($room)) {
+                    throw ValidationException::withMessages([]);
+                }
+
+                $game = $room->currentGame();
+                if (empty($game) && $game->id == $data['game']['id']) {
+                    throw ValidationException::withMessages([]);
+                }
+
+                $round = $game->currentRound();
+                if (empty($round)) {
+                    throw ValidationException::withMessages([]);
+                }
+
+                $guessedFlag = 0;
+                if (!$player->guessedWord($round)) {
+                    $guessedFlag = $round->checkGuessingWord($data['message']['text']);
+                    if ($guessedFlag === Round::GUESSED_WORD) {
+                        $score = $round->word->points_worth;  //TODO: RACUNANJE SKOR-A PO PRAVILIMA : STO KASNIJE TO LOSIJE : STO PRE TO BOLJE
+                        $player->hasGuessedWord($round, $score);
+                    }
+                }
+
+                $scoreResource = new ScoreResoruce($player->getScoreForRound($round));
+                $scoreResource->append(['guessed_flag' => $guessedFlag]);
+                $roundData = ['round' => $scoreResource];
+            }
 
             $message = [
                 'message' => [
@@ -57,7 +91,7 @@ class GameController extends WebsocketController
                 ]
             ];
 
-            $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
+            $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', array_merge($message, $roundData));
             $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_MESSAGE_ROOM', $message);
         } catch (\Exception $e) {
             $this->emitException($websocket, 'SEND_MESSAGE_ROOM_FAILURE', $e);
@@ -173,7 +207,7 @@ class GameController extends WebsocketController
 
             $websocket->emit('PLAYER_CHOOSED_WORD', ['word' => new WordResoruce($word)]);
             // mask the word and send it to all other players
-            $word->word = str_repeat('_', $word->clength);
+            $word->word = Tools::maskWord($word->word);
             $websocket->broadcast()->to($room->uuid)->emit('PLAYER_CHOOSED_WORD', ['word' => new WordResoruce($word)]);
 
             // starting game
@@ -193,10 +227,8 @@ class GameController extends WebsocketController
                     $nextPlayer = $room->getRandomPlayer();
 
                     // there is no players in queue to play current game so we end game
-                    if ($nextPlayer == null) {
-                        //TODO: game finished not round because we dont have next player : ALL PLAYER WERE DRAWING
+                    if (empty($nextPlayer)) {
                         $game->finish();
-
                         $finishingGameData = ['isThereNextGame' => false, 'rounds' => RoundResource::collection($game->getRounds())];
 
                         // if we have next game then we should create and start it

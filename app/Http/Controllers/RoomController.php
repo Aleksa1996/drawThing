@@ -42,7 +42,7 @@ class RoomController extends Controller
         $room = Room::create([
             'uuid' => '',
             'active' => true,
-            'number_of_games' => 3,
+            'number_of_games' => 1,
             'created_by' => $player->id,
             'administered_by' => $player->id
         ]);

@@ -2,13 +2,17 @@ import React from 'react';
 import InfoTooltip from '../../../Common/InfoTooltip/InfoTooltip';
 import Dropdown from '../../../Common/Dropdown/Dropdown';
 
-const GameToolBar = ({ player, round }) => {
+const GameToolBar = ({ player, game, round }) => {
 	return (
 		<div className="game-board-toolbar-container container-fluid">
 			<div className="game-board-toolbar-container-border">
 				<div className="row">
 					<div className="col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center">
-						<p className="game-board-rounds m-1">Round: 1 of 3</p>
+						{!round.inProgress() ? null : (
+							<p className="game-board-rounds m-1">
+								Round: {round.number} of {game.number_of_rounds}
+							</p>
+						)}
 						{!round.inProgress() ? null : (
 							<p
 								className={`game-board-clock m-1 d-block ${
@@ -25,7 +29,12 @@ const GameToolBar = ({ player, round }) => {
 							<p className="game-board-guessing-word">
 								{round.chosedWordExists()
 									? round.chosedWordToArrayOfLetters().map((letter, key) => (
-											<span key={key} className="game-board-guessing-word-letter">
+											<span
+												key={key}
+												className={`game-board-guessing-word-letter ${
+													letter.trim() ? '' : 'whitespace'
+												}`}
+											>
 												{round.isPlayerDrawing(player) ? letter : ' '}
 											</span>
 									  ))

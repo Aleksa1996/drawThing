@@ -30,6 +30,10 @@ class Round extends Model
 
     protected $dates = ['finishing_at', 'started_at'];
 
+    public const GUESSED_WORD = 1;
+    public const CLOSE_WORD = 2;
+    public const FAR_WORD = 0;
+
     // relationships
     public function word()
     {
@@ -44,6 +48,11 @@ class Round extends Model
     public function player()
     {
         return $this->belongsTo('App\Models\Player', 'drawn_by');
+    }
+
+    public function players()
+    {
+        return $this->belongsToMany('App\Models\Player')->withPivot('id', 'guessed', 'score')->as('score');
     }
 
     // mutators
@@ -116,6 +125,10 @@ class Round extends Model
         // $this->finishing_at = $this->started_at->copy()->addMinute(1)->addSecond();
         $this->finishing_at = $this->started_at->copy()->addSecond(15);
         $this->word()->associate($word);
+
+        $players = $this->game->room->players;
+        $this->players()->attach($players->pluck('id'));
+
         return $this->save();
     }
 
@@ -138,6 +151,28 @@ class Round extends Model
     {
         $this->status = 'finished';
         return $this->save();
+    }
+
+    public function checkGuessingWord(string $input)
+    {
+        $wordObj = $this->word;
+
+        $distance = levenshtein(strtolower($input), $wordObj->word);
+
+        if ($distance == 0) {
+            return self::GUESSED_WORD;
+        }
+
+        if ($distance <= 2) {
+            return self::CLOSE_WORD;
+        }
+
+        return self::FAR_WORD;
+    }
+
+    public function getScoreForPlayer($player)
+    {
+        return $this->score();
     }
 
     // scopes

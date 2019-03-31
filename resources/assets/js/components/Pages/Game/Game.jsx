@@ -191,7 +191,7 @@ class Game extends Component {
 		return (
 			<Page title="Game - Drawthing" className="container-fluid page-game">
 				<GameLayout>
-					<GameToolBar player={playerModel} round={roundModel} />
+					<GameToolBar player={playerModel} game={gameModel} round={roundModel} />
 					<div className="row no-gutters">
 						<GameScore player={playerModel} room={roomModel} />
 						<GameCanvas
