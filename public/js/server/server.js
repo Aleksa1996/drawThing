@@ -84397,15 +84397,17 @@ var PlayRules = function PlayRules(props) {
     className: "special-text"
   }, "Choose whether you want to create private room, and invite your friends or you want to play in a public room. Note that if you choose to create private room, you will automatically become room admin, so you can control which players may play and which don't.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, " Draw / Guess"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "special-text"
-  }, "Finally, the game starts! After the countdown is over, one random player needs to choose 1 out of 3 words. Game round begins, your concentration to the maximum. You need to guess what others draw or to draw chosen word. For better score you need to do that as fast as possible, or you will loose!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Notices:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
-    className: "mb-3"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "dasdad"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Bugs, bugs and bugs... if you see one "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, "Finally, the game starts! After the countdown is over, one random player needs to choose 1 out of 3 words. Game round begins, your concentration to the maximum. You need to guess what others draw or to draw chosen word. For better score you need to do that as fast as possible, or you will loose!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "special-text"
+  }, "Notices:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ol", {
+    className: "mb-3 special-text"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "In every game you play number of rounds equal to number of players"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "Each round lasts for 60 secs or 1 minute"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, "As soon as you guess word you get more points"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Bugs, bugs and bugs... if you see one "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "special-text"
   }, "You can send me a message through out contact form on ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/contact"
-  }, "this"), "\xA0 page, or you can contact me via", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+  }, "this "), "page, or you can contact me directly via", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     dangerouslySetInnerHTML: {
-      __html: '&nbsp; &#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;'
+      __html: '&nbsp;&#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;'
     }
   }))))));
 };

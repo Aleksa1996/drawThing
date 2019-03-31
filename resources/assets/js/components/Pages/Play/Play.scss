@@ -153,8 +153,9 @@
 			right: 0%;
 			width: 55%;
 			height: 100%;
-			padding: 10px 5% 0px 9%;
+			padding: 40px 5% 0px 9%;
 			z-index: 1;
+			overflow-y: auto;
 
 			.game-start-rules-heading {
 				text-align: center;

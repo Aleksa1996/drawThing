@@ -14033,8 +14033,9 @@ select[disabled] > option {
   right: 0%;
   width: 55%;
   height: 100%;
-  padding: 10px 5% 0px 9%;
+  padding: 40px 5% 0px 9%;
   z-index: 1;
+  overflow-y: auto;
 }
 
 .page-start-game .game-start-container .game-start-rules-container .game-start-rules-heading {

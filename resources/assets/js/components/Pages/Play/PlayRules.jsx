@@ -39,21 +39,23 @@ const PlayRules = props => {
 							need to guess what others draw or to draw chosen word. For better score you need to do
 							that as fast as possible, or you will loose!
 						</p>
-						<p>Notices:</p>
-						<ol className="mb-3">
-							<li>dasdad</li>
+						<p className="special-text">Notices:</p>
+						<ol className="mb-3 special-text">
+							<li>In every game you play number of rounds equal to number of players</li>
+							<li>Each round lasts for 60 secs or 1 minute</li>
+							<li>As soon as you guess word you get more points</li>
 						</ol>
 					</li>
 
 					<li>
 						<h4>Bugs, bugs and bugs... if you see one </h4>
 						<p className="special-text">
-							You can send me a message through out contact form on <Link to="/contact">this</Link>
-							&nbsp; page, or you can contact me via
+							You can send me a message through out contact form on <Link to="/contact">this </Link>
+							page, or you can contact me directly via
 							<span
 								dangerouslySetInnerHTML={{
 									__html:
-										'&nbsp; &#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;'
+										'&nbsp;&#97;&#108;&#101;&#107;&#115;&#97;.j.&#49;&#57;96&#64;&#103;m&#97;&#105;l&#46;&#99;&#111;&#109;'
 								}}
 							/>
 						</p>
