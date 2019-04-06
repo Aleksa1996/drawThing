@@ -40,7 +40,7 @@ class Player extends Model
 
     public function rounds()
     {
-        return $this->belongsToMany('App\Models\Round')->withPivot('id', 'guessed', 'score')->as('score');
+        return $this->belongsToMany('App\Models\Round')->withPivot('id', 'guessed', 'points', 'round_id')->as('score');
     }
 
     // mutators
@@ -163,21 +163,20 @@ class Player extends Model
         return self::active()->where('fd', $fd)->first();
     }
 
-    public function getScoreForRound(Round $round)
+
+    public function loadScoreForRound(Round $round)
     {
-        $round_player = $this->rounds()->where('round_id', $round->id)->first();
-
-        if (empty($round)) return [];
-
-        return $round_player;
+        return $this->load(['rounds' => function ($query) use ($round) {
+            return $query->where('rounds.id', $round->id);
+        }]);
     }
 
-    public function hasGuessedWord(Round $round, int $score)
+    public function awardWithPoints(Round $round, int $points)
     {
-        return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'score' => $score]);
+        return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'points' => $points]);
     }
 
-    public function guessedWord(Round $round)
+    public function hasGuessedWord(Round $round)
     {
         $round_player = $this->rounds()->wherePivot('round_id', $round->id)->first();
         if (empty($round_player)) return false;

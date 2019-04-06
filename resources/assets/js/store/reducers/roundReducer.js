@@ -8,7 +8,8 @@ import {
 	CHOOSE_WORD,
 	FINISHING_ROUND,
 	CLEAR_ROUND_DATA,
-	FINISHING_GAME
+	FINISHING_GAME,
+	SEND_MESSAGE_ROOM_SUCCESS
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -31,8 +32,8 @@ const initialState = {
 	words_to_choose: [],
 	chosed_word: null,
 	//
-	guessed_word: null,
-	score: null
+	// { player_id,score_id,guessed,points}
+	score: []
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -79,6 +80,17 @@ const reducer = (state = initialState, { type, payload }) => {
 				chosed_word: null,
 				words_to_choose: []
 			});
+		}
+
+		case SEND_MESSAGE_ROOM_SUCCESS: {
+			let { round } = payload;
+
+			if (round) {
+				delete round.id;
+				return updateRound(state, { ...round });
+			}
+
+			return updateRound(state, {});
 		}
 		case CLEAR_ROUND_DATA: {
 			return { ...initialState };

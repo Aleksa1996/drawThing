@@ -980,7 +980,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["TICK_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_ROUND"]];
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["TICK_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_WAS_CLOSE"]];
 var subscribeToRoundGlobalEvents = function subscribeToRoundGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -1066,7 +1066,7 @@ var roundStart = function roundStart(word) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, FINISHING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, FINISHING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA, PLAYER_GUESSED_WORD, PLAYER_GUESSED_WORD_FAILURE, PLAYER_WAS_CLOSE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1132,6 +1132,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TICK_ROUND", function() { return TICK_ROUND; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FINISHING_ROUND", function() { return FINISHING_ROUND; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_ROUND_DATA", function() { return CLEAR_ROUND_DATA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_GUESSED_WORD", function() { return PLAYER_GUESSED_WORD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_GUESSED_WORD_FAILURE", function() { return PLAYER_GUESSED_WORD_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAYER_WAS_CLOSE", function() { return PLAYER_WAS_CLOSE; });
 var CONNECT_WS = 'CONNECT_WS';
 var DISCONNECT_WS = 'DISCONNECT_WS';
 var SUBSCRIBE_WS = 'SUBSCRIBE_WS';
@@ -1211,7 +1214,11 @@ var STARTING_ROUND = 'STARTING_ROUND';
 var START_ROUND = 'START_ROUND';
 var TICK_ROUND = 'TICK_ROUND';
 var FINISHING_ROUND = 'FINISHING_ROUND';
-var CLEAR_ROUND_DATA = 'CLEAR_ROUND_DATA';
+var CLEAR_ROUND_DATA = 'CLEAR_ROUND_DATA'; //
+
+var PLAYER_GUESSED_WORD = 'PLAYER_GUESSED_WORD';
+var PLAYER_GUESSED_WORD_FAILURE = 'PLAYER_GUESSED_WORD_FAILURE';
+var PLAYER_WAS_CLOSE = 'PLAYER_WAS_CLOSE';
 
 /***/ }),
 
@@ -2506,7 +2513,7 @@ function (_Component) {
     key: "render",
     value: function render() {
       var location = this.props.location;
-      var disappearOnPage = ['/game', '/play'];
+      var disappearOnPage = ['/game', '/play', '/room'];
 
       if (disappearOnPage.includes(location.pathname)) {
         return null;
@@ -3192,7 +3199,7 @@ function (_Component) {
           player = _this$props2.player,
           round = _this$props2.round;
       var roundModel = new _utils_classes_Round__WEBPACK_IMPORTED_MODULE_8__["default"](round);
-      if (roundModel.isPlayerDrawing(player)) return false;
+      if (roundModel.isPlayerDrawing(player) || roundModel.guessedWord()) return false;
       var message = ''; // Message comes from text input
 
       if (e.type == 'submit') {
@@ -3284,6 +3291,7 @@ function (_Component) {
 
       if (roundModel.finished() && gameModel.isCanvasEmpty()) {
         this.props.sketchClear();
+        this.props.clearState(['chat']);
       }
     }
   }, {
@@ -4425,13 +4433,11 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     className: "game-board-chat-body",
     ref: chatBodyRef
   }, chat.messages.map(function (m) {
-    var player = room.getPlayer(m.player_id);
-    if (!player && m.player_id != '#playerActionMessage') return null;
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Room_RoomChatMessage__WEBPACK_IMPORTED_MODULE_2__["default"], {
       key: m.id,
       chat: chat,
-      message: m.text,
-      username: Object(lodash__WEBPACK_IMPORTED_MODULE_3__["get"])(player, 'username', '')
+      message: m,
+      username: Object(lodash__WEBPACK_IMPORTED_MODULE_3__["get"])(room.getPlayer(m.player_id), 'username', '')
     });
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-footer rounded-bottom"
@@ -4443,14 +4449,14 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     className: "form-control",
     id: "game-board-chat-input",
     placeholder: "Type word...",
-    disabled: round.isPlayerDrawing(player) || round.isPlayerChoosingWord(),
+    disabled: round.isPlayerDrawing(player) || round.isPlayerChoosingWord() || round.guessedWord(),
     autoComplete: "off"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-emojis"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "dropdown dropup"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-secondary dropdown-toggle ".concat(round.isPlayerDrawing(player) || round.isPlayerChoosingWord() ? 'disabled' : ''),
+    className: "btn btn-secondary dropdown-toggle ".concat(round.isPlayerDrawing(player) || round.isPlayerChoosingWord() || round.guessedWord() ? 'disabled' : ''),
     href: "javascript:void(0)",
     role: "button",
     id: "game-board-chat-emojis-dropdown",
@@ -5828,13 +5834,11 @@ var RoomChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     className: "game-board-chat-body",
     ref: chatBodyRef
   }, chat.messages.map(function (m) {
-    var player = room.getPlayer(m.player_id);
-    if (!player && m.player_id != '#playerActionMessage') return null;
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomChatMessage__WEBPACK_IMPORTED_MODULE_3__["default"], {
       key: m.id,
       chat: chat,
-      message: m.text,
-      username: Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(player, 'username', '')
+      message: m,
+      username: Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(room.getPlayer(m.player_id), 'username', '')
     });
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-footer rounded-bottom"
@@ -5911,8 +5915,8 @@ var RoomChatMessage = function RoomChatMessage(_ref) {
   }, username, ":")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-text rounded"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "m-0"
-  }, chat.parseEmojis(message, function (emoji, word) {
+    className: "m-0 ".concat(chat.getTypeClassname(message))
+  }, chat.parseEmojis(message.text, function (emoji, word) {
     return emoji ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       key: Object(uuid__WEBPACK_IMPORTED_MODULE_1__["v4"])(),
       className: "fa ".concat(emoji.class, " mx-1")
@@ -6463,7 +6467,7 @@ var socketExists = function socketExists(socketID) {
 /*!***********************************************************!*\
   !*** ./resources/assets/js/store/reducers/chatReducer.js ***!
   \***********************************************************/
-/*! exports provided: default, selector, updateChat, addMessage, generatePlayerActionMessage */
+/*! exports provided: default, selector, updateChat, addMessage, generateActionMessage */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6471,7 +6475,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateChat", function() { return updateChat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addMessage", function() { return addMessage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generatePlayerActionMessage", function() { return generatePlayerActionMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateActionMessage", function() { return generateActionMessage; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
@@ -6481,11 +6485,19 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 
 var initialState = {
-  // {id, text, player_id}
+  // {id, text, player_id, color}
   messages: [],
   sending: false,
   //
@@ -6512,7 +6524,21 @@ var initialState = {
   }, {
     text: '@emoji:fa-heart-o',
     class: 'fa-heart-o'
-  }]
+  }],
+  types: {
+    info: {
+      className: 'text-warning'
+    },
+    success: {
+      className: 'text-success'
+    },
+    danger: {
+      className: 'text-danger'
+    },
+    message: {
+      className: ''
+    }
+  }
 };
 
 var reducer = function reducer() {
@@ -6533,7 +6559,6 @@ var reducer = function reducer() {
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]:
       {
         var newMessages = addMessage(state.messages, payload.message);
-        console.log(payload);
         return updateChat(state, {
           sending: false,
           messages: newMessages
@@ -6559,7 +6584,7 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"]:
       {
-        var _newMessages2 = addMessage(state.messages, generatePlayerActionMessage(payload.player, ':player has joined room.'));
+        var _newMessages2 = addMessage(state.messages, generateActionMessage("".concat(payload.player.username, " has joined room."), state.types.success));
 
         return updateChat(state, {
           messages: _newMessages2
@@ -6568,7 +6593,7 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_LEAVED_ROOM"]:
       {
-        var _newMessages3 = addMessage(state.messages, generatePlayerActionMessage(payload.player, ':player has leaved room.'));
+        var _newMessages3 = addMessage(state.messages, generateActionMessage("".concat(payload.player.username, " has leaved room."), state.types.danger));
 
         return updateChat(state, {
           messages: _newMessages3
@@ -6577,7 +6602,7 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"]:
       {
-        var _newMessages4 = addMessage(state.messages, generatePlayerActionMessage(payload.player, ':player has been kicked from room by admin.'));
+        var _newMessages4 = addMessage(state.messages, generateActionMessage("".concat(payload.player.username, " has been kicked from room by admin."), state.types.danger));
 
         return updateChat(state, {
           messages: _newMessages4
@@ -6586,10 +6611,35 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["REPLACE_ADMIN_ROOM"]:
       {
-        var _newMessages5 = addMessage(state.messages, generatePlayerActionMessage(payload.player, ':player is now room admin.'));
+        var _newMessages5 = addMessage(state.messages, generateActionMessage("".concat(payload.player.username, " is now room admin."), state.types.info));
 
         return updateChat(state, {
           messages: _newMessages5
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"]:
+      {
+        var player = payload.player;
+        var _newMessages6 = [];
+
+        if (player.score.guessed) {
+          _newMessages6 = addMessage(state.messages, generateActionMessage("".concat(player.username, " successfully guessed word! (").concat(player.score.points, " point").concat(player.score.points > 1 ? 's' : '', ")"), state.types.success));
+        } else {
+          _newMessages6 = _toConsumableArray(state.messages);
+        }
+
+        return updateChat(state, {
+          messages: _newMessages6
+        });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_WAS_CLOSE"]:
+      {
+        var _newMessages7 = addMessage(state.messages, generateActionMessage('Ouff.. you are so close!', state.types.info));
+
+        return updateChat(state, {
+          messages: _newMessages7
         });
       }
 
@@ -6620,11 +6670,12 @@ var updateChat = function updateChat(state, room) {
 var addMessage = function addMessage(messages, message) {
   return messages.concat([message]);
 };
-var generatePlayerActionMessage = function generatePlayerActionMessage(player, text) {
+var generateActionMessage = function generateActionMessage(text) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   return {
-    id: player.id + '_' + player.username + Object(uuid__WEBPACK_IMPORTED_MODULE_2__["v4"])(),
-    text: text.replace(/:player/gi, player.username),
-    player_id: '#playerActionMessage'
+    id: Object(uuid__WEBPACK_IMPORTED_MODULE_2__["v4"])(),
+    text: text,
+    type: type
   };
 };
 
@@ -7285,8 +7336,8 @@ var initialState = {
   words_to_choose: [],
   chosed_word: null,
   //
-  guessed_word: null,
-  score: null
+  // { player_id,score_id,guessed,points}
+  score: []
 };
 
 var reducer = function reducer() {
@@ -7354,6 +7405,18 @@ var reducer = function reducer() {
           chosed_word: null,
           words_to_choose: []
         }));
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]:
+      {
+        var round = payload.round;
+
+        if (round) {
+          delete round.id;
+          return updateRound(state, _objectSpread({}, round));
+        }
+
+        return updateRound(state, {});
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROUND_DATA"]:
@@ -7678,6 +7741,10 @@ function (_Model) {
       }, message), /\s+/g);
     }, _this.hasMessages = function () {
       return _this.messages.length > 0;
+    }, _this.getTypeClassname = function (message) {
+      return Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(message, 'type.className', '');
+    }, _this.isMessageByPlayer = function (message) {
+      return Object(lodash__WEBPACK_IMPORTED_MODULE_1__["has"])(message, 'player_id');
     }, _temp));
   }
 
@@ -8197,6 +8264,8 @@ function (_Model) {
       return _this.timer;
     }, _this.nearEnd = function () {
       return _this.inProgress() && !_this.finished() && _this.seconds <= 5;
+    }, _this.guessedWord = function () {
+      return _this.guessed;
     }, _temp));
   }
 

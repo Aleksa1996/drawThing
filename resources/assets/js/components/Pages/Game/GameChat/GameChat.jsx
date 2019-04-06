@@ -13,18 +13,14 @@ const GameChat = React.forwardRef(({ player, room, chat, round, handleChatSend }
 						<span>Chat</span>
 					</div>
 					<div className="game-board-chat-body" ref={chatBodyRef}>
-						{chat.messages.map(m => {
-							const player = room.getPlayer(m.player_id);
-							if (!player && m.player_id != '#playerActionMessage') return null;
-							return (
-								<RoomChatMessage
-									key={m.id}
-									chat={chat}
-									message={m.text}
-									username={_get(player, 'username', '')}
-								/>
-							);
-						})}
+						{chat.messages.map(m => (
+							<RoomChatMessage
+								key={m.id}
+								chat={chat}
+								message={m}
+								username={_get(room.getPlayer(m.player_id), 'username', '')}
+							/>
+						))}
 					</div>
 					<div className="game-board-chat-footer rounded-bottom">
 						<form onSubmit={handleChatSend}>
@@ -34,7 +30,11 @@ const GameChat = React.forwardRef(({ player, room, chat, round, handleChatSend }
 								className="form-control"
 								id="game-board-chat-input"
 								placeholder="Type word..."
-								disabled={round.isPlayerDrawing(player) || round.isPlayerChoosingWord()}
+								disabled={
+									round.isPlayerDrawing(player) ||
+									round.isPlayerChoosingWord() ||
+									round.guessedWord()
+								}
 								autoComplete="off"
 							/>
 						</form>
@@ -43,7 +43,11 @@ const GameChat = React.forwardRef(({ player, room, chat, round, handleChatSend }
 							<div className="dropdown dropup">
 								<a
 									className={`btn btn-secondary dropdown-toggle ${
-										round.isPlayerDrawing(player) || round.isPlayerChoosingWord() ? 'disabled' : ''
+										round.isPlayerDrawing(player) ||
+										round.isPlayerChoosingWord() ||
+										round.guessedWord()
+											? 'disabled'
+											: ''
 									}`}
 									href="javascript:void(0)"
 									role="button"

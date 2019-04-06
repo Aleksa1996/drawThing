@@ -7,7 +7,9 @@ import {
 	START_ROUND,
 	TICK_ROUND,
 	FINISHING_ROUND,
-	CLEAR_ROUND_DATA
+	CLEAR_ROUND_DATA,
+	PLAYER_GUESSED_WORD,
+	PLAYER_WAS_CLOSE
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
@@ -16,7 +18,9 @@ const globalEvents = [
 	PLAYER_CHOOSED_WORD,
 	CHOOSE_WORD,
 	TICK_ROUND,
-	FINISHING_ROUND
+	FINISHING_ROUND,
+	PLAYER_GUESSED_WORD,
+	PLAYER_WAS_CLOSE
 ];
 
 export const subscribeToRoundGlobalEvents = () => (dispatch, getState, { api, sockets }) => {

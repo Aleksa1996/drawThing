@@ -15,4 +15,6 @@ export default class Round extends Model {
 	getFormattedTimer = () => this.timer;
 	// 15 secs
 	nearEnd = () => this.inProgress() && !this.finished() && this.seconds <= 5;
+
+	guessedWord = () => this.guessed;
 }

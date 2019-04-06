@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class Score extends Resource
+class RoundScore extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,6 @@ class Score extends Resource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->score->id,
-            'guessed' => $this->score->guessed,
-            'points' => $this->score->points,
-        ];
+        return parent::toArray($request);
     }
 }

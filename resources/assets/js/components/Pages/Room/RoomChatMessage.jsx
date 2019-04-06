@@ -11,8 +11,8 @@ const RoomChatMessage = ({ chat, message, username }) => {
 					</div>
 				)}
 				<div className="game-board-chat-text rounded">
-					<p className="m-0">
-						{chat.parseEmojis(message, (emoji, word) =>
+					<p className={`m-0 ${chat.getTypeClassname(message)}`}>
+						{chat.parseEmojis(message.text, (emoji, word) =>
 							emoji ? <i key={v4()} className={`fa ${emoji.class} mx-1`} /> : ` ${word} `
 						)}
 					</p>

@@ -107,6 +107,7 @@ class Game extends Component {
 
 		if (roundModel.finished() && gameModel.isCanvasEmpty()) {
 			this.props.sketchClear();
+			this.props.clearState(['chat']);
 		}
 	}
 
@@ -162,7 +163,7 @@ class Game extends Component {
 		const { player, round } = this.props;
 		const roundModel = new RoundModel(round);
 
-		if (roundModel.isPlayerDrawing(player)) return false;
+		if (roundModel.isPlayerDrawing(player) || roundModel.guessedWord()) return false;
 
 		let message = '';
 		// Message comes from text input

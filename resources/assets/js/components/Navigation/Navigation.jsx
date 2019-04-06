@@ -27,7 +27,7 @@ class Navigation extends Component {
 
 	render() {
 		const { location } = this.props;
-		const disappearOnPage = ['/game', '/play'];
+		const disappearOnPage = ['/game', '/play', '/room'];
 
 		if (disappearOnPage.includes(location.pathname)) {
 			return null;
