@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { reduxForm } from 'redux-form';
 import { Field } from 'redux-form';
 import { RenderInput, RenderTextarea } from '../../../hocs';
@@ -13,12 +12,10 @@ import { throttle as _throttle } from 'lodash';
 class ContactForm extends Component {
 	state = {};
 
-	handleContactForm = _throttle(values => {
-		this.props.handleSubmitContactForm(values);
-	}, 1000);
+	handleContactForm = _throttle(values => this.props.handleSubmitContactForm(values), 1000);
 
 	render() {
-		const { handleSubmit } = this.props;
+		const { handleSubmit, submitting, submitSucceeded, anyTouched, error } = this.props;
 		const { name, email, subject, message } = formFields;
 		return (
 			<form onSubmit={handleSubmit(this.handleContactForm)}>
@@ -27,7 +24,11 @@ class ContactForm extends Component {
 				<Field name="subject" component={RenderInput} {...subject} />
 				<Field name="message" component={RenderTextarea} {...message} />
 				<div className="col-md-12">
-					<Button type="submit" icon="fa-paper-plane" className="mybtn2">
+					{!anyTouched && submitSucceeded && (
+						<small className="text-success d-block my-3">Message successfully sent!</small>
+					)}
+					{error && <small className="text-danger d-block my-3">{error}</small>}
+					<Button type="submit" icon="fa-paper-plane" className="mybtn2" disabled={submitting}>
 						Submit
 					</Button>
 				</div>
@@ -37,7 +38,7 @@ class ContactForm extends Component {
 }
 
 export default reduxForm({
-	form: 'contact-form',
+	form: 'contactForm',
 	validate: validate(formFields),
 	enableReinitialize: true
 })(ContactForm);

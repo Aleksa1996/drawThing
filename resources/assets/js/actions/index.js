@@ -7,3 +7,4 @@ export * from './websocketActions';
 export * from './modalActions';
 export * from './countdownActions';
 export * from './roundActions';
+export * from './contactActions';

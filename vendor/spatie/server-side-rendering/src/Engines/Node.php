@@ -40,45 +40,53 @@ class Node implements Engine
     //     }
     // }
 
-    public function run(string $script) : string
+    public function run(string $script): string
     {
         $tempFilePath = $this->createTempFilePath();
         $nodePath = $this->nodePath;
 
         file_put_contents($tempFilePath, $script);
 
-        // swoole redis co
-        $redisClient = new SwooleCo\Redis();
-        $redisClient->connect('127.0.0.1', 6379);
-
-        $uri = request()->getRequestUri();
         $html = null;
-        $exists = (bool)$redisClient->exists($uri);
-        $exists = false;
-        if ($exists) {
-            $html = $redisClient->get($uri);
+        if (env('REDIS_PAGECACHE', false)) {
+            // swoole redis co
+            $redisClient = new SwooleCo\Redis();
+            $redisClient->connect('127.0.0.1', 6379);
+
+            // get requested uri
+            $uri = request()->getRequestUri();
+            // does uri cached?
+            $cached = (bool)$redisClient->exists($uri);
+            $html = null;
+
+            if ($cached) {
+                $html = $redisClient->get($uri);
+            } else {
+                $execResult = SwooleCo::exec($nodePath . ' ' . $tempFilePath);
+                $html = $execResult['output'];
+                $redisClient->set($uri, $html);
+            }
         } else {
             $execResult = SwooleCo::exec($nodePath . ' ' . $tempFilePath);
             $html = $execResult['output'];
-            $redisClient->set($uri, $html);
         }
+
 
         try {
             return substr($html ?? '', 0, -1);
         } catch (ProcessFailedException $exception) {
             throw EngineError::withException($exception);
-        }
-        finally {
+        } finally {
             unlink($tempFilePath);
         }
     }
 
-    public function getDispatchHandler() : string
+    public function getDispatchHandler(): string
     {
         return 'console.log';
     }
 
-    protected function createTempFilePath() : string
+    protected function createTempFilePath(): string
     {
         return implode(DIRECTORY_SEPARATOR, [$this->tempPath, md5(intval(microtime(true) * 1000) . random_bytes(5)) . '.js']);
     }

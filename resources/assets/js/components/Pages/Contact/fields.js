@@ -37,7 +37,7 @@ export const formFields = generateFormFields({
 			minLength: 2
 		},
 		materialDesign: true,
-		errMessage: 'subject must be min 2 characters!'
+		errMessage: 'Subject must be min 2 characters!'
 	},
 	message: {
 		type: 'textarea',

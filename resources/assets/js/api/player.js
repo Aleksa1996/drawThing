@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import globals from '../globals';
 
 export const create = data => axios.post(`${globals.url.host}/api/players`, data);

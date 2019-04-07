@@ -25,7 +25,7 @@ class Home extends Component {
 								</p>
 							</div>
 
-							<Link to="/game" className="mybtn2">
+							<Link to="/play" className="mybtn2">
 								<i className="fa fa-play mr-2" aria-hidden="true" />
 								Play now!
 							</Link>
