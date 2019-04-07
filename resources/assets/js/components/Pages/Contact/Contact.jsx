@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
+import { submitContactForm } from '../../../actions';
 
 import Page from '../Page';
 import ContactForm from './ContactForm';
 
 class Contact extends Component {
 	state = {};
-
-	handleSubmitContactForm = values => {
-		console.log(values);
-	};
 
 	handleMailTo = e => {
 		e.preventDefault();
@@ -65,7 +61,7 @@ class Contact extends Component {
 							<div className="col-md-6">
 								<div id="page-contact-form">
 									<div className="bg-white rounded shadow py-3">
-										<ContactForm handleSubmitContactForm={this.handleSubmitContactForm} />
+										<ContactForm handleSubmitContactForm={this.props.submitContactForm} />
 									</div>
 								</div>
 							</div>
@@ -78,8 +74,7 @@ class Contact extends Component {
 }
 
 // Contact.serverFetch = fetchTodos;
-export default Contact;
-// export default connect(
-// 	state => ({ todos: state.todoReducer.todos }),
-// 	{ fetchTodos }
-// )(Contact);
+export default connect(
+	state => ({}),
+	{ submitContactForm }
+)(Contact);

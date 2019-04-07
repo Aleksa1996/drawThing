@@ -6,24 +6,24 @@ use Validator;
 
 use App\Models\Game;
 use App\Models\Room;
-use App\Models\Round;
 use App\Models\Word;
+use App\Custom\Tools;
+use App\Models\Round;
+
 use App\Models\Player;
 
 use Illuminate\Http\Request;
-
-use App\Http\Resources\Room as RoomResource;
 use App\Http\Resources\Game as GameResource;
-use App\Http\Resources\Round as RoundResource;
+use App\Http\Resources\Room as RoomResource;
 use App\Http\Resources\Word as WordResoruce;
-use App\Http\Resources\PlayerScore as PlayerScoreResource;
 
 
+use App\Http\Resources\Round as RoundResource;
 use Illuminate\Validation\ValidationException;
 use SwooleTW\Http\Websocket\Facades\Websocket;
 use App\Http\Resources\Player as PlayerResource;
+use App\Http\Resources\PlayerScore as PlayerScoreResource;
 use SwooleTW\Http\Websocket\Facades\Room as WebsocketRoom;
-use App\Custom\Tools;
 
 class GameController extends WebsocketController
 {
@@ -133,14 +133,20 @@ class GameController extends WebsocketController
         // $player = Player::find(10);
         // $round = Round::find(7);
         // $game = Game::find(2);
-        $room = Room::find(2);
+        // $room = Room::find(2);
 
         // $r = $room->games()->with('rounds.players')->get()->pluck('rounds.*')->flatten();
         // return $r;
         // return RoundResource::collection($r);
-        $finishingGameData = [];
-        $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
-        return json_encode($finishingGameData);
+        // $finishingGameData = [];
+        // $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
+        // $when = now()->addMinutes(1);
+
+        // Mail::to('aleksa.j.1996@gmail.com')->send(new ContactForm());
+        // Mail::to('aleksa.j.1996@gmail.com')->later($when, new ContactForm());
+        // Mail::to('aleksa.j.1996@gmail.com')->queue(new ContactForm());
+
+        return 'test';
     }
 
     /**

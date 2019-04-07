@@ -85,7 +85,7 @@ class Game extends Component {
 			this.updateDrawingUI();
 		} catch (e) {
 			console.log(e);
-			// replace('/play');
+			replace('/play');
 		}
 	}
 

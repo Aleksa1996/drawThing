@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const checkValidity = (value, rules) => {
 	let isValid = true;
 
@@ -28,6 +30,10 @@ export const checkValidity = (value, rules) => {
 
 	if (rules.minLength) {
 		isValid = value.length >= rules.minLength && isValid;
+	}
+
+	if (rules.email) {
+		isValid = validator.isEmail(value) && isValid;
 	}
 
 	return isValid;
