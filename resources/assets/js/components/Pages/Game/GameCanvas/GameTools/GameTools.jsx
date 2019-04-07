@@ -74,7 +74,7 @@ class GameTools extends Component {
 			>
 				<div className="game-tools-container shadow rounded">
 					<div className="game-tools-handle d-flex justify-content-between align-items-baseline rounded">
-						<span>
+						<span className="text-transform-uppercase">
 							<i className="fa fa-wrench" aria-hidden="true" />
 							Available tools
 						</span>

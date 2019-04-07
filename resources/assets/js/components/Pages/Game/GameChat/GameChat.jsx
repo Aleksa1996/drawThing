@@ -15,7 +15,7 @@ const GameChat = React.forwardRef(({ player, room, chat, round, handleChatSend }
 				<div className="game-board-chat shadow rounded">
 					<div className="game-board-chat-header rounded">
 						<i className="fa fa-comment" aria-hidden="true" />
-						<span>Chat</span>
+						<span className="text-transform-uppercase">Chat</span>
 					</div>
 					<div className="game-board-chat-body" ref={chatBodyRef}>
 						{chat.messages.map(m => (

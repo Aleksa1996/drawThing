@@ -93,6 +93,11 @@
 							pointer-events: all !important;
 						}
 					}
+					#game-board-chat-emojis-dropdown {
+						&:hover {
+							color: $mytheme-color-first;
+						}
+					}
 					.dropdown-menu {
 						width: 300px;
 						background: $mytheme-color-fourth;

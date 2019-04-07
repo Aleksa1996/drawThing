@@ -7,7 +7,7 @@ const GameScore = ({ player, room, game, round }) => {
 				<div className="game-board-score shadow rounded">
 					<div className="game-board-score-header rounded">
 						<i className="fa fa-trophy" aria-hidden="true" />
-						<span>Scoreboard</span>
+						<span className="text-transform-uppercase">Scoreboard</span>
 					</div>
 					<ul className="game-board-score-list">
 						{room.getActivePlayers().map(p => (

@@ -1612,57 +1612,6 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/components/Common/Dropdown/Dropdown.jsx":
-/*!*********************************************************************!*\
-  !*** ./resources/assets/js/components/Common/Dropdown/Dropdown.jsx ***!
-  \*********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(uuid__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-var Dropdown = function Dropdown(_ref) {
-  var children = _ref.children,
-      actions = _ref.actions,
-      id = _ref.id,
-      className = _ref.className,
-      classNameMenu = _ref.classNameMenu,
-      classNameContainer = _ref.classNameContainer;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "dropdown ".concat(classNameContainer || '')
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-secondary dropdown-toggle ".concat(className || ''),
-    href: "javascript:void(0)",
-    role: "button",
-    id: id,
-    "data-toggle": "dropdown",
-    "aria-haspopup": "true",
-    "aria-expanded": "false"
-  }, children), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "dropdown-menu ".concat(classNameMenu || ''),
-    "aria-labelledby": id
-  }, actions.map(function (a) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-      className: "dropdown-item",
-      to: a.to,
-      key: Object(uuid__WEBPACK_IMPORTED_MODULE_2__["v4"])()
-    }, a.title);
-  })));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Dropdown);
-
-/***/ }),
-
 /***/ "./resources/assets/js/components/Common/Errors/ErrorItem.jsx":
 /*!********************************************************************!*\
   !*** ./resources/assets/js/components/Common/Errors/ErrorItem.jsx ***!
@@ -1728,38 +1677,6 @@ var Errors = function Errors(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Errors);
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/Common/InfoTooltip/InfoTooltip.jsx":
-/*!***************************************************************************!*\
-  !*** ./resources/assets/js/components/Common/InfoTooltip/InfoTooltip.jsx ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-
-var InfoTooltip = function InfoTooltip(_ref) {
-  var children = _ref.children,
-      placement = _ref.placement,
-      info = _ref.info,
-      className = _ref.className;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    type: "button",
-    className: "btn info-tooltip ".concat(className || ''),
-    "data-toggle": "tooltip",
-    "data-html": "true",
-    "data-placement": placement || 'top',
-    title: info
-  }, children);
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (InfoTooltip);
 
 /***/ }),
 
@@ -1884,7 +1801,7 @@ function (_Component) {
             return _this2.chooseWord(wtc);
           },
           type: "button",
-          className: "mybtn2"
+          className: "mybtn2 text-transform-uppercase"
         }, wtc.word);
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center mt-3"
@@ -2456,6 +2373,7 @@ function (_Component) {
         className: "col-xs-6 col-sm-6 col-md-6 text-left justify-content-center align-items-center d-flex"
       }, "\xA9 2019 \xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://aleksajovanovic.com",
+        className: "basic-link-white text-decoration-none",
         title: "My portfolio"
       }, "Aleksa Jovanovic"), "\xA0 179/15"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-xs-6 col-sm-6  col-md-6 text-right justify-content-center align-items-center d-flex"
@@ -3463,8 +3381,7 @@ function (_Component) {
 
         this.updateDrawingUI();
       } catch (e) {
-        console.log(e);
-        replace('/play');
+        console.log(e); // replace('/play');
       }
     }
   }, {
@@ -3748,7 +3665,9 @@ function (_Component) {
         className: "game-tools-container shadow rounded"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-tools-handle d-flex justify-content-between align-items-baseline rounded"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "text-transform-uppercase"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-wrench",
         "aria-hidden": "true"
       }), "Available tools"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4635,7 +4554,9 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-comment",
     "aria-hidden": "true"
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Chat")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "text-transform-uppercase"
+  }, "Chat")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-body",
     ref: chatBodyRef
   }, chat.messages.map(function (m) {
@@ -4743,7 +4664,9 @@ var GameScore = function GameScore(_ref) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-trophy",
     "aria-hidden": "true"
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Scoreboard")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "text-transform-uppercase"
+  }, "Scoreboard")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
     className: "game-board-score-list"
   }, room.getActivePlayers().map(function (p) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
@@ -4786,11 +4709,9 @@ var GameScore = function GameScore(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Common_InfoTooltip_InfoTooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Common/InfoTooltip/InfoTooltip */ "./resources/assets/js/components/Common/InfoTooltip/InfoTooltip.jsx");
-/* harmony import */ var _Common_Dropdown_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Common/Dropdown/Dropdown */ "./resources/assets/js/components/Common/Dropdown/Dropdown.jsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
@@ -4808,19 +4729,19 @@ var GameToolBar = function GameToolBar(_ref) {
     className: "row"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center"
-  }, !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "game-board-rounds m-1"
-  }, "Round: ", round.number, " of ", game.number_of_rounds), !round.inProgress() ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "game-board-rounds m-1 text-transform-uppercase"
+  }, "ROUND: ", round.inProgress() ? "".concat(round.number, " of ").concat(game.number_of_rounds) : ''), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
     className: "game-board-clock m-1 d-block ".concat(round.nearEnd() ? 'bounceAnimation' : '')
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-clock-o",
     "aria-hidden": "true"
   }), " \xA0", round.getFormattedTimer())), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-6 col-sm-8 col-md-6 col-lg-6 game-board-guessing-word-container d-flex justify-content-center align-items-center"
+    className: "col-6 col-sm-8 col-md-7 col-lg-8 game-board-guessing-word-container d-flex justify-content-center align-items-center"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: ""
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-    className: "game-board-guessing-word"
+    className: "game-board-guessing-word mb-0 text-transform-uppercase"
   }, round.chosedWordExists() ? round.chosedWordToArrayOfLetters().map(function (letter, key) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       key: key,
@@ -4828,24 +4749,12 @@ var GameToolBar = function GameToolBar(_ref) {
     }, round.isPlayerDrawing(player) ? letter : ' ');
   }) : round.isPlayerChoosingWord() && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "bounceAnimation d-block"
-  }, Object(lodash__WEBPACK_IMPORTED_MODULE_3__["get"])(round.getDrawer(room.getActivePlayers()), 'username', ''), " choosing word"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "ml-3 d-none"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_InfoTooltip_InfoTooltip__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    info: "Guessing word",
-    className: "m-1"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-question",
-    "aria-hidden": "true"
-  })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "game-board-toolbar-menu-container col-xs-12 col-sm-12 col-md-2 col-lg-3 d-none d-md-flex align-items-center"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_Dropdown_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    id: "game-board-toolbar-menu",
-    actions: [{
-      to: '/',
-      title: 'Leave room'
-    }],
-    classNameMenu: "dropdown-menu-right"
-  }, "Menu")))));
+  }, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(round.getDrawer(room.getActivePlayers()), 'username', ''), " choosing word")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col-sm-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    className: "basic-link-white text-decoration-none my-transition-elastic",
+    to: "/play"
+  }, "QUIT")))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (GameToolBar);

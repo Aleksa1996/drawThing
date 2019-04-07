@@ -1,7 +1,5 @@
 import React from 'react';
-import InfoTooltip from '../../../Common/InfoTooltip/InfoTooltip';
-import Dropdown from '../../../Common/Dropdown/Dropdown';
-
+import { Link } from 'react-router-dom';
 import { get as _get } from 'lodash';
 
 const GameToolBar = ({ player, room, game, round }) => {
@@ -10,25 +8,19 @@ const GameToolBar = ({ player, room, game, round }) => {
 			<div className="game-board-toolbar-container-border">
 				<div className="row">
 					<div className="col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center">
-						{!round.inProgress() ? null : (
-							<p className="game-board-rounds m-1">
-								Round: {round.number} of {game.number_of_rounds}
-							</p>
-						)}
-						{!round.inProgress() ? null : (
-							<p
-								className={`game-board-clock m-1 d-block ${
-									round.nearEnd() ? 'bounceAnimation' : ''
-								}`}
-							>
-								<i className="fa fa-clock-o" aria-hidden="true" /> &nbsp;
-								{round.getFormattedTimer()}
-							</p>
-						)}
+						<p className="game-board-rounds m-1 text-transform-uppercase">
+							ROUND: {round.inProgress() ? `${round.number} of ${game.number_of_rounds}` : ''}
+						</p>
+						<p
+							className={`game-board-clock m-1 d-block ${round.nearEnd() ? 'bounceAnimation' : ''}`}
+						>
+							<i className="fa fa-clock-o" aria-hidden="true" /> &nbsp;
+							{round.getFormattedTimer()}
+						</p>
 					</div>
-					<div className="col-6 col-sm-8 col-md-6 col-lg-6 game-board-guessing-word-container d-flex justify-content-center align-items-center">
+					<div className="col-6 col-sm-8 col-md-7 col-lg-8 game-board-guessing-word-container d-flex justify-content-center align-items-center">
 						<div className="">
-							<p className="game-board-guessing-word">
+							<p className="game-board-guessing-word mb-0 text-transform-uppercase">
 								{round.chosedWordExists()
 									? round.chosedWordToArrayOfLetters().map((letter, key) => (
 											<span
@@ -48,20 +40,14 @@ const GameToolBar = ({ player, room, game, round }) => {
 									  )}
 							</p>
 						</div>
-						<div className="ml-3 d-none">
-							<InfoTooltip info="Guessing word" className="m-1">
-								<i className="fa fa-question" aria-hidden="true" />
-							</InfoTooltip>
-						</div>
 					</div>
-					<div className="game-board-toolbar-menu-container col-xs-12 col-sm-12 col-md-2 col-lg-3 d-none d-md-flex align-items-center">
-						<Dropdown
-							id="game-board-toolbar-menu"
-							actions={[{ to: '/', title: 'Leave room' }]}
-							classNameMenu="dropdown-menu-right"
+					<div className="col-sm-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
+						<Link
+							className="basic-link-white text-decoration-none my-transition-elastic"
+							to="/play"
 						>
-							Menu
-						</Dropdown>
+							QUIT
+						</Link>
 					</div>
 				</div>
 			</div>

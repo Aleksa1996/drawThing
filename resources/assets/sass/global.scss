@@ -159,3 +159,25 @@ select[disabled] > option {
 	word-spacing: 1.1px;
 	letter-spacing: 0.6px;
 }
+
+.text-decoration-none {
+	text-decoration: none !important;
+}
+
+.basic-link-white {
+	color: $mytheme-color-sixth;
+	&:hover {
+		color: $mytheme-color-first;
+	}
+}
+
+.basic-link-green {
+	color: $mytheme-color-first;
+	&:hover {
+		color: $mytheme-color-sixth;
+	}
+}
+
+.text-transform-uppercase {
+	text-transform: uppercase;
+}
