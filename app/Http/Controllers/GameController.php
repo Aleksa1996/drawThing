@@ -132,7 +132,15 @@ class GameController extends WebsocketController
     {
         // $player = Player::find(10);
         // $round = Round::find(7);
-        return json_encode(['points' => '']);
+        // $game = Game::find(2);
+        $room = Room::find(2);
+
+        // $r = $room->games()->with('rounds.players')->get()->pluck('rounds.*')->flatten();
+        // return $r;
+        // return RoundResource::collection($r);
+        $finishingGameData = [];
+        $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
+        return json_encode($finishingGameData);
     }
 
     /**
@@ -283,6 +291,7 @@ class GameController extends WebsocketController
                             $finishingGameData['nextRound'] = new RoundResource($round);
                         } else {
                             $room->deactivate();
+                            $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
                         }
                         // summary of the game through rounds and flag is there new game or not
                         $websocket->to($room->uuid)->emit('FINISHING_GAME', $finishingGameData);

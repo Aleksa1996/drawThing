@@ -23,4 +23,8 @@ export default class Round extends Model {
 		}
 		return false;
 	};
+
+	getDrawer = players => {
+		return players.find(this.isPlayerDrawing);
+	};
 }

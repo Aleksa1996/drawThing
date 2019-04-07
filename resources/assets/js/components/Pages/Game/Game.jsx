@@ -105,11 +105,6 @@ class Game extends Component {
 			this.updateDrawingUI();
 		}
 
-		if (roundModel.finished() && !gameModel.isCanvasEmpty()) {
-			this.props.sketchClear();
-			this.props.clearState(['chat']);
-		}
-
 		if (gameModel.finished() && prevGame.status != gameModel.status) {
 			this.props.showModal({
 				modalType: 'SHOW_SCOREBOARD_MODAL'
@@ -157,6 +152,7 @@ class Game extends Component {
 			}
 		}));
 
+		this.props.clearState(['chat']);
 		this.props.sketchClear();
 	};
 
@@ -204,7 +200,7 @@ class Game extends Component {
 		return (
 			<Page title="Game - Drawthing" className="container-fluid page-game">
 				<GameLayout>
-					<GameToolBar player={playerModel} game={gameModel} round={roundModel} />
+					<GameToolBar player={playerModel} room={roomModel} game={gameModel} round={roundModel} />
 					<div className="row no-gutters">
 						<GameScore player={playerModel} room={roomModel} game={gameModel} round={roundModel} />
 						<GameCanvas

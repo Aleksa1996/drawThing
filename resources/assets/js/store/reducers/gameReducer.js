@@ -41,7 +41,8 @@ const initialState = {
 	//
 	rounds: [],
 	nextGame: null,
-	nextRound: null
+	nextRound: null,
+	finalScores: []
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -95,9 +96,12 @@ const reducer = (state = initialState, { type, payload }) => {
 
 			let nextRound = null;
 			let nextGame = null;
+			let finalScores = [];
 			if (isThereNextGame) {
 				nextRound = { ..._get(payload, 'nextRound', null), score: [] };
 				nextGame = { ..._get(payload, 'nextGame', null), rounds: [] };
+			} else {
+				finalScores = [..._get(payload, 'finalScores', [])];
 			}
 
 			return updateGame(state, {
@@ -105,7 +109,8 @@ const reducer = (state = initialState, { type, payload }) => {
 				rounds,
 				isThereNextGame,
 				nextRound,
-				nextGame
+				nextGame,
+				finalScores
 			});
 		}
 		case PLAYER_GUESSED_WORD: {

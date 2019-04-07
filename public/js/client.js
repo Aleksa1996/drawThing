@@ -311,7 +311,7 @@ var clearState = function clearState() {
         sockets = _ref.sockets;
 
     if (whatToClear && whatToClear.length == 0) {
-      whatToClear = ['room', 'chat', 'player', 'game'];
+      whatToClear = ['player', 'room', 'chat', 'game', 'round'];
     } // clear reducer state
 
 
@@ -338,7 +338,7 @@ var clearSubscriptions = function clearSubscriptions() {
 
     //unsubscribe chat and room events
     if (whatToClear && whatToClear.length == 0) {
-      whatToClear = ['room', 'chat', 'game'];
+      whatToClear = ['room', 'chat', 'game', 'round'];
     } // clear reducer state
 
 
@@ -2292,8 +2292,7 @@ function (_Component) {
       var title = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fa-trophy",
         "aria-hidden": "true"
-      }), " Scoreboard"); // TODO: IF THERE IS NO NEXTGAME JUST PUSH ALL SCORES TOGETHER
-
+      }), " Scoreboard");
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: title,
         body: "",
@@ -2324,7 +2323,7 @@ function (_Component) {
           className: "game-board-score-username"
         }, p.username, " ", playerModel.id == p.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, " (you)") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
           className: "game-board-score-points"
-        }, "(", gameModel.getScoreForPlayer(p), ") points")));
+        }, "(", gameModel.isThereNextGame ? gameModel.getScoreForPlayer(p) : gameModel.getFinalScoreForPlayer(p), ") points")));
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center mt-3"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
@@ -3370,6 +3369,8 @@ function (_Component) {
         };
       });
 
+      _this.props.clearState(['chat']);
+
       _this.props.sketchClear();
     };
 
@@ -3489,11 +3490,6 @@ function (_Component) {
         this.updateDrawingUI();
       }
 
-      if (roundModel.finished() && !gameModel.isCanvasEmpty()) {
-        this.props.sketchClear();
-        this.props.clearState(['chat']);
-      }
-
       if (gameModel.finished() && prevGame.status != gameModel.status) {
         this.props.showModal({
           modalType: 'SHOW_SCOREBOARD_MODAL'
@@ -3527,6 +3523,7 @@ function (_Component) {
         className: "container-fluid page-game"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameLayout__WEBPACK_IMPORTED_MODULE_10__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameToolBar_GameToolBar__WEBPACK_IMPORTED_MODULE_11__["default"], {
         player: playerModel,
+        room: roomModel,
         game: gameModel,
         round: roundModel
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4791,12 +4788,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Common_InfoTooltip_InfoTooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Common/InfoTooltip/InfoTooltip */ "./resources/assets/js/components/Common/InfoTooltip/InfoTooltip.jsx");
 /* harmony import */ var _Common_Dropdown_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../Common/Dropdown/Dropdown */ "./resources/assets/js/components/Common/Dropdown/Dropdown.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
 
 var GameToolBar = function GameToolBar(_ref) {
   var player = _ref.player,
+      room = _ref.room,
       game = _ref.game,
       round = _ref.round;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -4827,7 +4828,7 @@ var GameToolBar = function GameToolBar(_ref) {
     }, round.isPlayerDrawing(player) ? letter : ' ');
   }) : round.isPlayerChoosingWord() && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "bounceAnimation d-block"
-  }, "Choosing word..."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, Object(lodash__WEBPACK_IMPORTED_MODULE_3__["get"])(round.getDrawer(room.getActivePlayers()), 'username', ''), " choosing word"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ml-3 d-none"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Common_InfoTooltip_InfoTooltip__WEBPACK_IMPORTED_MODULE_1__["default"], {
     info: "Guessing word",
@@ -7043,7 +7044,8 @@ var initialState = {
   //
   rounds: [],
   nextGame: null,
-  nextRound: null
+  nextRound: null,
+  finalScores: []
 };
 
 var reducer = function reducer() {
@@ -7148,6 +7150,7 @@ var reducer = function reducer() {
             isThereNextGame = payload.isThereNextGame;
         var nextRound = null;
         var nextGame = null;
+        var finalScores = [];
 
         if (isThereNextGame) {
           nextRound = _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'nextRound', null), {
@@ -7156,13 +7159,16 @@ var reducer = function reducer() {
           nextGame = _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'nextGame', null), {
             rounds: []
           });
+        } else {
+          finalScores = _toConsumableArray(Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'finalScores', []));
         }
 
         return updateGame(state, _objectSpread({}, game, {
           rounds: rounds,
           isThereNextGame: isThereNextGame,
           nextRound: nextRound,
-          nextGame: nextGame
+          nextGame: nextGame,
+          finalScores: finalScores
         }));
       }
 
@@ -8262,6 +8268,19 @@ function (_Model) {
 
         return totalScore + score;
       }, 0);
+    }, _this.getFinalScoreForPlayer = function (player) {
+      return _this.finalScores.reduce(function (totalScore, round) {
+        var score = 0;
+        var playerScore = round.score.find(function (s) {
+          return s.player_id == player.id;
+        });
+
+        if (playerScore) {
+          score = playerScore.points;
+        }
+
+        return totalScore + score;
+      }, 0);
     }, _temp));
   }
 
@@ -8568,6 +8587,8 @@ function (_Model) {
       }
 
       return false;
+    }, _this.getDrawer = function (players) {
+      return players.find(_this.isPlayerDrawing);
     }, _temp));
   }
 

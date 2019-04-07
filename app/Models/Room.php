@@ -201,6 +201,11 @@ class Room extends Model
         return $this->number_of_games > $this->getGamesCount();
     }
 
+    public function getFinalScores()
+    {
+        return $this->games()->with('rounds.players')->get()->pluck('rounds.*')->flatten();
+    }
+
     // scopes
     public function scopeFindByUuid($query, $uuid)
     {

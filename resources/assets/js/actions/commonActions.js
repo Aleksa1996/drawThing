@@ -6,7 +6,7 @@ import { clearRoundData, unsubscribeToRoundGlobalEvents } from './roundActions';
 
 export const clearState = (whatToClear = []) => (dispatch, getState, { api, sockets }) => {
 	if (whatToClear && whatToClear.length == 0) {
-		whatToClear = ['room', 'chat', 'player', 'game'];
+		whatToClear = ['player', 'room', 'chat', 'game', 'round'];
 	}
 	// clear reducer state
 	whatToClear.forEach(wtc => {
@@ -27,7 +27,7 @@ export const clearState = (whatToClear = []) => (dispatch, getState, { api, sock
 export const clearSubscriptions = (whatToClear = []) => (dispatch, getState, { api, sockets }) => {
 	//unsubscribe chat and room events
 	if (whatToClear && whatToClear.length == 0) {
-		whatToClear = ['room', 'chat', 'game'];
+		whatToClear = ['room', 'chat', 'game', 'round'];
 	}
 	// clear reducer state
 	whatToClear.forEach(wtc => {

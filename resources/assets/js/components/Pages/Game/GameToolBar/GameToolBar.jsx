@@ -2,7 +2,9 @@ import React from 'react';
 import InfoTooltip from '../../../Common/InfoTooltip/InfoTooltip';
 import Dropdown from '../../../Common/Dropdown/Dropdown';
 
-const GameToolBar = ({ player, game, round }) => {
+import { get as _get } from 'lodash';
+
+const GameToolBar = ({ player, room, game, round }) => {
 	return (
 		<div className="game-board-toolbar-container container-fluid">
 			<div className="game-board-toolbar-container-border">
@@ -39,7 +41,10 @@ const GameToolBar = ({ player, game, round }) => {
 											</span>
 									  ))
 									: round.isPlayerChoosingWord() && (
-											<span className="bounceAnimation d-block">Choosing word...</span>
+											<span className="bounceAnimation d-block">
+												{_get(round.getDrawer(room.getActivePlayers()), 'username', '')} choosing
+												word
+											</span>
 									  )}
 							</p>
 						</div>

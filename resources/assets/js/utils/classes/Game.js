@@ -20,4 +20,17 @@ export default class Game extends Model {
 			return totalScore + score;
 		}, 0);
 	};
+
+	getFinalScoreForPlayer = player => {
+		return this.finalScores.reduce((totalScore, round) => {
+			let score = 0;
+			let playerScore = round.score.find(s => s.player_id == player.id);
+
+			if (playerScore) {
+				score = playerScore.points;
+			}
+
+			return totalScore + score;
+		}, 0);
+	};
 }

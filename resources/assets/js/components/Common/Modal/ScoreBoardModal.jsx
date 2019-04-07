@@ -55,7 +55,6 @@ class ScoreBoardModal extends Component {
 				<i className="fa fa-trophy" aria-hidden="true" /> Scoreboard
 			</React.Fragment>
 		);
-		// TODO: IF THERE IS NO NEXTGAME JUST PUSH ALL SCORES TOGETHER
 		return (
 			<Modal
 				title={title}
@@ -79,7 +78,11 @@ class ScoreBoardModal extends Component {
 									<span className="game-board-score-username">
 										{p.username} {playerModel.id == p.id ? <small> (you)</small> : null}
 										<small className="game-board-score-points">
-											({gameModel.getScoreForPlayer(p)}) points
+											(
+											{gameModel.isThereNextGame
+												? gameModel.getScoreForPlayer(p)
+												: gameModel.getFinalScoreForPlayer(p)}
+											) points
 										</small>
 									</span>
 								</li>

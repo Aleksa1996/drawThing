@@ -20,7 +20,7 @@ class Game extends Resource
             'number_of_rounds' => $this->number_of_rounds,
             'room_id' => $this->room_id,
             'created_at' => $this->created_at,
-            'rounds' => Round::collection($this->whenLoaded('rounds')),
+            'rounds' => Round::collection($this->whenLoaded('rounds'))
         ];
     }
 }
