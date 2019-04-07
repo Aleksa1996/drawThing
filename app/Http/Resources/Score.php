@@ -6,7 +6,6 @@ use Illuminate\Http\Resources\Json\Resource;
 
 class Score extends Resource
 {
-    protected $addData = [];
     /**
      * Transform the resource into an array.
      *
@@ -15,18 +14,12 @@ class Score extends Resource
      */
     public function toArray($request)
     {
-        $data = [
+        return [
             'id' => $this->score->id,
             'guessed' => $this->score->guessed,
-            'score' => $this->score->score
+            'points' => $this->score->points,
+            'player_id' => $this->score->player_id,
+            'round_id' => $this->score->round_id,
         ];
-
-        return array_merge($data, $this->addData);
-    }
-
-    public function append(array $data)
-    {
-        $this->addData = $data;
-        return $this;
     }
 }

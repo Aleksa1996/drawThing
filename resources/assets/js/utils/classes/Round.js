@@ -15,4 +15,16 @@ export default class Round extends Model {
 	getFormattedTimer = () => this.timer;
 	// 15 secs
 	nearEnd = () => this.inProgress() && !this.finished() && this.seconds <= 5;
+
+	playerGuessedWord = player => {
+		let playerScore = this.score.find(s => s.player_id == player.id);
+		if (playerScore) {
+			return playerScore.guessed;
+		}
+		return false;
+	};
+
+	getDrawer = players => {
+		return players.find(this.isPlayerDrawing);
+	};
 }

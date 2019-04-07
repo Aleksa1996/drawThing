@@ -49,7 +49,6 @@ class ChooseWordModal extends Component {
 				title="Choose word to draw"
 				body="Choose one word out of three:"
 				buttons={buttons}
-				data={words_to_choose}
 				handleClose={hideModal}
 				shouldCloseOnOverlayClick={false}
 				shouldHideCloseButton={true}
@@ -60,7 +59,7 @@ class ChooseWordModal extends Component {
 							key={wtc.id}
 							onClick={() => this.chooseWord(wtc)}
 							type="button"
-							className="mybtn2"
+							className="mybtn2 text-transform-uppercase"
 						>
 							{wtc.word}
 						</Button>

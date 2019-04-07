@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 } from 'uuid';
 
-import { split as _split, find as _find, get as _get } from 'lodash';
+import { get as _get } from 'lodash';
 import RoomChatMessage from './RoomChatMessage';
 
 const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) => {
@@ -10,18 +10,14 @@ const RoomChat = React.forwardRef(({ room, chat, handleChatSend }, chatBodyRef) 
 			<div className="game-board-chat rounded">
 				<h2 className="game-created-title">Room Chat</h2>
 				<div className="game-board-chat-body" ref={chatBodyRef}>
-					{chat.messages.map(m => {
-						const player = room.getPlayer(m.player_id);
-						if (!player && m.player_id != '#playerActionMessage') return null;
-						return (
-							<RoomChatMessage
-								key={m.id}
-								chat={chat}
-								message={m.text}
-								username={_get(player, 'username', '')}
-							/>
-						);
-					})}
+					{chat.messages.map(m => (
+						<RoomChatMessage
+							key={m.id}
+							chat={chat}
+							message={m}
+							username={_get(room.getPlayer(m.player_id), 'username', '')}
+						/>
+					))}
 				</div>
 				<div className="game-board-chat-footer rounded-bottom">
 					<form onSubmit={handleChatSend}>

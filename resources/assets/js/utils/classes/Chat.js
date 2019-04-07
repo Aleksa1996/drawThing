@@ -1,6 +1,6 @@
 import Model from './Model';
 
-import { split as _split, find as _find } from 'lodash';
+import { split as _split, find as _find, get as _get, has as _has } from 'lodash';
 
 export default class Chat extends Model {
 	parseEmojis = (message, callback) => {
@@ -21,4 +21,8 @@ export default class Chat extends Model {
 		);
 
 	hasMessages = () => this.messages.length > 0;
+
+	getTypeClassname = message => _get(message, 'type.className', '');
+
+	isMessageByPlayer = message => _has(message, 'player_id');
 }

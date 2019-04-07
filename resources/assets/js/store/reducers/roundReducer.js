@@ -1,14 +1,19 @@
 import {
 	STARTING_GAME,
+	FINISHING_GAME,
+	//
 	STARTING_ROUND,
-	PLAYER_CHOOSING_WORD,
-	PLAYER_CHOOSED_WORD,
+	FINISHING_ROUND,
 	START_ROUND,
 	TICK_ROUND,
+	//
+	PLAYER_CHOOSING_WORD,
+	PLAYER_CHOOSED_WORD,
 	CHOOSE_WORD,
-	FINISHING_ROUND,
+	//
 	CLEAR_ROUND_DATA,
-	FINISHING_GAME
+	//
+	PLAYER_GUESSED_WORD
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -31,8 +36,8 @@ const initialState = {
 	words_to_choose: [],
 	chosed_word: null,
 	//
-	guessed_word: null,
-	score: null
+	// { player_id,score_id,guessed,points}
+	score: []
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -40,21 +45,8 @@ const reducer = (state = initialState, { type, payload }) => {
 		case STARTING_GAME: {
 			return updateRound(state, { ...payload.round });
 		}
-		case PLAYER_CHOOSING_WORD: {
-			return updateRound(state, {
-				localStatus: 'PLAYER_CHOOSING_WORD'
-			});
-		}
-		case CHOOSE_WORD: {
-			return updateRound(state, {
-				words_to_choose: payload.round.words_to_choose
-			});
-		}
-		case PLAYER_CHOOSED_WORD: {
-			return updateRound(state, {
-				localStatus: 'PLAYER_CHOOSED_WORD',
-				chosed_word: payload.word
-			});
+		case FINISHING_GAME: {
+			return { ...initialState };
 		}
 		case STARTING_ROUND: {
 			return updateRound(state, { ...payload.round, localStatus: 'ROUND_STARTING' });
@@ -73,12 +65,26 @@ const reducer = (state = initialState, { type, payload }) => {
 				localStatus: 'ROUND_FINISHED'
 			});
 		}
-		case FINISHING_GAME: {
+		case PLAYER_CHOOSING_WORD: {
 			return updateRound(state, {
-				..._get(payload, 'round', {}),
-				chosed_word: null,
-				words_to_choose: []
+				localStatus: 'PLAYER_CHOOSING_WORD'
 			});
+		}
+		case CHOOSE_WORD: {
+			return updateRound(state, {
+				words_to_choose: payload.round.words_to_choose
+			});
+		}
+		case PLAYER_CHOOSED_WORD: {
+			return updateRound(state, {
+				localStatus: 'PLAYER_CHOOSED_WORD',
+				chosed_word: payload.word
+			});
+		}
+		case PLAYER_GUESSED_WORD: {
+			const { player } = payload;
+			const newScores = updateScore(state.score, player.score);
+			return updateRound(state, { score: newScores });
 		}
 		case CLEAR_ROUND_DATA: {
 			return { ...initialState };
@@ -95,6 +101,12 @@ export default reducer;
 export const selector = state => {};
 
 // utility reducer functions
-export const updateRound = (state, round) => {
-	return _fp_assign(state, round);
-};
+export const updateRound = (state, round) => _fp_assign(state, round);
+
+export const updateScore = (score, newScore) =>
+	score.map(s => {
+		if (s.id == newScore.id) {
+			return { ...s, ...newScore };
+		}
+		return { ...s };
+	});

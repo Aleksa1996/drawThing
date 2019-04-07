@@ -12890,6 +12890,30 @@ select[disabled] > option {
   letter-spacing: 0.6px;
 }
 
+.text-decoration-none {
+  text-decoration: none !important;
+}
+
+.basic-link-white {
+  color: #e6e6e6;
+}
+
+.basic-link-white:hover {
+  color: #37ca8a;
+}
+
+.basic-link-green {
+  color: #37ca8a;
+}
+
+.basic-link-green:hover {
+  color: #e6e6e6;
+}
+
+.text-transform-uppercase {
+  text-transform: uppercase;
+}
+
 .input-material-wrapper {
   min-height: 75px;
   margin-bottom: 1rem;
@@ -13486,6 +13510,10 @@ select[disabled] > option {
   box-shadow: none;
 }
 
+.game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input:disabled:hover {
+  cursor: not-allowed !important;
+}
+
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis {
   position: absolute;
   right: 30px;
@@ -13513,6 +13541,15 @@ select[disabled] > option {
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown a:focus {
   box-shadow: none;
   border: none;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-toggle.disabled:hover {
+  cursor: not-allowed !important;
+  pointer-events: all !important;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown #game-board-chat-emojis-dropdown:hover {
+  color: #37ca8a;
 }
 
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu {
@@ -13772,7 +13809,6 @@ select[disabled] > option {
 
 .game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word {
   margin-bottom: 7px;
-  font-size: 1.4rem;
 }
 
 .game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word .game-board-guessing-word-letter {
@@ -13782,7 +13818,7 @@ select[disabled] > option {
   width: 15px;
   display: inline-block;
   text-align: center;
-  height: 35px;
+  height: 25px;
 }
 
 .game-board-toolbar-container .game-board-toolbar-container-border .game-board-guessing-word-container .game-board-guessing-word .game-board-guessing-word-letter.whitespace {
@@ -13997,14 +14033,17 @@ select[disabled] > option {
 }
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar {
-  display: block;
-  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   position: relative;
 }
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar img {
-  width: 50px;
+  width: 40px;
 }
 
 .page-start-game .game-start-container .game-start-card .game-created-container .game-created-user-list .game-created-user-list-item .game-created-user-avatar .game-creater-user-leader {

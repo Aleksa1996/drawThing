@@ -4,8 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
+use App\Http\Resources\Score as ScoreResource;
 use App\Http\Resources\Word as WordResource;
-use App\Http\Resources\Player as PlayerResource;
 
 
 class Round extends Resource
@@ -27,7 +27,8 @@ class Round extends Resource
             'started_at' => $this->startedAtAtomFormat(),
             'finishing_at' => $this->finishingAtAtomFormat(),
             'timer' => $this->timer(),
-            'seconds' => $this->diffBetweenStartingAndFinishingInSec()
+            'seconds' => $this->diffBetweenStartingAndFinishingInSec(),
+            'score' => ScoreResource::collection($this->whenLoaded('players'))
         ];
     }
 }

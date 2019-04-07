@@ -26,8 +26,8 @@ class WebsocketController extends Controller
         var_dump('connected');
         try {
             $websocket->emit('CONNECT_SOCKET_DATA', ['fd' => $websocket->getSender()]);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
+        } catch (\Exception $exception) {
+            print_r(['file' => $exception->getFile(), 'line' => $exception->getLine(), 'message' => $exception->getMessage()]);
         }
     }
     /**
@@ -44,7 +44,7 @@ class WebsocketController extends Controller
             // find player
             $player = Player::findByFd($websocket->getSender());
 
-            if (is_null($player)) {
+            if (empty($player)) {
                 return;
             }
 
@@ -53,8 +53,12 @@ class WebsocketController extends Controller
 
             // disconnect player from db  and websocket tables
             $player->disconnectFromRoom($room);
-            WebsocketRoom::delete($player->fd, $room->uuid);
+            $player->load('rooms');
+            foreach ($player->rooms as $r) {
+                WebsocketRoom::delete($player->fd, $r->uuid);
+            }
 
+            if (empty($room)) return;
             // if room is empty remove it // TODO: SPECIAL RANDOM ROOM DONT DELETE
             if ($room->isEmpty()) {
                 $room->deactivate();
@@ -67,8 +71,8 @@ class WebsocketController extends Controller
 
             // send notification to others
             Websocket::broadcast()->to($room->uuid)->emit('PLAYER_LEAVED_ROOM', ['player' => new PlayerResource($player)]);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
+        } catch (\Exception $exception) {
+            print_r(['file' => $exception->getFile(), 'line' => $exception->getLine(), 'message' => $exception->getMessage()]);
         }
     }
 
@@ -123,7 +127,7 @@ class WebsocketController extends Controller
             // emit error
             $websocket->emit($event, ['errors' => $errorCollection->values()]);
         } else {
-            print_r(['file' => $exception->getFile(), 'message' => $exception->getMessage(), 'line' => $exception->getLine()]);
+            print_r(['file' => $exception->getFile(), 'line' => $exception->getLine(), 'message' => $exception->getMessage()]);
         }
     }
 

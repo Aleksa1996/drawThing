@@ -11,7 +11,7 @@
 		.game-board-guessing-word-container {
 			.game-board-guessing-word {
 				margin-bottom: 7px;
-				font-size: 1.4rem;
+				// font-size: 1.4rem;
 
 				.game-board-guessing-word-letter {
 					border-bottom: 1.5px solid #fff;
@@ -20,7 +20,7 @@
 					width: 15px;
 					display: inline-block;
 					text-align: center;
-					height: 35px;
+					height: 25px;
 					&.whitespace {
 						border-bottom: none !important;
 					}

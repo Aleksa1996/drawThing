@@ -109,13 +109,16 @@
 						align-items: center;
 						margin: 10px 0px;
 						.game-created-user-avatar {
-							display: block;
-							height: 50px;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							width: 60px;
+							height: 60px;
 							border-radius: 50%;
 							position: relative;
 
 							img {
-								width: 50px;
+								width: 40px;
 							}
 							.game-creater-user-leader {
 								position: absolute;

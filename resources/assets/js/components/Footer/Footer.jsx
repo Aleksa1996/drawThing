@@ -8,7 +8,11 @@ class Footer extends Component {
 				<div className="row">
 					<div className="col-xs-6 col-sm-6 col-md-6 text-left justify-content-center align-items-center d-flex">
 						&copy; 2019 &nbsp;
-						<a href="https://aleksajovanovic.com" title="My portfolio">
+						<a
+							href="https://aleksajovanovic.com"
+							className="basic-link-white text-decoration-none"
+							title="My portfolio"
+						>
 							Aleksa Jovanovic
 						</a>
 						&nbsp; 179/15

@@ -17,7 +17,7 @@ class CreatePlayerRoundTable extends Migration
             $table->increments('id');
 
             $table->boolean('guessed')->default(false);
-            $table->integer('score')->default(0);
+            $table->integer('points')->default(0);
 
             $table->unsignedInteger('player_id');
             $table->unsignedInteger('round_id');
