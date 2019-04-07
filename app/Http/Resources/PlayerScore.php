@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
-use App\Http\Resources\PlayerScore as PlayerScoreResource;
+use App\Http\Resources\Score as ScoreResource;
 
 
 class PlayerScore extends Resource
@@ -22,13 +22,7 @@ class PlayerScore extends Resource
             'avatar' => $this->avatar,
             'fd' => $this->fd,
             'score' => $this->whenLoaded('rounds', function () {
-                $round = $this->rounds->first();
-                return [
-                    'id' => $round->score->id,
-                    'guessed' => $round->score->guessed,
-                    'points' => $round->score->points,
-                    'round_id' => $round->score->round_id
-                ];
+                return  new ScoreResource($this->rounds->first());
             })
         ];
     }

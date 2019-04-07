@@ -10,7 +10,6 @@ const Modal = ({
 	title,
 	body,
 	buttons,
-	data,
 	handleClose,
 	children,
 	shouldCloseOnOverlayClick,

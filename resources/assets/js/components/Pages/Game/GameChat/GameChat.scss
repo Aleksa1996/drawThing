@@ -56,6 +56,12 @@
 				&:focus {
 					box-shadow: none;
 				}
+
+				&:disabled {
+					&:hover {
+						cursor: not-allowed !important;
+					}
+				}
 			}
 			.game-board-chat-emojis {
 				position: absolute;
@@ -81,7 +87,12 @@
 							border: none;
 						}
 					}
-
+					.dropdown-toggle.disabled {
+						&:hover {
+							cursor: not-allowed !important;
+							pointer-events: all !important;
+						}
+					}
 					.dropdown-menu {
 						width: 300px;
 						background: $mytheme-color-fourth;

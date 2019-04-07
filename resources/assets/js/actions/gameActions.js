@@ -89,3 +89,8 @@ export const startingGameFailure = errors => ({
 	type: STARTING_GAME_REQUEST_FAILURE,
 	payload: errors
 });
+
+export const startNextGame = data => (dispatch, getState, { api, sockets }) => {
+	const { nextGame: game, nextRound: round } = getState().game;
+	dispatch({ type: 'STARTING_GAME', payload: { game, round } });
+};

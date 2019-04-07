@@ -9,11 +9,13 @@ import {
 	FINISHING_ROUND,
 	CLEAR_ROUND_DATA,
 	PLAYER_GUESSED_WORD,
-	PLAYER_WAS_CLOSE
+	PLAYER_WAS_CLOSE,
+	STARTING_ROUND
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
 const globalEvents = [
+	STARTING_ROUND,
 	PLAYER_CHOOSING_WORD,
 	PLAYER_CHOOSED_WORD,
 	CHOOSE_WORD,

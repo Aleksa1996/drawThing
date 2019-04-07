@@ -31,7 +31,7 @@ import GameScore from './GameScore/GameScore';
 import GameCanvas from './GameCanvas/GameCanvas';
 import GameChat from './GameChat/GameChat';
 
-import { CHOOSE_WORD_MODAL } from '../../Common/Modal/modalTypes';
+import { CHOOSE_WORD_MODAL, SHOW_SCOREBOARD_MODAL } from '../../Common/Modal/modalTypes';
 
 class Game extends Component {
 	constructor(props) {
@@ -89,7 +89,7 @@ class Game extends Component {
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate({ chat: prevChat, round: prevRound, game: prevGame }) {
 		// chat always scroll on new message to see the latest one
 		const { chat, game, round } = this.props;
 
@@ -97,17 +97,23 @@ class Game extends Component {
 		const gameModel = new GameModel(game);
 		const roundModel = new RoundModel(round);
 
-		if (chat.messages.length != prevProps.chat.messages.length && chatModel.hasMessages()) {
+		if (prevChat.messages.length != chatModel.messages.length && chatModel.hasMessages()) {
 			this.scrollToBottom();
 		}
 
-		if (prevProps.round.drawn_by != round.drawn_by || prevProps.game.id != game.id) {
+		if (prevRound.drawn_by != roundModel.drawn_by || prevGame.id != gameModel.id) {
 			this.updateDrawingUI();
 		}
 
-		if (roundModel.finished() && gameModel.isCanvasEmpty()) {
+		if (roundModel.finished() && !gameModel.isCanvasEmpty()) {
 			this.props.sketchClear();
 			this.props.clearState(['chat']);
+		}
+
+		if (gameModel.finished() && prevGame.status != gameModel.status) {
+			this.props.showModal({
+				modalType: 'SHOW_SCOREBOARD_MODAL'
+			});
 		}
 	}
 
@@ -163,7 +169,13 @@ class Game extends Component {
 		const { player, round } = this.props;
 		const roundModel = new RoundModel(round);
 
-		if (roundModel.isPlayerDrawing(player) || roundModel.guessedWord()) return false;
+		if (
+			roundModel.isPlayerDrawing(player) ||
+			roundModel.isPlayerChoosingWord() ||
+			roundModel.playerGuessedWord(player)
+		) {
+			return false;
+		}
 
 		let message = '';
 		// Message comes from text input
@@ -194,7 +206,7 @@ class Game extends Component {
 				<GameLayout>
 					<GameToolBar player={playerModel} game={gameModel} round={roundModel} />
 					<div className="row no-gutters">
-						<GameScore player={playerModel} room={roomModel} />
+						<GameScore player={playerModel} room={roomModel} game={gameModel} round={roundModel} />
 						<GameCanvas
 							{...this.state.sketchpad}
 							items={game.drawing.items}

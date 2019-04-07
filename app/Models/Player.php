@@ -84,8 +84,12 @@ class Player extends Model
      */
     public function disconnectFromRoom($room = null)
     {
-        if (is_null($room)) {
+        if (empty($room)) {
             $room = $this->currentRoom();
+        }
+
+        if (empty($room)) {
+            return $this->rooms()->newPivotStatement()->where('player_id', $this->id)->update(['active' => false]);
         }
 
         return $this->rooms()->updateExistingPivot($room->id, ['active' => false]);
@@ -171,9 +175,16 @@ class Player extends Model
         }]);
     }
 
-    public function awardWithPoints(Round $round, int $points)
+    public function awardWithPoints(Round $round, int $points, int $percentage = 0)
     {
-        return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'points' => $points]);
+        $extraPoints = (int)round(($points * $percentage) / 100);
+        $sumPoints = $points + $extraPoints;
+
+        if ($sumPoints <= 0) {
+            $sumPoints = 1;
+        }
+
+        return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'points' => $sumPoints]);
     }
 
     public function hasGuessedWord(Round $round)

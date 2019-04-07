@@ -50,7 +50,7 @@ Route::group(['middleware' => 'api'], function ($router) {
         Route::post('/start', 'GameController@start');
     });
 
-    Route::get('/test', 'GameController@test');
-
-    // Route::group(['prefix' => 'game'], function () {});
+    if (env('APP_ENV') === 'local') {
+        Route::get('/test', 'GameController@test');
+    }
 });

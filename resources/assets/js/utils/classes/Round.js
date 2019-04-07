@@ -16,5 +16,11 @@ export default class Round extends Model {
 	// 15 secs
 	nearEnd = () => this.inProgress() && !this.finished() && this.seconds <= 5;
 
-	guessedWord = () => this.guessed;
+	playerGuessedWord = player => {
+		let playerScore = this.score.find(s => s.player_id == player.id);
+		if (playerScore) {
+			return playerScore.guessed;
+		}
+		return false;
+	};
 }

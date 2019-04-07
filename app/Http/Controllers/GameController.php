@@ -50,11 +50,20 @@ class GameController extends WebsocketController
 
             $player = $this->validatePlayer($data);
 
-            $message = Tools::generateChatMessage($data['message']['text'], ['player_id' => $player->id]);
-            $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
-            $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_MESSAGE_ROOM', $message);
+            // check if word is guessed through chat
+            $result = $this->guessWord($websocket, $data, $player);
 
-            $this->guessWord($websocket, $data, $player);
+            if ($result['guessingResult'] === Round::GUESSED) {
+                $websocket->to($data['room']['uuid'])->emit('PLAYER_GUESSED_WORD', ['player' => $result['data']]);
+            } else {
+                if ($result['guessingResult'] === Round::WAS_CLOSE) {
+                    $websocket->emit('PLAYER_WAS_CLOSE',  $result['data']);
+                }
+                // generate chat message
+                $message = Tools::generateChatMessage($data['message']['text'], ['player_id' => $player->id]);
+                $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
+                $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_MESSAGE_ROOM', $message);
+            }
         } catch (\Exception $e) {
             $this->emitException($websocket, 'SEND_MESSAGE_ROOM_FAILURE', $e);
         }
@@ -71,7 +80,7 @@ class GameController extends WebsocketController
     {
         try {
             if (empty($websocket) || empty($data)  || empty($player)  || empty($data['game']['id']) || empty($data['game']['status'])) {
-                return;
+                return ['guessingResult' => 0, 'data' => []];
             }
 
             $room = $player->currentRoom();
@@ -93,18 +102,27 @@ class GameController extends WebsocketController
 
                 $guessingResult = $round->checkGuessingWord($data['message']['text']);
 
-                //TODO: RACUNANJE POEN-A LJUDI KOJI POGADJAJU PO PRAVILIMA : STO KASNIJE TO LOSIJE : STO PRE TO BOLJE
-                // TODO: RACUNANJE POENA ZA ONOGA KO CRTA NA KRAJU RUNDE ZASNOVANO NA BRZINI LJUDI KOJI SU OTKRILI REC
                 if ($guessingResult === Round::GUESSED) {
-                    $points = $round->word->points_worth;
-                    $player->awardWithPoints($round, $points);
+                    $extraAwardInPercent = 0;
+                    $diffInPercent = $round->diffBetweenStartingAndFinishingInPercent();
+
+                    if ($diffInPercent <= 35) {
+                        $extraAwardInPercent = 20;
+                    } else if ($diffInPercent > 75) {
+                        $extraAwardInPercent = -25;
+                    }
+
+                    $player->awardWithPoints($round, $round->word->points_worth, $extraAwardInPercent);
                     $player->loadScoreForRound($round);
 
-                    $websocket->to($room->uuid)->emit('PLAYER_GUESSED_WORD', ['player' => new PlayerScoreResource($player)]);
+                    return ['guessingResult' => $guessingResult, 'data' => new PlayerScoreResource($player)];
+                    // $websocket->to($room->uuid)->emit('PLAYER_GUESSED_WORD', ['player' => new PlayerScoreResource($player)]);
                 } else if ($guessingResult === Round::WAS_CLOSE) {
-                    $websocket->emit('PLAYER_WAS_CLOSE', []);
+                    return ['guessingResult' => $guessingResult, 'data' => []];
+                    // $websocket->emit('PLAYER_WAS_CLOSE', []);
                 }
             }
+            return ['guessingResult' => 0, 'data' => []];
         } catch (\Exception $e) {
             $this->emitException($websocket, 'PLAYER_GUESSED_WORD_FAILURE', $e);
         }
@@ -114,7 +132,7 @@ class GameController extends WebsocketController
     {
         // $player = Player::find(10);
         // $round = Round::find(7);
-        return 'test';
+        return json_encode(['points' => '']);
     }
 
     /**
@@ -139,7 +157,7 @@ class GameController extends WebsocketController
             $player = $this->validatePlayer($data);
             $room = $player->currentRoom();
 
-            if (!$room->isPlayerDrawing($player)) {
+            if (empty($room) || !$room->isPlayerDrawing($player)) {
                 throw ValidationException::withMessages(['_general_error' => ['You dont have permissions to do that!']]);
             }
 
@@ -203,26 +221,23 @@ class GameController extends WebsocketController
             }
 
             $player = $this->validatePlayer($data);
+
             $room = $player->currentRoom();
-
-            $game = $room->currentGame();
-            $word = Word::find($data['word']['id']);
-            $round = null;
-
-            if (empty($game)) {
-                var_dump('game empty');
-                $game = $room->createGame();
-                $round = $game->startNextRound($player, $word);
-            } elseif (!$game->canContinue()) {
-                // TODO: ZAVRSITI I RUNDU
-                var_dump('game cannot continiue');
-                $game->finish();
-                $game = $room->createGame();
-                $round = $game->startNextRound($player, $word);
-            } else {
-                $round = $game->currentRound();
+            if (empty($room)) {
+                throw ValidationException::withMessages(['_general_error' => ['Room is not valid!']]);
             }
 
+            $game = $room->currentGame();
+            if (empty($game)) {
+                throw ValidationException::withMessages(['_general_error' => ['Game is not valid!']]);
+            }
+
+            $round = $game->currentRound();
+            if (empty($round)) {
+                throw ValidationException::withMessages(['_general_error' => ['Round is not valid!']]);
+            }
+
+            $word = Word::find($data['word']['id']);
 
             $websocket->emit('PLAYER_CHOOSED_WORD', ['word' => new WordResoruce($word)]);
             // mask the word and send it to all other players
@@ -233,22 +248,29 @@ class GameController extends WebsocketController
             $game->start();
             // starting round
             $round->start($word);
+            $round->load('players');
             $websocket->to($room->uuid)->emit('STARTING_ROUND', ['round' => new RoundResource($round)]);
 
             // starting round timer
             $this->startTimer(1000, function () use (&$websocket, $room, $game, $round, $data) {
 
                 $round->tick();
+                unset($round->players);
                 $websocket->to($room->uuid)->emit('TICK_ROUND', ['round' => new RoundResource($round)]);
 
                 if ($round->finished()) {
+                    $round->awardDrawer();
                     $round->finish();
                     $nextPlayer = $room->getRandomPlayer();
 
                     // there is no players in queue to play current game so we end game
                     if (empty($nextPlayer)) {
                         $game->finish();
-                        $finishingGameData = ['isThereNextGame' => false, 'rounds' => RoundResource::collection($game->getRounds()->load('players'))];
+                        $finishingGameData = [
+                            'isThereNextGame' => false,
+                            'rounds' => RoundResource::collection($game->getRounds()->load('players')),
+                            'game' => new GameResource($game)
+                        ];
 
                         // if we have next game then we should create and start it
                         if ($room->isThereNextGame()) {
@@ -257,14 +279,13 @@ class GameController extends WebsocketController
                             $round = $game->createRound($randomPlayer);
 
                             $finishingGameData['isThereNextGame'] = true;
-                            $finishingGameData['game'] = new GameResource($game);
-                            $finishingGameData['round'] = new RoundResource($round);
+                            $finishingGameData['nextGame'] = new GameResource($game);
+                            $finishingGameData['nextRound'] = new RoundResource($round);
                         } else {
                             $room->deactivate();
                         }
                         // summary of the game through rounds and flag is there new game or not
                         $websocket->to($room->uuid)->emit('FINISHING_GAME', $finishingGameData);
-
                         return $round->finished();
                     }
 

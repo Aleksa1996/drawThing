@@ -13486,6 +13486,10 @@ select[disabled] > option {
   box-shadow: none;
 }
 
+.game-board-container-right .game-board-chat .game-board-chat-footer #game-board-chat-input:disabled:hover {
+  cursor: not-allowed !important;
+}
+
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis {
   position: absolute;
   right: 30px;
@@ -13513,6 +13517,11 @@ select[disabled] > option {
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown a:focus {
   box-shadow: none;
   border: none;
+}
+
+.game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-toggle.disabled:hover {
+  cursor: not-allowed !important;
+  pointer-events: all !important;
 }
 
 .game-board-container-right .game-board-chat .game-board-chat-footer .game-board-chat-emojis .dropdown .dropdown-menu {

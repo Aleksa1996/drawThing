@@ -90,6 +90,24 @@ class Round extends Model
         return empty($this->started_at) ? null : $this->started_at->diffInSeconds($this->finishing_at);
     }
 
+    public function diffBetweenStartingAndFinishingInPercent($startDate = null, $finishDate = null)
+    {
+        if (empty($startDate)) {
+            $startDate = $this->started_at;
+        }
+
+        if (empty($finishDate)) {
+            $startDate = $this->finishing_at;
+        }
+
+        $now = Carbon::now();
+
+        $diffStartFinish = $startDate->diffInSeconds($finishDate);
+        $diffNowStart = $now->diffInSeconds($startDate);
+
+        return $diffNowStart / ($diffStartFinish == 0 ? 1 : $diffStartFinish) * 100;
+    }
+
     /**
      * Format difference in minute between starting and finishing time
      *
@@ -138,7 +156,7 @@ class Round extends Model
      */
     public function finished()
     {
-        return $this->diffBetweenStartingAndFinishingInSec() == 0;
+        return $this->diffBetweenStartingAndFinishingInSec() == 0 || $this->status == 'finished';
     }
 
     /**
@@ -149,6 +167,8 @@ class Round extends Model
     public function finish()
     {
         $this->status = 'finished';
+        // reset finishing at with real value (because of subsecond func)
+        $this->finishing_at = $this->started_at->copy()->addSecond(15);
         return $this->save();
     }
 
@@ -173,6 +193,18 @@ class Round extends Model
         }
 
         return 0;
+    }
+
+    public function awardDrawer()
+    {
+        $avgPoints = $this->players()->wherePivot('player_id', '<>', $this->player->id)->avg('points');
+        $sumPoints = round((mt_rand(0, 9) / 10) * $avgPoints);
+
+        if ($sumPoints <= 0) {
+            $sumPoints = rand(1, 3);
+        }
+
+        $this->players()->updateExistingPivot($this->player->id, ['points' => $sumPoints]);
     }
 
     // scopes

@@ -49,7 +49,6 @@ class ChooseWordModal extends Component {
 				title="Choose word to draw"
 				body="Choose one word out of three:"
 				buttons={buttons}
-				data={words_to_choose}
 				handleClose={hideModal}
 				shouldCloseOnOverlayClick={false}
 				shouldHideCloseButton={true}

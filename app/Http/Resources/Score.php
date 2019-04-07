@@ -18,6 +18,8 @@ class Score extends Resource
             'id' => $this->score->id,
             'guessed' => $this->score->guessed,
             'points' => $this->score->points,
+            'player_id' => $this->score->player_id,
+            'round_id' => $this->score->round_id,
         ];
     }
 }

@@ -9,12 +9,14 @@ import {
 	STARTING_GAME_REQUEST_FAILURE,
 	//
 	STARTING_GAME,
-	//
-	FINISHING_ROUND,
-	//
 	FINISHING_GAME,
 	//
-	CLEAR_GAME_DATA
+	STARTING_ROUND,
+	FINISHING_ROUND,
+	//
+	CLEAR_GAME_DATA,
+	//
+	PLAYER_GUESSED_WORD
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -37,7 +39,9 @@ const initialState = {
 	//
 	isThereNextGame: false,
 	//
-	rounds: []
+	rounds: [],
+	nextGame: null,
+	nextRound: null
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -77,17 +81,37 @@ const reducer = (state = initialState, { type, payload }) => {
 		case STARTING_GAME: {
 			return updateGame(state, { ...payload.game });
 		}
+		case STARTING_ROUND: {
+			const newRounds = addRound(state.rounds, payload.round);
+			return updateGame(state, { rounds: newRounds });
+		}
 		//
 		case FINISHING_ROUND: {
 			return updateGame(state, { rounds: payload.rounds });
 		}
 		//
 		case FINISHING_GAME: {
+			let { game, rounds, isThereNextGame } = payload;
+
+			let nextRound = null;
+			let nextGame = null;
+			if (isThereNextGame) {
+				nextRound = { ..._get(payload, 'nextRound', null), score: [] };
+				nextGame = { ..._get(payload, 'nextGame', null), rounds: [] };
+			}
+
 			return updateGame(state, {
-				..._get(payload, 'game', {}),
-				rounds: payload.rounds,
-				isThereNextGame: payload.isThereNextGame
+				...game,
+				rounds,
+				isThereNextGame,
+				nextRound,
+				nextGame
 			});
+		}
+		case PLAYER_GUESSED_WORD: {
+			const { player } = payload;
+			const newRounds = updateScoreInRound(state.rounds, player.score);
+			return updateGame(state, { rounds: newRounds });
 		}
 		case CLEAR_GAME_DATA: {
 			return { ...initialState };
@@ -101,14 +125,24 @@ export default reducer;
 
 export const selector = state => {};
 
-export const updateGame = (state, game) => {
-	return _fp_assign(state, game);
-};
+export const updateGame = (state, game) => _fp_assign(state, game);
 
-export const addDrawing = (drawings, drawing) => {
-	return drawings.concat([drawing]);
-};
+export const addDrawing = (drawings, drawing) => drawings.concat([drawing]);
 
-export const undoDrawing = drawings => {
-	return [...drawings].slice(0, -1);
-};
+export const undoDrawing = drawings => [...drawings].slice(0, -1);
+
+export const addRound = (rounds, round) => rounds.concat([round]);
+
+export const updateScoreInRound = (rounds, newScore) =>
+	rounds.map(r => {
+		if (r.id == newScore.round_id) {
+			let score = r.score.map(s => {
+				if (s.id == newScore.id) {
+					return { ...s, ...newScore };
+				}
+				return { ...s };
+			});
+			return { ...r, score };
+		}
+		return { ...r };
+	});

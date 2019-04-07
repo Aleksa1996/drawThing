@@ -79484,7 +79484,7 @@ var hideCountdown = function hideCountdown() {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/gameActions.js ***!
   \****************************************************/
-/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure */
+/*! exports provided: subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, startNextGame */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79499,6 +79499,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startGame", function() { return startGame; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameSuccess", function() { return startingGameSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startingGameFailure", function() { return startingGameFailure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startNextGame", function() { return startNextGame; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
@@ -79628,6 +79629,22 @@ var startingGameFailure = function startingGameFailure(errors) {
     payload: errors
   };
 };
+var startNextGame = function startNextGame(data) {
+  return function (dispatch, getState, _ref8) {
+    var api = _ref8.api,
+        sockets = _ref8.sockets;
+    var _getState$game = getState().game,
+        game = _getState$game.nextGame,
+        round = _getState$game.nextRound;
+    dispatch({
+      type: 'STARTING_GAME',
+      payload: {
+        game: game,
+        round: round
+      }
+    });
+  };
+};
 
 /***/ }),
 
@@ -79635,7 +79652,7 @@ var startingGameFailure = function startingGameFailure(errors) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/index.js ***!
   \**********************************************/
-/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, showCountdown, hideCountdown, subscribeToRoundGlobalEvents, unsubscribeToRoundGlobalEvents, clearRoundData, requestWordsToChoose, chooseWord, roundStart */
+/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, startNextGame, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, showCountdown, hideCountdown, subscribeToRoundGlobalEvents, unsubscribeToRoundGlobalEvents, clearRoundData, requestWordsToChoose, chooseWord, roundStart */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -79676,6 +79693,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "startingGameSuccess", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["startingGameSuccess"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "startingGameFailure", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["startingGameFailure"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "startNextGame", function() { return _gameActions__WEBPACK_IMPORTED_MODULE_2__["startNextGame"]; });
 
 /* harmony import */ var _playerActions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./playerActions */ "./resources/assets/js/actions/playerActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clearPlayerData", function() { return _playerActions__WEBPACK_IMPORTED_MODULE_3__["clearPlayerData"]; });
@@ -80066,7 +80085,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["TICK_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_WAS_CLOSE"]];
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["STARTING_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["TICK_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_ROUND"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_WAS_CLOSE"]];
 var subscribeToRoundGlobalEvents = function subscribeToRoundGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -80872,7 +80891,6 @@ function (_Component) {
         title: "Choose word to draw",
         body: "Choose one word out of three:",
         buttons: buttons,
-        data: words_to_choose,
         handleClose: hideModal,
         shouldCloseOnOverlayClick: false,
         shouldHideCloseButton: true
@@ -81045,7 +81063,6 @@ var Modal = function Modal(_ref) {
   var title = _ref.title,
       body = _ref.body,
       buttons = _ref.buttons,
-      data = _ref.data,
       handleClose = _ref.handleClose,
       children = _ref.children,
       shouldCloseOnOverlayClick = _ref.shouldCloseOnOverlayClick,
@@ -81114,6 +81131,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _KickPlayerModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./KickPlayerModal */ "./resources/assets/js/components/Common/Modal/KickPlayerModal.jsx");
 /* harmony import */ var _InfoModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./InfoModal */ "./resources/assets/js/components/Common/Modal/InfoModal.jsx");
 /* harmony import */ var _ChooseWordModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ChooseWordModal */ "./resources/assets/js/components/Common/Modal/ChooseWordModal.jsx");
+/* harmony import */ var _ScoreBoardModal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ScoreBoardModal */ "./resources/assets/js/components/Common/Modal/ScoreBoardModal.jsx");
 var _MODAL_COMPONENTS;
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -81144,7 +81162,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var MODAL_COMPONENTS = (_MODAL_COMPONENTS = {}, _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["KICK_PLAYER_MODAL"], _KickPlayerModal__WEBPACK_IMPORTED_MODULE_3__["default"]), _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["INFO_MODAL"], _InfoModal__WEBPACK_IMPORTED_MODULE_4__["default"]), _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["CHOOSE_WORD_MODAL"], _ChooseWordModal__WEBPACK_IMPORTED_MODULE_5__["default"]), _MODAL_COMPONENTS);
+
+var MODAL_COMPONENTS = (_MODAL_COMPONENTS = {}, _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["KICK_PLAYER_MODAL"], _KickPlayerModal__WEBPACK_IMPORTED_MODULE_3__["default"]), _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["INFO_MODAL"], _InfoModal__WEBPACK_IMPORTED_MODULE_4__["default"]), _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["CHOOSE_WORD_MODAL"], _ChooseWordModal__WEBPACK_IMPORTED_MODULE_5__["default"]), _defineProperty(_MODAL_COMPONENTS, _modalTypes__WEBPACK_IMPORTED_MODULE_2__["SHOW_SCOREBOARD_MODAL"], _ScoreBoardModal__WEBPACK_IMPORTED_MODULE_6__["default"]), _MODAL_COMPONENTS);
 
 var ModalRoot =
 /*#__PURE__*/
@@ -81178,11 +81197,183 @@ function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/Common/Modal/ScoreBoardModal.jsx":
+/*!*************************************************************************!*\
+  !*** ./resources/assets/js/components/Common/Modal/ScoreBoardModal.jsx ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modal */ "./resources/assets/js/components/Common/Modal/Modal.jsx");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../actions */ "./resources/assets/js/actions/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _utils_classes_Player__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/classes/Player */ "./resources/assets/js/utils/classes/Player.js");
+/* harmony import */ var _utils_classes_Room__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/classes/Room */ "./resources/assets/js/utils/classes/Room.js");
+/* harmony import */ var _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../utils/classes/Game */ "./resources/assets/js/utils/classes/Game.js");
+/* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/lib/index.js");
+/* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(connected_react_router__WEBPACK_IMPORTED_MODULE_8__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+
+
+
+
+
+var ScoreBoardModal =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(ScoreBoardModal, _Component);
+
+  function ScoreBoardModal(props) {
+    var _this;
+
+    _classCallCheck(this, ScoreBoardModal);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ScoreBoardModal).call(this, props));
+
+    _this.countdown = function () {
+      if (_this.state.countdown == 0) {
+        clearInterval(_this.countdownId);
+
+        _this.props.hideModal();
+
+        if (_this.props.game.isThereNextGame) {
+          return _this.props.startNextGame();
+        }
+
+        return _this.props.replace('/play');
+      }
+
+      _this.setState(function (_ref) {
+        var countdown = _ref.countdown;
+        return {
+          countdown: countdown - 1
+        };
+      });
+    };
+
+    _this.countdownId = null;
+    _this.state = {
+      countdown: 6
+    };
+    return _this;
+  }
+
+  _createClass(ScoreBoardModal, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.countdownId = setInterval(this.countdown, 1000);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.countdownId);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var buttons = [];
+      var _this$props = this.props,
+          player = _this$props.player,
+          room = _this$props.room,
+          game = _this$props.game,
+          hideModal = _this$props.hideModal;
+      var playerModel = new _utils_classes_Player__WEBPACK_IMPORTED_MODULE_5__["default"](player);
+      var roomModel = new _utils_classes_Room__WEBPACK_IMPORTED_MODULE_6__["default"](room);
+      var gameModel = new _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__["default"](game);
+      var title = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-trophy",
+        "aria-hidden": "true"
+      }), " Scoreboard"); // TODO: IF THERE IS NO NEXTGAME JUST PUSH ALL SCORES TOGETHER
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: title,
+        body: "",
+        buttons: buttons,
+        handleClose: hideModal,
+        shouldCloseOnOverlayClick: false,
+        shouldHideCloseButton: true
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game-board-container-left"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "game-board-score"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+        className: "game-board-score-list"
+      }, roomModel.getActivePlayers().map(function (p) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+          key: p.id,
+          className: "game-board-score-row rounded"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "game-board-score-avatar-container"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "game-board-score-avatar"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: p.avatar,
+          className: "shadow"
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "game-board-score-position"
+        }, "1"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "game-board-score-username"
+        }, p.username, " ", playerModel.id == p.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, " (you)") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+          className: "game-board-score-points"
+        }, "(", gameModel.getScoreForPlayer(p), ") points")));
+      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "text-center mt-3"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
+        className: "d-block bounceAnimation"
+      }, gameModel.isThereNextGame ? 'Next game starting in ' : 'Finishing game in ', this.state.countdown, " sec.")));
+    }
+  }]);
+
+  return ScoreBoardModal;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(function (state) {
+  return {
+    player: state.player,
+    room: state.room,
+    game: state.game
+  };
+}, {
+  hideModal: _actions__WEBPACK_IMPORTED_MODULE_3__["hideModal"],
+  startNextGame: _actions__WEBPACK_IMPORTED_MODULE_3__["startNextGame"],
+  replace: connected_react_router__WEBPACK_IMPORTED_MODULE_8__["replace"]
+})(ScoreBoardModal));
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/Common/Modal/modalTypes.jsx":
 /*!********************************************************************!*\
   !*** ./resources/assets/js/components/Common/Modal/modalTypes.jsx ***!
   \********************************************************************/
-/*! exports provided: KICK_PLAYER_MODAL, INFO_MODAL, CHOOSE_WORD_MODAL */
+/*! exports provided: KICK_PLAYER_MODAL, INFO_MODAL, CHOOSE_WORD_MODAL, SHOW_SCOREBOARD_MODAL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -81190,9 +81381,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KICK_PLAYER_MODAL", function() { return KICK_PLAYER_MODAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INFO_MODAL", function() { return INFO_MODAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHOOSE_WORD_MODAL", function() { return CHOOSE_WORD_MODAL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_SCOREBOARD_MODAL", function() { return SHOW_SCOREBOARD_MODAL; });
 var KICK_PLAYER_MODAL = 'KICK_PLAYER_MODAL';
 var INFO_MODAL = 'INFO_MODAL';
 var CHOOSE_WORD_MODAL = 'CHOOSE_WORD_MODAL';
+var SHOW_SCOREBOARD_MODAL = 'SHOW_SCOREBOARD_MODAL';
 
 /***/ }),
 
@@ -82218,7 +82411,11 @@ function (_Component) {
           player = _this$props2.player,
           round = _this$props2.round;
       var roundModel = new _utils_classes_Round__WEBPACK_IMPORTED_MODULE_8__["default"](round);
-      if (roundModel.isPlayerDrawing(player) || roundModel.guessedWord()) return false;
+
+      if (roundModel.isPlayerDrawing(player) || roundModel.isPlayerChoosingWord() || roundModel.playerGuessedWord(player)) {
+        return false;
+      }
+
       var message = ''; // Message comes from text input
 
       if (e.type == 'submit') {
@@ -82290,7 +82487,10 @@ function (_Component) {
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
+    value: function componentDidUpdate(_ref2) {
+      var prevChat = _ref2.chat,
+          prevRound = _ref2.round,
+          prevGame = _ref2.game;
       // chat always scroll on new message to see the latest one
       var _this$props4 = this.props,
           chat = _this$props4.chat,
@@ -82300,17 +82500,23 @@ function (_Component) {
       var gameModel = new _utils_classes_Game__WEBPACK_IMPORTED_MODULE_7__["default"](game);
       var roundModel = new _utils_classes_Round__WEBPACK_IMPORTED_MODULE_8__["default"](round);
 
-      if (chat.messages.length != prevProps.chat.messages.length && chatModel.hasMessages()) {
+      if (prevChat.messages.length != chatModel.messages.length && chatModel.hasMessages()) {
         this.scrollToBottom();
       }
 
-      if (prevProps.round.drawn_by != round.drawn_by || prevProps.game.id != game.id) {
+      if (prevRound.drawn_by != roundModel.drawn_by || prevGame.id != gameModel.id) {
         this.updateDrawingUI();
       }
 
-      if (roundModel.finished() && gameModel.isCanvasEmpty()) {
+      if (roundModel.finished() && !gameModel.isCanvasEmpty()) {
         this.props.sketchClear();
         this.props.clearState(['chat']);
+      }
+
+      if (gameModel.finished() && prevGame.status != gameModel.status) {
+        this.props.showModal({
+          modalType: 'SHOW_SCOREBOARD_MODAL'
+        });
       }
     }
   }, {
@@ -82346,7 +82552,9 @@ function (_Component) {
         className: "row no-gutters"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameScore_GameScore__WEBPACK_IMPORTED_MODULE_12__["default"], {
         player: playerModel,
-        room: roomModel
+        room: roomModel,
+        game: gameModel,
+        round: roundModel
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_GameCanvas_GameCanvas__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({}, this.state.sketchpad, {
         items: game.drawing.items,
         onCompleteItem: this.onCompleteDrawing,
@@ -83437,6 +83645,7 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
       chat = _ref.chat,
       round = _ref.round,
       handleChatSend = _ref.handleChatSend;
+  var disabledChat = round.isPlayerDrawing(player) || round.isPlayerChoosingWord() || round.playerGuessedWord(player);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-md-3 order-2 order-md-3 my-md-0 my-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83468,14 +83677,14 @@ var GameChat = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(function 
     className: "form-control",
     id: "game-board-chat-input",
     placeholder: "Type word...",
-    disabled: round.isPlayerDrawing(player) || round.isPlayerChoosingWord() || round.guessedWord(),
+    disabled: disabledChat,
     autoComplete: "off"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "game-board-chat-emojis"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "dropdown dropup"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    className: "btn btn-secondary dropdown-toggle ".concat(round.isPlayerDrawing(player) || round.isPlayerChoosingWord() || round.guessedWord() ? 'disabled' : ''),
+    className: "btn btn-secondary dropdown-toggle ".concat(disabledChat ? 'disabled' : ''),
     href: "javascript:void(0)",
     role: "button",
     id: "game-board-chat-emojis-dropdown",
@@ -83541,8 +83750,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var GameScore = function GameScore(_ref) {
-  var room = _ref.room,
-      player = _ref.player;
+  var player = _ref.player,
+      room = _ref.room,
+      game = _ref.game,
+      round = _ref.round;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "col-md-3 order-3 order-md-1 my-md-0 my-3"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -83564,7 +83775,10 @@ var GameScore = function GameScore(_ref) {
       className: "game-board-score-avatar-container"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       className: "game-board-score-drawing"
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    }, round.isPlayerDrawing(p) && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-paint-brush",
+      "aria-hidden": "true"
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
       className: "game-board-score-avatar"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: p.avatar,
@@ -83575,7 +83789,7 @@ var GameScore = function GameScore(_ref) {
       className: "game-board-score-username"
     }, p.username, " ", player.id == p.id ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, " (you)") : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", {
       className: "game-board-score-points"
-    }, "(22) point/s")));
+    }, "(", game.getScoreForPlayer(p), ") points")));
   })))));
 };
 
@@ -85893,7 +86107,7 @@ var updateCountdown = function updateCountdown(state, countdown) {
 /*!***********************************************************!*\
   !*** ./resources/assets/js/store/reducers/gameReducer.js ***!
   \***********************************************************/
-/*! exports provided: default, selector, updateGame, addDrawing, undoDrawing */
+/*! exports provided: default, selector, updateGame, addDrawing, undoDrawing, addRound, updateScoreInRound */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -85902,6 +86116,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateGame", function() { return updateGame; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addDrawing", function() { return addDrawing; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "undoDrawing", function() { return undoDrawing; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addRound", function() { return addRound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateScoreInRound", function() { return updateScoreInRound; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
@@ -85939,7 +86155,9 @@ var initialState = {
   //
   isThereNextGame: false,
   //
-  rounds: []
+  rounds: [],
+  nextGame: null,
+  nextRound: null
 };
 
 var reducer = function reducer() {
@@ -86019,6 +86237,14 @@ var reducer = function reducer() {
       {
         return updateGame(state, _objectSpread({}, payload.game));
       }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["STARTING_ROUND"]:
+      {
+        var newRounds = addRound(state.rounds, payload.round);
+        return updateGame(state, {
+          rounds: newRounds
+        });
+      }
     //
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_ROUND"]:
@@ -86031,10 +86257,38 @@ var reducer = function reducer() {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
       {
-        return updateGame(state, _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'game', {}), {
-          rounds: payload.rounds,
-          isThereNextGame: payload.isThereNextGame
+        var game = payload.game,
+            rounds = payload.rounds,
+            isThereNextGame = payload.isThereNextGame;
+        var nextRound = null;
+        var nextGame = null;
+
+        if (isThereNextGame) {
+          nextRound = _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'nextRound', null), {
+            score: []
+          });
+          nextGame = _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'nextGame', null), {
+            rounds: []
+          });
+        }
+
+        return updateGame(state, _objectSpread({}, game, {
+          rounds: rounds,
+          isThereNextGame: isThereNextGame,
+          nextRound: nextRound,
+          nextGame: nextGame
         }));
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"]:
+      {
+        var player = payload.player;
+
+        var _newRounds = updateScoreInRound(state.rounds, player.score);
+
+        return updateGame(state, {
+          rounds: _newRounds
+        });
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_GAME_DATA"]:
@@ -86057,6 +86311,27 @@ var addDrawing = function addDrawing(drawings, drawing) {
 };
 var undoDrawing = function undoDrawing(drawings) {
   return _toConsumableArray(drawings).slice(0, -1);
+};
+var addRound = function addRound(rounds, round) {
+  return rounds.concat([round]);
+};
+var updateScoreInRound = function updateScoreInRound(rounds, newScore) {
+  return rounds.map(function (r) {
+    if (r.id == newScore.round_id) {
+      var score = r.score.map(function (s) {
+        if (s.id == newScore.id) {
+          return _objectSpread({}, s, newScore);
+        }
+
+        return _objectSpread({}, s);
+      });
+      return _objectSpread({}, r, {
+        score: score
+      });
+    }
+
+    return _objectSpread({}, r);
+  });
 };
 
 /***/ }),
@@ -86414,13 +86689,14 @@ var editPlayer = function editPlayer(players, id, player) {
 /*!************************************************************!*\
   !*** ./resources/assets/js/store/reducers/roundReducer.js ***!
   \************************************************************/
-/*! exports provided: default, selector, updateRound */
+/*! exports provided: default, selector, updateRound, updateScore */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateRound", function() { return updateRound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateScore", function() { return updateScore; });
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
@@ -86467,26 +86743,9 @@ var reducer = function reducer() {
         return updateRound(state, _objectSpread({}, payload.round));
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
       {
-        return updateRound(state, {
-          localStatus: 'PLAYER_CHOOSING_WORD'
-        });
-      }
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"]:
-      {
-        return updateRound(state, {
-          words_to_choose: payload.round.words_to_choose
-        });
-      }
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"]:
-      {
-        return updateRound(state, {
-          localStatus: 'PLAYER_CHOOSED_WORD',
-          chosed_word: payload.word
-        });
+        return _objectSpread({}, initialState);
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["STARTING_ROUND"]:
@@ -86513,24 +86772,35 @@ var reducer = function reducer() {
         });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FINISHING_GAME"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSING_WORD"]:
       {
-        return updateRound(state, _objectSpread({}, Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(payload, 'round', {}), {
-          chosed_word: null,
-          words_to_choose: []
-        }));
+        return updateRound(state, {
+          localStatus: 'PLAYER_CHOOSING_WORD'
+        });
       }
 
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SEND_MESSAGE_ROOM_SUCCESS"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CHOOSE_WORD"]:
       {
-        var round = payload.round;
+        return updateRound(state, {
+          words_to_choose: payload.round.words_to_choose
+        });
+      }
 
-        if (round) {
-          delete round.id;
-          return updateRound(state, _objectSpread({}, round));
-        }
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_CHOOSED_WORD"]:
+      {
+        return updateRound(state, {
+          localStatus: 'PLAYER_CHOOSED_WORD',
+          chosed_word: payload.word
+        });
+      }
 
-        return updateRound(state, {});
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_GUESSED_WORD"]:
+      {
+        var player = payload.player;
+        var newScores = updateScore(state.score, player.score);
+        return updateRound(state, {
+          score: newScores
+        });
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROUND_DATA"]:
@@ -86549,6 +86819,15 @@ var selector = function selector(state) {}; // utility reducer functions
 
 var updateRound = function updateRound(state, round) {
   return Object(lodash_fp__WEBPACK_IMPORTED_MODULE_1__["assign"])(state, round);
+};
+var updateScore = function updateScore(score, newScore) {
+  return score.map(function (s) {
+    if (s.id == newScore.id) {
+      return _objectSpread({}, s, newScore);
+    }
+
+    return _objectSpread({}, s);
+  });
 };
 
 /***/ }),
@@ -87080,8 +87359,23 @@ function (_Model) {
       return _this.status == 'starting';
     }, _this.notStarted = function () {
       return _this.status == null;
+    }, _this.finished = function () {
+      return _this.status == 'finished';
     }, _this.isCanvasEmpty = function () {
-      return _this.drawing.items.length > 0;
+      return _this.drawing.items.length <= 0;
+    }, _this.getScoreForPlayer = function (player) {
+      return _this.rounds.reduce(function (totalScore, round) {
+        var score = 0;
+        var playerScore = round.score.find(function (s) {
+          return s.player_id == player.id;
+        });
+
+        if (playerScore) {
+          score = playerScore.points;
+        }
+
+        return totalScore + score;
+      }, 0);
     }, _temp));
   }
 
@@ -87378,8 +87672,16 @@ function (_Model) {
       return _this.timer;
     }, _this.nearEnd = function () {
       return _this.inProgress() && !_this.finished() && _this.seconds <= 5;
-    }, _this.guessedWord = function () {
-      return _this.guessed;
+    }, _this.playerGuessedWord = function (player) {
+      var playerScore = _this.score.find(function (s) {
+        return s.player_id == player.id;
+      });
+
+      if (playerScore) {
+        return playerScore.guessed;
+      }
+
+      return false;
     }, _temp));
   }
 
