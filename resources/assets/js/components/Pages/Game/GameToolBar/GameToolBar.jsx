@@ -8,7 +8,7 @@ const GameToolBar = ({ player, room, game, round }) => {
 			<div className="game-board-toolbar-container-border">
 				<div className="row">
 					<div className="col-6 col-sm-4 col-md-4 col-lg-3 d-flex justify-content-between align-items-center">
-						<p className="game-board-rounds m-1 text-transform-uppercase">
+						<p className="game-board-rounds m-1">
 							ROUND: {round.inProgress() ? `${round.number} of ${game.number_of_rounds}` : ''}
 						</p>
 						<p

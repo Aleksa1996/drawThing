@@ -74,6 +74,8 @@ class GameController extends WebsocketController
      *
      * @param Player $player
      * @param array $data
+     * @param Websocket $websocket
+     *
      * @return void
      */
     protected function guessWord($websocket, array $data = null, Player $player)
@@ -83,17 +85,17 @@ class GameController extends WebsocketController
                 return ['guessingResult' => 0, 'data' => []];
             }
 
-            $room = $player->currentRoom();
+            $room = $player->getCurrentRoom();
             if (empty($room)) {
                 throw ValidationException::withMessages(['_general_error' => ['Room is not valid!']]);
             }
 
-            $game = $room->currentGame();
+            $game = $room->getCurrentGame();
             if (empty($game) || ($game->id != $data['game']['id'])) {
                 throw ValidationException::withMessages(['_general_error' => ['Game is not valid!']]);
             }
 
-            $round = $game->currentRound();
+            $round = $game->getCurrentRound();
             if (empty($round)) {
                 throw ValidationException::withMessages(['_general_error' => ['Round is not valid!']]);
             }
@@ -116,37 +118,14 @@ class GameController extends WebsocketController
                     $player->loadScoreForRound($round);
 
                     return ['guessingResult' => $guessingResult, 'data' => new PlayerScoreResource($player)];
-                    // $websocket->to($room->uuid)->emit('PLAYER_GUESSED_WORD', ['player' => new PlayerScoreResource($player)]);
                 } else if ($guessingResult === Round::WAS_CLOSE) {
                     return ['guessingResult' => $guessingResult, 'data' => []];
-                    // $websocket->emit('PLAYER_WAS_CLOSE', []);
                 }
             }
             return ['guessingResult' => 0, 'data' => []];
         } catch (\Exception $e) {
             $this->emitException($websocket, 'PLAYER_GUESSED_WORD_FAILURE', $e);
         }
-    }
-
-    public function test()
-    {
-        // $player = Player::find(10);
-        // $round = Round::find(7);
-        // $game = Game::find(2);
-        // $room = Room::find(2);
-
-        // $r = $room->games()->with('rounds.players')->get()->pluck('rounds.*')->flatten();
-        // return $r;
-        // return RoundResource::collection($r);
-        // $finishingGameData = [];
-        // $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
-        // $when = now()->addMinutes(1);
-
-        // Mail::to('aleksa.j.1996@gmail.com')->send(new ContactForm());
-        // Mail::to('aleksa.j.1996@gmail.com')->later($when, new ContactForm());
-        // Mail::to('aleksa.j.1996@gmail.com')->queue(new ContactForm());
-
-        return 'test';
     }
 
     /**
@@ -169,7 +148,7 @@ class GameController extends WebsocketController
             }
 
             $player = $this->validatePlayer($data);
-            $room = $player->currentRoom();
+            $room = $player->getCurrentRoom();
 
             if (empty($room) || !$room->isPlayerDrawing($player)) {
                 throw ValidationException::withMessages(['_general_error' => ['You dont have permissions to do that!']]);
@@ -206,7 +185,7 @@ class GameController extends WebsocketController
             }
 
             $player = $this->validatePlayer($data);
-            $room = $player->currentRoom();
+            $room = $player->getCurrentRoom();
 
             if (empty($room) || !$room->isPlayerDrawing($player)) {
                 throw ValidationException::withMessages(['_general_error' => ['You dont have permissions to do that!']]);
@@ -236,17 +215,17 @@ class GameController extends WebsocketController
 
             $player = $this->validatePlayer($data);
 
-            $room = $player->currentRoom();
+            $room = $player->getCurrentRoom();
             if (empty($room)) {
                 throw ValidationException::withMessages(['_general_error' => ['Room is not valid!']]);
             }
 
-            $game = $room->currentGame();
+            $game = $room->getCurrentGame();
             if (empty($game)) {
                 throw ValidationException::withMessages(['_general_error' => ['Game is not valid!']]);
             }
 
-            $round = $game->currentRound();
+            $round = $game->getCurrentRound();
             if (empty($round)) {
                 throw ValidationException::withMessages(['_general_error' => ['Round is not valid!']]);
             }
@@ -272,13 +251,15 @@ class GameController extends WebsocketController
                 unset($round->players);
                 $websocket->to($room->uuid)->emit('TICK_ROUND', ['round' => new RoundResource($round)]);
 
-                if ($round->finished()) {
+                $roundFinished = $round->finished();
+
+                if ($roundFinished) {
                     $round->awardDrawer();
                     $round->finish();
                     $nextPlayer = $room->getRandomPlayer();
 
                     // there is no players in queue to play current game so we end game
-                    if (empty($nextPlayer)) {
+                    if (empty($nextPlayer) || !$room->hasEnoughPlayersForGame()) {
                         $game->finish();
                         $finishingGameData = [
                             'isThereNextGame' => false,
@@ -301,16 +282,15 @@ class GameController extends WebsocketController
                         }
                         // summary of the game through rounds and flag is there new game or not
                         $websocket->to($room->uuid)->emit('FINISHING_GAME', $finishingGameData);
-                        return $round->finished();
+                        return $roundFinished;
                     }
 
                     $round = $game->createRound($nextPlayer);
-                    // TODO: SENDING FINAL SCORES AND DISPLAYING TABLE IN ROUND SUMMARY
                     $finishingRoundData = ['drawn_by' => $nextPlayer->id, 'rounds' => RoundResource::collection($game->getRounds()->load('players'))];
                     $websocket->to($room->uuid)->emit('FINISHING_ROUND', $finishingRoundData);
                 }
 
-                return $round->finished();
+                return $roundFinished;
             });
         } catch (\Exception $e) {
             $this->emitException($websocket, 'CHOOSED_WORD_FAILURE', $e);
@@ -335,8 +315,8 @@ class GameController extends WebsocketController
         }
 
         // room must have more than 1 player
-        $room = $player->currentRoom();
-        if ($room->getPlayerCount() <= 1) {
+        $room = $player->getCurrentRoom();
+        if (!$room->hasEnoughPlayersForGame()) {
             throw ValidationException::withMessages(['_general_error' => ['Cannot start game with one player in room!']]);
         }
 

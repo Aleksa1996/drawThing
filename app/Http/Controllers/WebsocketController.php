@@ -49,7 +49,7 @@ class WebsocketController extends Controller
             }
 
             // get room from wich player left
-            $room = $player->currentRoom();
+            $room = $player->getCurrentRoom();
 
             // disconnect player from db  and websocket tables
             $player->disconnectFromRoom($room);
@@ -59,12 +59,18 @@ class WebsocketController extends Controller
             }
 
             if (empty($room)) return;
+
             // if room is empty remove it // TODO: SPECIAL RANDOM ROOM DONT DELETE
-            if ($room->isEmpty()) {
+            $playerCount = $room->getActivePlayerCount();
+            if ($playerCount <= 0) {
                 $room->deactivate();
+            } else if ($playerCount == 1) {
+                // because of room its not active anymore after deactivate
+                $room->finishAllRounds();
+                $room->finishAllGames();
             }
 
-            // if player was admin, replace him with another in room
+            // if player was admin, replace him with another player in room
             if ($player->isAdminInRoom($room) && $newAdminPlayer = $room->setNewAdmin()) {
                 Websocket::broadcast()->to($room->uuid)->emit('REPLACE_ADMIN_ROOM', ['player' => new PlayerResource($newAdminPlayer)]);
             }

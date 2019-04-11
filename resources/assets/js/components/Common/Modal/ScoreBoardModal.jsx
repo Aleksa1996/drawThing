@@ -67,7 +67,7 @@ class ScoreBoardModal extends Component {
 				<div className="game-board-container-left">
 					<div className="game-board-score">
 						<ul className="game-board-score-list">
-							{roomModel.getActivePlayers().map(p => (
+							{roomModel.players.map(p => (
 								<li key={p.id} className="game-board-score-row rounded">
 									<span className="game-board-score-avatar-container">
 										<span className="game-board-score-avatar">

@@ -85,7 +85,7 @@ class Player extends Model
     public function disconnectFromRoom($room = null)
     {
         if (empty($room)) {
-            $room = $this->currentRoom();
+            $room = $this->getCurrentRoom();
         }
 
         if (empty($room)) {
@@ -100,7 +100,7 @@ class Player extends Model
      *
      * @return \App\Models\Room
      */
-    public function currentRoom()
+    public function getCurrentRoom()
     {
         return $this->rooms()->active()->latest()->take(1)->first();
     }
@@ -117,7 +117,7 @@ class Player extends Model
         if ($room instanceof \App\Models\Room) {
             return $room && $room->administered_by == $this->id;
         } else if (empty($room)) {
-            $r = $this->currentRoom();
+            $r = $this->getCurrentRoom();
         } else if (is_string($room)) {
             $r = $this->rooms()->where('uuid', $room)->first();
         }
@@ -167,7 +167,12 @@ class Player extends Model
         return self::active()->where('fd', $fd)->first();
     }
 
-
+    /**
+     * Load relationship to get scores for specific round
+     *
+     * @param Round $round
+     * @return void
+     */
     public function loadScoreForRound(Round $round)
     {
         return $this->load(['rounds' => function ($query) use ($round) {
@@ -175,6 +180,14 @@ class Player extends Model
         }]);
     }
 
+    /**
+     * Award player with points in game
+     *
+     * @param Round $round
+     * @param integer $points
+     * @param integer $percentage
+     * @return bool
+     */
     public function awardWithPoints(Round $round, int $points, int $percentage = 0)
     {
         $extraPoints = (int)round(($points * $percentage) / 100);
@@ -187,6 +200,12 @@ class Player extends Model
         return $this->rounds()->updateExistingPivot($round->id, ['guessed' => true, 'points' => $sumPoints]);
     }
 
+    /**
+     * Player guessed word ?
+     *
+     * @param Round $round
+     * @return boolean
+     */
     public function hasGuessedWord(Round $round)
     {
         $round_player = $this->rounds()->wherePivot('round_id', $round->id)->first();
