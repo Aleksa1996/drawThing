@@ -39,7 +39,9 @@ const initialState = {
 		id: 0
 	},
 	//
-	players: []
+	players: [],
+	//
+	has_game_in_progress: false
 };
 
 const reducer = (state = initialState, { type, payload }) => {

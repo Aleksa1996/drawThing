@@ -1,6 +1,6 @@
 import Model from './Model';
 
-import { get as _get } from 'lodash';
+import { get as _get, orderBy as _orderBy } from 'lodash';
 
 export default class Room extends Model {
 	isCreated = () => this.created && this.createError == null;

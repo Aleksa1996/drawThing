@@ -18,6 +18,8 @@ import {
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
+import { push, replace } from 'connected-react-router';
+
 import Helpers from '../utils/Helpers';
 
 const globalEvents = [
@@ -82,8 +84,12 @@ export const joinRoom = (data = null) => (dispatch, getState, { api, sockets }) 
 		.then(response => {
 			dispatch(joinRoomSuccess(response.data));
 
-			const { player } = response.data;
+			const { player, room } = response.data;
 			if (player) dispatch({ type: UPDATE_PLAYER, payload: { player } });
+			if (room.has_game_in_progress) {
+				dispatch({ type: STARTING_GAME, payload: { game: room.game } });
+				dispatch(replace('/game'));
+			}
 
 			return response;
 		})

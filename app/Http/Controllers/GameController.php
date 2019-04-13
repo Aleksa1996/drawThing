@@ -27,6 +27,35 @@ use SwooleTW\Http\Websocket\Facades\Room as WebsocketRoom;
 
 class GameController extends WebsocketController
 {
+
+    /**
+     * Notify all players when form in room is updated
+     *
+     * @param Websocket $websocket
+     * @param array $data
+     * @return void
+     */
+    public function onRoomFormUpdate($websocket, $data)
+    {
+        try {
+            $validator = Validator::make($data, [
+                'room.uuid' => 'required|string|min:1',
+                'message.text' => 'required|string|min:1',
+                'game.id' => 'present|numeric|nullable',
+                'game.status' => 'present|string|nullable'
+            ]);
+
+            if ($validator->fails()) {
+                throw ValidationException::withMessages($validator->failed());
+            }
+
+            $player = $this->validatePlayer($data);
+        } catch (\Exception $e) {
+            $this->emitException($websocket, 'SEND_MESSAGE_ROOM_FAILURE', $e);
+        }
+    }
+
+
     /**
      * Recives and passes room messages
      *

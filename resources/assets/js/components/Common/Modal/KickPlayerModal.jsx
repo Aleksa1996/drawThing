@@ -5,28 +5,36 @@ import Modal from './Modal';
 
 import { kickPlayer, hideModal } from '../../../actions';
 
+import Button from '../../Form/Button';
+
 const KickPlayerModal = ({ player, hideModal, kickPlayer }) => {
-	const buttons = [
-		{
-			btnText: 'Kick',
-			btnProps: {
-				onClick: () => {
+	const footer = (
+		<React.Fragment>
+			<Button type="button" className="mybtn2" onClick={hideModal}>
+				No
+			</Button>
+			<Button
+				type="button"
+				className="mybtn2"
+				onClick={() => {
 					kickPlayer(player.id).then(() => {
 						hideModal();
 					});
-				}
-			}
-		},
-		{ btnText: 'No', btnProps: { onClick: hideModal } }
-	];
+				}}
+			>
+				Yes
+			</Button>
+		</React.Fragment>
+	);
+
 	if (!player) return null;
 	return (
 		<Modal
 			title="Kicking player"
 			body={`Are you sure you want to kick ${player.username} from room ?`}
-			buttons={buttons}
 			data={player}
 			handleClose={hideModal}
+			footer={footer}
 		/>
 	);
 };

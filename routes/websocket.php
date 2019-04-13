@@ -21,3 +21,5 @@ Websocket::on('SEND_MESSAGE_ROOM', '\App\Http\Controllers\GameController@onRoomM
 Websocket::on('SEND_DRAWING', '\App\Http\Controllers\GameController@onDrawing');
 Websocket::on('REQUEST_WORDS', '\App\Http\Controllers\GameController@onRequestWordsToChoose');
 Websocket::on('CHOOSED_WORD', '\App\Http\Controllers\GameController@onChoosedWord');
+
+Websocket::on('ROOM_FORM_UPDATE', '\App\Http\Controllers\GameController@onRoomFormUpdate');

@@ -67,7 +67,10 @@ function htmlTemplate(reactDom, reduxState, helmetData) {
         <!DOCTYPE html>
         <html lang="en">
         <head>
-            <meta charset="utf-8">
+			<meta charset="utf-8">
+			<meta name="description" content="Join players from around the world in this weird and wild online game. Can you figure out the secret word or phrase that will be drawn during each round? You can join in the fun by drawing one too."/>
+			<meta name="keywords" content="drawthing,play,game,draw,draw&guessing"/>
+			<meta name="robots" content="index,follow"/>
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="csrf-token" content="${context.csrf_token}">
             ${helmetData.title.toString()}

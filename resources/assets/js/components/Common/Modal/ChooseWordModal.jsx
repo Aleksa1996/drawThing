@@ -41,17 +41,24 @@ class ChooseWordModal extends Component {
 	}
 
 	render() {
-		const buttons = [];
 		const { words_to_choose, hideModal } = this.props;
+
+		const footer = (
+			<div className="text-center w-100">
+				<small className="d-block bounceAnimation">
+					Automatically choosing word after {this.state.countdown} sec.
+				</small>
+			</div>
+		);
 
 		return (
 			<Modal
-				title="Choose word to draw"
+				title="WORD TO DRAW"
 				body="Choose one word out of three:"
-				buttons={buttons}
 				handleClose={hideModal}
 				shouldCloseOnOverlayClick={false}
 				shouldHideCloseButton={true}
+				footer={footer}
 			>
 				<div className="choose-word-button-group d-flex justify-content-around align-items-center">
 					{words_to_choose.map(wtc => (
@@ -60,15 +67,11 @@ class ChooseWordModal extends Component {
 							onClick={() => this.chooseWord(wtc)}
 							type="button"
 							className="mybtn2 text-transform-uppercase"
+							style={{ fontSize: '12px', padding: '15px 25px' }}
 						>
 							{wtc.word}
 						</Button>
 					))}
-				</div>
-				<div className="text-center mt-3">
-					<small className="d-block bounceAnimation">
-						Automatically choosing word after {this.state.countdown} sec.
-					</small>
 				</div>
 			</Modal>
 		);

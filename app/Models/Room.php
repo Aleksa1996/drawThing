@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $uuid
  * @property boolean $active
  * @property integer $number_of_games
+ * @property integer $round_length
  *
  * @property integer $created_by
  * @property integer $administered_by
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     // options
-    protected $fillable = ['uuid', 'active', 'number_of_games', 'created_by', 'administered_by'];
+    protected $fillable = ['uuid', 'active', 'number_of_games', 'round_length', 'created_by', 'administered_by'];
 
     // relationships
     public function players()
@@ -251,6 +252,16 @@ class Room extends Model
         foreach ($this->games as $game) {
             $game->rounds()->update(['status' => 'finished']);
         }
+    }
+
+    /**
+     * Check whether game is in progress in room
+     *
+     * @return boolean
+     */
+    public function hasGameInProgress()
+    {
+        return $this->games()->active()->count() > 0;
     }
 
 

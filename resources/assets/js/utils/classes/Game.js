@@ -1,5 +1,7 @@
 import Model from './Model';
 
+import { orderBy as _orderBy } from 'lodash';
+
 export default class Game extends Model {
 	inProgress = () => this.status == 'in_progress';
 	starting = () => this.status == 'starting';
@@ -33,4 +35,6 @@ export default class Game extends Model {
 			return totalScore + score;
 		}, 0);
 	};
+
+	sortPlayersByScore = players => _orderBy(players, ['score'], ['desc']);
 }

@@ -4,6 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
+use App\Http\Resources\Game as GameResource;
+use App\Http\Resources\Round as RoundResource;
+
+
 class Room extends Resource
 {
     /**
@@ -14,6 +18,15 @@ class Room extends Resource
      */
     public function toArray($request)
     {
+        $has_game_in_progress = $this->hasGameInprogress();
+
+        $currentGame = null;
+        $currentRound = null;
+        if ($has_game_in_progress) {
+            $currentGame = $this->getCurrentGame();
+            $currentRound = $currentGame->getCurrentRound();
+        }
+
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
@@ -26,7 +39,18 @@ class Room extends Resource
 
             'players' => Player::collection($this->whenLoaded('players')),
 
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+
+            'has_game_in_progress' => $has_game_in_progress,
+
+            'game' => $this->when(
+                $has_game_in_progress,
+                new GameResource($currentGame)
+            ),
+            'round' => $this->when(
+                $has_game_in_progress,
+                new RoundResource($currentRound)
+            )
         ];
     }
 }
