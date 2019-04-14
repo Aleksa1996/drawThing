@@ -144,13 +144,11 @@ class Round extends Model
      * @param Word $word
      * @return void
      */
-    public function start(Word $word)
+    public function start(Word $word, int $round_length)
     {
         $this->status = 'in_progress';
         $this->started_at = Carbon::now();
-        //TODO: VRATI NA MINUT POSLE TESTIRANJA
-        // $this->finishing_at = $this->started_at->copy()->addMinute(1)->addSecond();
-        $this->finishing_at = $this->started_at->copy()->addSecond(15);
+        $this->finishing_at = $this->started_at->copy()->addSeconds($round_length);
         $this->_finishing_at = $this->finishing_at->copy();
 
         $this->word()->associate($word);

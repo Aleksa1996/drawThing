@@ -31,6 +31,7 @@ import RoomPlayers from './RoomPlayers';
 
 import Button from '../../Form/Button';
 import Errors from '../../Common/Errors/Errors';
+import RoomForm from './RoomForm';
 
 class Room extends Component {
 	constructor(props) {
@@ -186,6 +187,7 @@ class Room extends Component {
 								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
 							/>
+							<RoomForm player={playerModel} room={roomModel} />
 							<div className="game-created-chat-container">
 								<RoomChat
 									room={roomModel}

@@ -32,7 +32,7 @@ class Room extends Resource
             'uuid' => $this->uuid,
             'active' => $this->active,
             'number_of_games' => $this->number_of_games,
-            'current_game' => $this->current_game,
+            'round_length' => $this->round_length,
 
             'created_by' => $this->created_by,
             'administered_by' => $this->administered_by,
@@ -42,7 +42,6 @@ class Room extends Resource
             'created_at' => $this->created_at,
 
             'has_game_in_progress' => $has_game_in_progress,
-
             'game' => $this->when(
                 $has_game_in_progress,
                 new GameResource($currentGame)

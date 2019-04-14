@@ -40,9 +40,8 @@ class GameController extends WebsocketController
         try {
             $validator = Validator::make($data, [
                 'room.uuid' => 'required|string|min:1',
-                'message.text' => 'required|string|min:1',
-                'game.id' => 'present|numeric|nullable',
-                'game.status' => 'present|string|nullable'
+                'room.number_of_games' => 'required|numeric|min:1|max:5',
+                'room.round_length' => 'required|numeric|min:20|max:70'
             ]);
 
             if ($validator->fails()) {
@@ -50,8 +49,18 @@ class GameController extends WebsocketController
             }
 
             $player = $this->validatePlayer($data);
+            $room = $player->getCurrentRoom();
+            if (!$player->isAdminInRoom($room)) {
+                throw ValidationException::withMessages(['_general_error' => ['You dont have privileges to do that!']]);
+            }
+
+            $room->number_of_games = $data['room']['number_of_games'];
+            $room->round_length = $data['room']['round_length'];
+            $room->save();
+
+            $websocket->to($data['room']['uuid'])->emit('ROOM_FORM_UPDATED', ['room' => new RoomResource($room)]);
         } catch (\Exception $e) {
-            $this->emitException($websocket, 'SEND_MESSAGE_ROOM_FAILURE', $e);
+            $this->emitException($websocket, 'ROOM_FORM_UPDATE_FAILURE', $e);
         }
     }
 
@@ -269,7 +278,7 @@ class GameController extends WebsocketController
             // starting game
             $game->start();
             // starting round
-            $round->start($word);
+            $round->start($word, $room->round_length);
             $round->load('players');
             $websocket->to($room->uuid)->emit('STARTING_ROUND', ['round' => new RoundResource($round)]);
 

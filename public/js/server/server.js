@@ -83675,7 +83675,7 @@ var startNextGame = function startNextGame(data) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/index.js ***!
   \**********************************************/
-/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, startNextGame, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, showCountdown, hideCountdown, subscribeToRoundGlobalEvents, unsubscribeToRoundGlobalEvents, clearRoundData, requestWordsToChoose, chooseWord, roundStart, submitContactForm, submitContactFormSuccess, submitContactFormFailure */
+/*! exports provided: subscribeToChatGlobalEvents, unsubscribeToChatGlobalEvents, clearChatData, clearChatMessages, sendMessageRoom, clearState, clearSubscriptions, subscribeToGameGlobalEvents, unsubscribeToGameGlobalEvents, clearGameData, sketchDraw, sketchUndo, sketchClear, sketchSendDrawings, startGame, startingGameSuccess, startingGameFailure, startNextGame, clearPlayerData, createPlayer, createPlayerSuccess, createPlayerFailure, subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, emitRoomFormUpdate, debouncedEmitRoomFormUpdate, ws_make_connection, ws_connect, ws_disconnect, ws_subscribe, ws_unsubscribe, ws_emit, showModal, hideModal, showCountdown, hideCountdown, subscribeToRoundGlobalEvents, unsubscribeToRoundGlobalEvents, clearRoundData, requestWordsToChoose, chooseWord, roundStart, submitContactForm, submitContactFormSuccess, submitContactFormFailure */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83754,6 +83754,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "kickPlayerFailure", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["kickPlayerFailure"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "leaveRoom", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["leaveRoom"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "emitRoomFormUpdate", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["emitRoomFormUpdate"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "debouncedEmitRoomFormUpdate", function() { return _roomActions__WEBPACK_IMPORTED_MODULE_4__["debouncedEmitRoomFormUpdate"]; });
 
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ws_make_connection", function() { return _websocketActions__WEBPACK_IMPORTED_MODULE_5__["ws_make_connection"]; });
@@ -83901,7 +83905,7 @@ var createPlayerFailure = function createPlayerFailure() {
 /*!****************************************************!*\
   !*** ./resources/assets/js/actions/roomActions.js ***!
   \****************************************************/
-/*! exports provided: subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom */
+/*! exports provided: subscribeToRoomGlobalEvents, unsubscribeToRoomGlobalEvents, clearRoomData, createRoom, createRoomSuccess, createRoomFailure, joinRoom, joinRoomSuccess, joinRoomFailure, kickPlayer, kickPlayerSuccess, kickPlayerFailure, leaveRoom, emitRoomFormUpdate, debouncedEmitRoomFormUpdate */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83919,16 +83923,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kickPlayerSuccess", function() { return kickPlayerSuccess; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kickPlayerFailure", function() { return kickPlayerFailure; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "leaveRoom", function() { return leaveRoom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emitRoomFormUpdate", function() { return emitRoomFormUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "debouncedEmitRoomFormUpdate", function() { return debouncedEmitRoomFormUpdate; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var _websocketActions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./websocketActions */ "./resources/assets/js/actions/websocketActions.js");
 /* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/lib/index.js");
 /* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(connected_react_router__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _utils_Helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/Helpers */ "./resources/assets/js/utils/Helpers.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
 
-var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_LEAVED_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["REPLACE_ADMIN_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["STARTING_GAME"]];
+
+
+var globalEvents = [_types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_JOINED_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_KICKED"], _types__WEBPACK_IMPORTED_MODULE_0__["PLAYER_LEAVED_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["REPLACE_ADMIN_ROOM"], _types__WEBPACK_IMPORTED_MODULE_0__["STARTING_GAME"], _types__WEBPACK_IMPORTED_MODULE_0__["ROOM_FORM_UPDATED"]];
 var subscribeToRoomGlobalEvents = function subscribeToRoomGlobalEvents() {
   return function (dispatch, getState, _ref) {
     var api = _ref.api,
@@ -84110,6 +84123,42 @@ var leaveRoom = function leaveRoom(data) {
     dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', 'LEAVE_ROOM', null));
   };
 };
+var emitRoomFormUpdate = function emitRoomFormUpdate(data) {
+  return function (dispatch, getState, _ref7) {
+    var api = _ref7.api,
+        sockets = _ref7.sockets;
+    var _getState$player4 = getState().player,
+        id = _getState$player4.id,
+        username = _getState$player4.username,
+        password = _getState$player4.password;
+    var _getState$room = getState().room,
+        uuid = _getState$room.uuid,
+        number_of_games = _getState$room.number_of_games,
+        round_length = _getState$room.round_length;
+    var fdata = {
+      player: {
+        id: id,
+        username: username,
+        password: password
+      },
+      room: _objectSpread({
+        uuid: uuid,
+        number_of_games: number_of_games,
+        round_length: round_length
+      }, data)
+    };
+    dispatch({
+      type: _types__WEBPACK_IMPORTED_MODULE_0__["ROOM_FORM_UPDATED"],
+      payload: {
+        room: fdata.room
+      }
+    });
+    debouncedEmitRoomFormUpdate(fdata, dispatch);
+  };
+};
+var debouncedEmitRoomFormUpdate = Object(lodash__WEBPACK_IMPORTED_MODULE_4__["debounce"])(function (fdata, dispatch) {
+  dispatch(Object(_websocketActions__WEBPACK_IMPORTED_MODULE_1__["ws_emit"])('game', 'ROOM_FORM_UPDATE', fdata));
+}, 500);
 
 /***/ }),
 
@@ -84218,7 +84267,7 @@ var roundStart = function roundStart(word) {
 /*!**********************************************!*\
   !*** ./resources/assets/js/actions/types.js ***!
   \**********************************************/
-/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, FINISHING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA, PLAYER_GUESSED_WORD, PLAYER_GUESSED_WORD_FAILURE, PLAYER_WAS_CLOSE, SUBMITTING_CONTACT_FORM, SUBMIT_CONTACT_FORM_SUCCESS, SUBMIT_CONTACT_FORM_FAILURE */
+/*! exports provided: CONNECT_WS, DISCONNECT_WS, SUBSCRIBE_WS, UNSUBSCRIBE_WS, EMIT_WS, CONNECTING_SOCKET, CONNECT_SOCKET_SUCCESS, CONNECT_SOCKET_FAILURE, CONNECT_SOCKET_DATA, CREATING_PLAYER, CREATE_PLAYER_SUCCESS, CREATE_PLAYER_FAILURE, CLEAR_PLAYER_DATA, CREATING_ROOM, CREATE_ROOM_SUCCESS, CREATE_ROOM_FAILURE, CLEAR_ROOM_DATA, JOINING_ROOM, JOIN_ROOM_SUCCESS, JOIN_ROOM_FAILURE, PLAYER_JOINED_ROOM, PLAYER_LEAVED_ROOM, UPDATE_PLAYER, KICKING_PLAYER, PLAYER_KICK_SUCCESS, PLAYER_KICK_FAILURE, PLAYER_KICKED, REPLACE_ADMIN_ROOM, SENDING_MESSAGE_ROOM, SEND_MESSAGE_ROOM_SUCCESS, SEND_MESSAGE_ROOM_FAILURE, RECEIVE_MESSAGE_ROOM, CLEAR_CHAT_DATA, CLEAR_CHAT_MESSAGES, SHOW_MODAL, HIDE_MODAL, SKETCHPAD_DRAW, SKETCHPAD_UNDO, SKETCHPAD_CLEAR, SEND_DRAWING, RECEIVE_DRAWING_GAME, STARTING_GAME_REQUEST, STARTING_GAME_REQUEST_SUCCESS, STARTING_GAME_REQUEST_FAILURE, STARTING_GAME, FINISHING_GAME, CLEAR_GAME_DATA, PLAYER_CHOOSING_WORD, CHOOSED_WORD, PLAYER_CHOOSED_WORD, CHOOSED_WORD_FAILURE, REQUEST_WORDS, REQUEST_WORDS_FAILURE, CHOOSE_WORD, SHOW_COUNTDOWN, HIDE_COUNTDOWN, STARTING_ROUND, START_ROUND, TICK_ROUND, FINISHING_ROUND, CLEAR_ROUND_DATA, PLAYER_GUESSED_WORD, PLAYER_GUESSED_WORD_FAILURE, PLAYER_WAS_CLOSE, SUBMITTING_CONTACT_FORM, SUBMIT_CONTACT_FORM_SUCCESS, SUBMIT_CONTACT_FORM_FAILURE, ROOM_FORM_UPDATE, ROOM_FORM_UPDATED */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84290,6 +84339,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUBMITTING_CONTACT_FORM", function() { return SUBMITTING_CONTACT_FORM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUBMIT_CONTACT_FORM_SUCCESS", function() { return SUBMIT_CONTACT_FORM_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SUBMIT_CONTACT_FORM_FAILURE", function() { return SUBMIT_CONTACT_FORM_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROOM_FORM_UPDATE", function() { return ROOM_FORM_UPDATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROOM_FORM_UPDATED", function() { return ROOM_FORM_UPDATED; });
 var CONNECT_WS = 'CONNECT_WS';
 var DISCONNECT_WS = 'DISCONNECT_WS';
 var SUBSCRIBE_WS = 'SUBSCRIBE_WS';
@@ -84378,6 +84429,8 @@ var PLAYER_WAS_CLOSE = 'PLAYER_WAS_CLOSE'; //
 var SUBMITTING_CONTACT_FORM = 'SUBMITTING_CONTACT_FORM';
 var SUBMIT_CONTACT_FORM_SUCCESS = 'SUBMIT_CONTACT_FORM_SUCCESS';
 var SUBMIT_CONTACT_FORM_FAILURE = 'SUBMIT_CONTACT_FORM_FAILURE';
+var ROOM_FORM_UPDATE = 'ROOM_FORM_UPDATE';
+var ROOM_FORM_UPDATED = 'ROOM_FORM_UPDATED';
 
 /***/ }),
 
@@ -86117,7 +86170,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -88772,6 +88824,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _RoomPlayers__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./RoomPlayers */ "./resources/assets/js/components/Pages/Room/RoomPlayers.jsx");
 /* harmony import */ var _Form_Button__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../Form/Button */ "./resources/assets/js/components/Form/Button.jsx");
 /* harmony import */ var _Common_Errors_Errors__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../Common/Errors/Errors */ "./resources/assets/js/components/Common/Errors/Errors.jsx");
+/* harmony import */ var _RoomForm__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./RoomForm */ "./resources/assets/js/components/Pages/Room/RoomForm.jsx");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -88789,6 +88842,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -88989,6 +89043,9 @@ function (_Component) {
         handleCopyToClipboard: this.handleCopyToClipboard,
         handleKick: this.handleKick,
         ref: this.joinLinkInputRef
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomForm__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        player: playerModel,
+        room: roomModel
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "game-created-chat-container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_RoomChat__WEBPACK_IMPORTED_MODULE_11__["default"], {
@@ -89166,6 +89223,149 @@ var RoomChatMessage = function RoomChatMessage(_ref) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (RoomChatMessage);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Pages/Room/RoomForm.jsx":
+/*!****************************************************************!*\
+  !*** ./resources/assets/js/components/Pages/Room/RoomForm.jsx ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../actions/ */ "./resources/assets/js/actions/index.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var RoomForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(RoomForm, _Component);
+
+  function RoomForm() {
+    var _getPrototypeOf2;
+
+    var _temp, _this;
+
+    _classCallCheck(this, RoomForm);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(RoomForm)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {}, _this.handleRoomFormInput = function (e) {
+      var _this$props = _this.props,
+          player = _this$props.player,
+          room = _this$props.room;
+
+      if (room.isPlayerAdmin(player)) {
+        var _e$target = e.target,
+            value = _e$target.value,
+            name = _e$target.name;
+
+        _this.props.emitRoomFormUpdate(_defineProperty({}, name, value));
+      }
+    }, _temp));
+  }
+
+  _createClass(RoomForm, [{
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          player = _this$props2.player,
+          room = _this$props2.room;
+      var isPlayerAdmin = room.isPlayerAdmin(player);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: function onSubmit(e) {
+          return e.preventDefault();
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group-wrapper  col-md-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: " input-filled",
+        htmlFor: "number_of_games"
+      }, "Number of games"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        name: "number_of_games",
+        id: "number_of_games",
+        className: "form-control",
+        value: room.number_of_games,
+        onChange: this.handleRoomFormInput,
+        disabled: !isPlayerAdmin
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "1"
+      }, "1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "2"
+      }, "2"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "3"
+      }, "3"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "4"
+      }, "4"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "5"
+      }, "5")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group-wrapper  col-md-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        className: " input-filled",
+        htmlFor: "round_length"
+      }, "Round length"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "range",
+        name: "round_length",
+        value: room.round_length,
+        id: "round_length",
+        placeholder: "",
+        className: "custom-range",
+        min: "20",
+        max: "70",
+        step: "5",
+        onChange: this.handleRoomFormInput,
+        disabled: !isPlayerAdmin
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-12"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6"
+      }, "Games: ", room.number_of_games), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col-md-6 text-right"
+      }, "Round length: ", room.round_length, " sec"))));
+    }
+  }]);
+
+  return RoomForm;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(null, {
+  emitRoomFormUpdate: _actions___WEBPACK_IMPORTED_MODULE_2__["emitRoomFormUpdate"]
+})(RoomForm));
 
 /***/ }),
 
@@ -89370,6 +89570,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_form__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(uuid__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -89383,6 +89585,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 
 
@@ -89413,14 +89616,15 @@ var createRenderer = function createRenderer(render) {
 var RenderInput = createRenderer(function (input, label, _ref2) {
   var type = _ref2.type,
       disabled = _ref2.disabled,
-      placeholder = _ref2.placeholder;
+      placeholder = _ref2.placeholder,
+      options = _ref2.options;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", _extends({}, input, {
     type: type || 'text',
     id: input.name,
     disabled: disabled || false,
     placeholder: placeholder.active ? placeholder.text : '',
-    className: "form-control"
-  }));
+    className: "form-control ".concat(Object(lodash__WEBPACK_IMPORTED_MODULE_3__["get"])(options, 'className', ''))
+  }, options));
 });
 var RenderTextarea = createRenderer(function (input, label, _ref3) {
   var disabled = _ref3.disabled,
@@ -90536,13 +90740,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../actions/types */ "./resources/assets/js/actions/types.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/fp */ "./node_modules/lodash/fp.js");
 /* harmony import */ var lodash_fp__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_fp__WEBPACK_IMPORTED_MODULE_1__);
+var _initialState;
+
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-var initialState = {
+var initialState = (_initialState = {
   id: null,
   uuid: null,
   active: false,
@@ -90568,7 +90774,7 @@ var initialState = {
   players: [],
   //
   has_game_in_progress: false
-};
+}, _defineProperty(_initialState, "number_of_games", 3), _defineProperty(_initialState, "round_length", 60), _initialState);
 
 var reducer = function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -90664,6 +90870,11 @@ var reducer = function reducer() {
         return updateRoom(state, {
           administered_by: payload.player.id
         });
+      }
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ROOM_FORM_UPDATED"]:
+      {
+        return updateRoom(state, _objectSpread({}, payload.room));
       }
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_ROOM_DATA"]:

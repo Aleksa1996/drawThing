@@ -9,7 +9,8 @@ import {
 	PLAYER_LEAVED_ROOM,
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
-	CLEAR_ROOM_DATA
+	CLEAR_ROOM_DATA,
+	ROOM_FORM_UPDATED
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -41,7 +42,9 @@ const initialState = {
 	//
 	players: [],
 	//
-	has_game_in_progress: false
+	has_game_in_progress: false,
+	number_of_games: 3,
+	round_length: 60
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -92,6 +95,10 @@ const reducer = (state = initialState, { type, payload }) => {
 
 		case REPLACE_ADMIN_ROOM: {
 			return updateRoom(state, { administered_by: payload.player.id });
+		}
+
+		case ROOM_FORM_UPDATED: {
+			return updateRoom(state, { ...payload.room });
 		}
 
 		case CLEAR_ROOM_DATA: {
