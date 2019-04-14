@@ -11,6 +11,8 @@ use SwooleTW\Http\Websocket\Facades\Websocket;
 
 use App\Http\Resources\Round as RoundResource;
 
+use App\Events\GameFinished;
+
 class DoFinishRoundActions
 {
     /**
@@ -39,10 +41,12 @@ class DoFinishRoundActions
 
         $nextPlayer = $room->getRandomPlayer();
 
-        if (!empty($nextPlayer) && $room->hasEnoughPlayersForGame()) {
+        if (!empty($nextPlayer)) {
             $round = $game->createRound($nextPlayer);
             $finishingRoundData = ['drawn_by' => $nextPlayer->id, 'rounds' => RoundResource::collection($game->getRounds()->load('players'))];
             Websocket::to($room->uuid)->emit('FINISHING_ROUND', $finishingRoundData);
+        } else {
+            event(new GameFinished($game));
         }
     }
 }

@@ -190,7 +190,7 @@ class Round extends Model
     {
         $wordObj = $this->word;
 
-        $distance = levenshtein(strtolower($input), $wordObj->word);
+        $distance = levenshtein(trim(strtolower($input)), trim(strtolower($wordObj->word)));
 
         if ($distance == 0) {
             return self::GUESSED;
@@ -227,7 +227,7 @@ class Round extends Model
      */
     public function whetherAllPlayersGuessedWord()
     {
-        return $this->players()->wherePivot('guessed', false)->wherePivot('player_id', '<>', $this->drawn_by)->count() == 0;
+        return $this->players()->active()->wherePivot('guessed', false)->wherePivot('player_id', '<>', $this->drawn_by)->count() == 0;
     }
 
     // scopes
