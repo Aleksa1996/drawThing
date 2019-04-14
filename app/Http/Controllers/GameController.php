@@ -97,13 +97,14 @@ class GameController extends WebsocketController
             if ($result['guessingResult'] === Round::GUESSED) {
                 $websocket->to($data['room']['uuid'])->emit('PLAYER_GUESSED_WORD', ['player' => $result['data']]);
             } else {
-                if ($result['guessingResult'] === Round::WAS_CLOSE) {
-                    $websocket->emit('PLAYER_WAS_CLOSE',  $result['data']);
-                }
                 // generate chat message
                 $message = Tools::generateChatMessage($data['message']['text'], ['player_id' => $player->id]);
                 $websocket->emit('SEND_MESSAGE_ROOM_SUCCESS', $message);
                 $websocket->broadcast()->to($data['room']['uuid'])->emit('RECEIVE_MESSAGE_ROOM', $message);
+
+                if ($result['guessingResult'] === Round::WAS_CLOSE) {
+                    $websocket->emit('PLAYER_WAS_CLOSE',  $result['data']);
+                }
             }
         } catch (\Exception $e) {
             $this->emitException($websocket, 'SEND_MESSAGE_ROOM_FAILURE', $e);

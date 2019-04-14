@@ -55,15 +55,12 @@ class DoPlayerDisconnectedActions
 
         // if room has only one player immediately finish all games and rounds and display final scores
         if ($playerCount == 1) {
+            // dispatch event to finish current game and round
+            event(new GameFinished($game));
             // finish all active games and rounds
             $room->finishAllRounds();
             $room->finishAllGames();
-            // dispatch event to finish current game and round
-            event(new GameFinished($game));
         }
-
-        // okej mi je kada je round ticker u toku
-        // nije okej kada leave-uje u sred biranja reci
 
         if ($playerCount > 1) {
             $round  = $game->getCurrentRound();
