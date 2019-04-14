@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use Validator;
+use Illuminate\Validation\ValidationException;
 
 use App\Models\Game;
 use App\Models\Room;
 use App\Models\Word;
-use App\Custom\Tools;
 use App\Models\Round;
-
 use App\Models\Player;
 
-use Illuminate\Http\Request;
 use App\Http\Resources\Game as GameResource;
 use App\Http\Resources\Room as RoomResource;
 use App\Http\Resources\Word as WordResoruce;
-
-
 use App\Http\Resources\Round as RoundResource;
-use Illuminate\Validation\ValidationException;
-use SwooleTW\Http\Websocket\Facades\Websocket;
 use App\Http\Resources\Player as PlayerResource;
 use App\Http\Resources\PlayerScore as PlayerScoreResource;
+
+use SwooleTW\Http\Websocket\Facades\Websocket;
 use SwooleTW\Http\Websocket\Facades\Room as WebsocketRoom;
+
+use App\Custom\Tools;
+
+use App\Events\GameFinished;
+use App\Events\RoundFinished;
 
 class GameController extends WebsocketController
 {
@@ -284,48 +287,20 @@ class GameController extends WebsocketController
 
             // starting round timer
             $this->startTimer(1000, function () use (&$websocket, $room, $game, $round, $data) {
-
+                // tick (refresg) round every 1 sec
                 $round->tick();
-                unset($round->players);
-                $websocket->to($room->uuid)->emit('TICK_ROUND', ['round' => new RoundResource($round)]);
 
+                // if round is finished do some actions
                 $roundFinished = $round->finished();
-
                 if ($roundFinished) {
-                    $round->awardDrawer();
-                    $round->finish();
-                    $nextPlayer = $room->getRandomPlayer();
-
-                    // there is no players in queue to play current game so we end game
-                    if (empty($nextPlayer) || !$room->hasEnoughPlayersForGame()) {
-                        $game->finish();
-                        $finishingGameData = [
-                            'isThereNextGame' => false,
-                            'rounds' => RoundResource::collection($game->getRounds()->load('players')),
-                            'game' => new GameResource($game)
-                        ];
-
-                        // if we have next game then we should create and start it
-                        if ($room->isThereNextGame()) {
-                            $game = $room->createGame();
-                            $randomPlayer = $room->getRandomPlayer();
-                            $round = $game->createRound($randomPlayer);
-
-                            $finishingGameData['isThereNextGame'] = true;
-                            $finishingGameData['nextGame'] = new GameResource($game);
-                            $finishingGameData['nextRound'] = new RoundResource($round);
-                        } else {
-                            $room->deactivate();
-                            $finishingGameData['finalScores'] = RoundResource::collection($room->getFinalScores());
-                        }
-                        // summary of the game through rounds and flag is there new game or not
-                        $websocket->to($room->uuid)->emit('FINISHING_GAME', $finishingGameData);
-                        return $roundFinished;
+                    if ($game->finished()) {
+                        event(new GameFinished($game));
+                    } else {
+                        event(new RoundFinished($round));
                     }
-
-                    $round = $game->createRound($nextPlayer);
-                    $finishingRoundData = ['drawn_by' => $nextPlayer->id, 'rounds' => RoundResource::collection($game->getRounds()->load('players'))];
-                    $websocket->to($room->uuid)->emit('FINISHING_ROUND', $finishingRoundData);
+                } else {
+                    unset($round->players);
+                    $websocket->to($room->uuid)->emit('TICK_ROUND', ['round' => new RoundResource($round)]);
                 }
 
                 return $roundFinished;

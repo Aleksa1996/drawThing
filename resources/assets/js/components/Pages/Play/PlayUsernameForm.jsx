@@ -83,7 +83,7 @@ const PlayUsernameForm = ({
 							>
 								Create room
 							</Button>
-							<Button
+							{/* <Button
 								onClick={handleSubmit}
 								type="button"
 								className="mybtn2"
@@ -93,7 +93,7 @@ const PlayUsernameForm = ({
 								disabled={buttonStatus}
 							>
 								Random room
-							</Button>
+							</Button> */}
 						</React.Fragment>
 					)}
 				</div>

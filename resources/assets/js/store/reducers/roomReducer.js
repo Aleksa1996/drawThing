@@ -27,13 +27,13 @@ const initialState = {
 
 	created_at: null,
 	//
+	errors: [],
+	//
 	creating: false,
 	created: false,
-	createError: null,
 	//
 	joining: false,
 	joined: false,
-	joinError: null,
 	//
 	lastKickedPlayer: {
 		// zero is because of componentDidUpdate : Room Maximum update depth exceeded
@@ -57,13 +57,13 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateRoom(state, {
 				creating: false,
 				created: true,
-				createError: null,
+				errors: [],
 				...payload.room
 			});
 		}
 
 		case CREATE_ROOM_FAILURE: {
-			return updateRoom(state, { creating: false, created: false, createError: payload.message });
+			return updateRoom(state, { creating: false, created: false, errors: payload.errors });
 		}
 
 		case JOINING_ROOM: {
@@ -71,11 +71,11 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case JOIN_ROOM_SUCCESS: {
-			return updateRoom(state, { joining: false, joined: true, joinError: null, ...payload.room });
+			return updateRoom(state, { joining: false, joined: true, errors: [], ...payload.room });
 		}
 
 		case JOIN_ROOM_FAILURE: {
-			return updateRoom(state, { joining: false, joined: false, joinError: payload.message });
+			return updateRoom(state, { joining: false, joined: false, errors: payload.errors });
 		}
 
 		case PLAYER_JOINED_ROOM: {

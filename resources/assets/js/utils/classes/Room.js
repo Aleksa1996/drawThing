@@ -3,9 +3,9 @@ import Model from './Model';
 import { get as _get, orderBy as _orderBy } from 'lodash';
 
 export default class Room extends Model {
-	isCreated = () => this.created && this.createError == null;
+	isCreated = () => this.created && this.errors && this.errors.length == 0;
 
-	isJoined = () => this.joined && this.joinError == null;
+	isJoined = () => this.joined && this.errors && this.errors.length == 0;
 
 	isReady = () => this.isCreated() || this.isJoined();
 

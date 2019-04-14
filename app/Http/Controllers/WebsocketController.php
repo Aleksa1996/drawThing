@@ -10,7 +10,7 @@ use SwooleTW\Http\Websocket\Facades\Room as WebsocketRoom;
 
 use App\Models\Player;
 
-use App\Http\Resources\Player as PlayerResource;
+use App\Events\PlayerDisconnected;
 
 class WebsocketController extends Controller
 {
@@ -41,42 +41,14 @@ class WebsocketController extends Controller
     {
         var_dump('disconnected');
         try {
-            // find player
+            // is player disconnected from sockets
+            //TODO: HARDCORE PROVERA PLAYER-A
             $player = Player::findByFd($websocket->getSender());
-
-            if (empty($player)) {
-                return;
+            if (!empty($player)) {
+                event(new PlayerDisconnected($player));
             }
 
-            // get room from wich player left
-            $room = $player->getCurrentRoom();
-
-            // disconnect player from db  and websocket tables
-            $player->disconnectFromRoom($room);
-            $player->load('rooms');
-            foreach ($player->rooms as $r) {
-                WebsocketRoom::delete($player->fd, $r->uuid);
-            }
-
-            if (empty($room)) return;
-
-            // if room is empty remove it // TODO: SPECIAL RANDOM ROOM DONT DELETE
-            $playerCount = $room->getActivePlayerCount();
-            if ($playerCount <= 0) {
-                $room->deactivate();
-            } else if ($playerCount == 1) {
-                // because of room its not active anymore after deactivate
-                $room->finishAllRounds();
-                $room->finishAllGames();
-            }
-
-            // if player was admin, replace him with another player in room
-            if ($player->isAdminInRoom($room) && $newAdminPlayer = $room->setNewAdmin()) {
-                Websocket::broadcast()->to($room->uuid)->emit('REPLACE_ADMIN_ROOM', ['player' => new PlayerResource($newAdminPlayer)]);
-            }
-
-            // send notification to others
-            Websocket::broadcast()->to($room->uuid)->emit('PLAYER_LEAVED_ROOM', ['player' => new PlayerResource($player)]);
+            //
         } catch (\Exception $exception) {
             print_r(['file' => $exception->getFile(), 'line' => $exception->getLine(), 'message' => $exception->getMessage()]);
         }

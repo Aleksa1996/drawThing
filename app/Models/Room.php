@@ -239,6 +239,9 @@ class Room extends Model
      */
     public function finishAllGames()
     {
+        $this->number_of_games = $this->getGamesCount();
+        $this->save();
+
         $this->games()->update(['status' => 'finished']);
     }
 
@@ -249,6 +252,7 @@ class Room extends Model
      */
     public function finishAllRounds()
     {
+        $this->load('games');
         foreach ($this->games as $game) {
             $game->rounds()->update(['status' => 'finished']);
         }

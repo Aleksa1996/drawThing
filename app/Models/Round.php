@@ -53,7 +53,7 @@ class Round extends Model
 
     public function players()
     {
-        return $this->belongsToMany('App\Models\Player')->withPivot('id', 'guessed', 'points', 'player_id')->as('score');
+        return $this->belongsToMany('App\Models\Player')->withPivot('id', 'guessed', 'points', 'player_id')->as('score')->orderBy('points', 'desc');
     }
 
     // mutators

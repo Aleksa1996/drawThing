@@ -147,7 +147,7 @@ class Game extends Model
      */
     public function finished()
     {
-        return $this->status == 'finished' || !$this->room->hasEnoughPlayersForGame();
+        return $this->status == 'finished' || !$this->room->hasEnoughPlayersForGame() || $this->number_of_rounds == $this->getRoundsCount();
     }
 
     //scopes

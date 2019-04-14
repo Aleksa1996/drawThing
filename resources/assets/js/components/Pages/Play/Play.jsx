@@ -13,6 +13,8 @@ import { push, replace } from 'connected-react-router';
 import RoomModel from '../../../utils/classes/Room';
 import Errors from '../../../utils/classes/Errors';
 
+import ErrorsComponent from '../../Common/Errors/Errors';
+
 import Page from '../Page';
 import PlayAvatarForm from './PlayAvatarForm';
 import PlayUsernameForm from './PlayUsernameForm';
@@ -205,6 +207,7 @@ class Play extends Component {
 							hasRoomUUID={this.hasRoomUUID}
 							buttonStatus={room.creating || room.joining || player.creating}
 						/>
+						<ErrorsComponent errors={room.errors} />
 					</div>
 					<PlayRules />
 				</div>

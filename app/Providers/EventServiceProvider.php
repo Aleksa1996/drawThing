@@ -13,9 +13,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'App\Events\PlayerDisconnected' => [
+            'App\Listeners\DoPlayerDisconnectedActions',
         ],
+        'App\Events\RoundFinished' => [
+            'App\Listeners\DoFinishRoundActions',
+        ],
+        'App\Events\GameFinished' => [
+            'App\Listeners\DoFinishGameActions',
+        ]
     ];
 
     /**

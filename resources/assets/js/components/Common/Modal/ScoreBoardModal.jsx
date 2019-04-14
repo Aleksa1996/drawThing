@@ -48,8 +48,8 @@ class ScoreBoardModal extends Component {
 		const playerModel = new PlayerModel(player);
 		const roomModel = new RoomModel(room);
 		const gameModel = new GameModel(game);
-
-		const playersWithScore = roomModel.getActivePlayers().map(p => ({
+		const players = gameModel.isThereNextGame ? roomModel.getActivePlayers() : roomModel.players;
+		const playersWithScore = players.map(p => ({
 			...p,
 			score: gameModel.isThereNextGame
 				? gameModel.getScoreForPlayer(p)
@@ -82,7 +82,7 @@ class ScoreBoardModal extends Component {
 				<div className="game-board-container-left">
 					<div className="game-board-score">
 						<ul className="game-board-score-list">
-							{playersWithScore.map((p, i) => (
+							{gameModel.sortPlayersByScore(playersWithScore).map((p, i) => (
 								<li key={p.id} className="game-board-score-row rounded">
 									<span className="game-board-score-avatar-container">
 										<span className="game-board-score-avatar">
