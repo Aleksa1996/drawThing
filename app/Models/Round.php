@@ -33,6 +33,8 @@ class Round extends Model
     public const GUESSED = 1;
     public const WAS_CLOSE = 2;
 
+    public $_finishing_at = null;
+
     // relationships
     public function word()
     {
@@ -51,7 +53,7 @@ class Round extends Model
 
     public function players()
     {
-        return $this->belongsToMany('App\Models\Player')->withPivot('id', 'guessed', 'points', 'player_id')->as('score');
+        return $this->belongsToMany('App\Models\Player')->withPivot('id', 'guessed', 'points', 'player_id')->as('score')->orderBy('points', 'desc');
     }
 
     // mutators
@@ -87,9 +89,16 @@ class Round extends Model
      */
     public function diffBetweenStartingAndFinishingInSec()
     {
-        return empty($this->started_at) ? null : $this->started_at->diffInSeconds($this->finishing_at);
+        return empty($this->started_at) ? null : $this->started_at->diffInSeconds($this->_finishing_at);
     }
 
+    /**
+     * Calculate difference in percent
+     *
+     * @param \Carbon\Carbon $startDate
+     * @param \Carbon\Carbon $finishDate
+     * @return int
+     */
     public function diffBetweenStartingAndFinishingInPercent($startDate = null, $finishDate = null)
     {
         if (empty($startDate)) {
@@ -115,17 +124,18 @@ class Round extends Model
      */
     public function timer()
     {
-        return empty($this->started_at) ? null : $this->started_at->diffAsCarbonInterval($this->finishing_at)->format('%I:%S');
+        return empty($this->started_at) ? '00:00' : $this->started_at->diffAsCarbonInterval($this->_finishing_at)->format('%I:%S');
     }
 
     /**
-     * Substracts second from finishing_at
+     * Refreshing model
      *
      * @return \Carbon\Carbon
      */
     public function tick()
     {
-        return $this->finishing_at = $this->finishing_at->subSecond();
+        $this->refresh();
+        $this->_finishing_at = $this->_finishing_at->subSecond();
     }
 
     /**
@@ -134,13 +144,13 @@ class Round extends Model
      * @param Word $word
      * @return void
      */
-    public function start(Word $word)
+    public function start(Word $word, int $round_length)
     {
         $this->status = 'in_progress';
         $this->started_at = Carbon::now();
-        //TODO: VRATI NA MINUT POSLE TESTIRANJA
-        // $this->finishing_at = $this->started_at->copy()->addMinute(1)->addSecond();
-        $this->finishing_at = $this->started_at->copy()->addSecond(15);
+        $this->finishing_at = $this->started_at->copy()->addSeconds($round_length);
+        $this->_finishing_at = $this->finishing_at->copy();
+
         $this->word()->associate($word);
 
         $players = $this->game->room->players;
@@ -156,7 +166,7 @@ class Round extends Model
      */
     public function finished()
     {
-        return $this->diffBetweenStartingAndFinishingInSec() == 0 || $this->status == 'finished';
+        return $this->diffBetweenStartingAndFinishingInSec() == 0 || $this->status == 'finished' || $this->whetherAllPlayersGuessedWord();
     }
 
     /**
@@ -167,8 +177,6 @@ class Round extends Model
     public function finish()
     {
         $this->status = 'finished';
-        // reset finishing at with real value (because of subsecond func)
-        $this->finishing_at = $this->started_at->copy()->addSecond(15);
         return $this->save();
     }
 
@@ -195,6 +203,11 @@ class Round extends Model
         return 0;
     }
 
+    /**
+     * Award player who draws
+     *
+     * @return bool
+     */
     public function awardDrawer()
     {
         $avgPoints = $this->players()->wherePivot('player_id', '<>', $this->player->id)->avg('points');
@@ -204,7 +217,17 @@ class Round extends Model
             $sumPoints = rand(1, 3);
         }
 
-        $this->players()->updateExistingPivot($this->player->id, ['points' => $sumPoints]);
+        return $this->players()->updateExistingPivot($this->player->id, ['points' => $sumPoints]);
+    }
+
+    /**
+     * Determine if all players has guessed word in round
+     *
+     * @return bool
+     */
+    public function whetherAllPlayersGuessedWord()
+    {
+        return $this->players()->wherePivot('guessed', false)->wherePivot('player_id', '<>', $this->drawn_by)->count() == 0;
     }
 
     // scopes

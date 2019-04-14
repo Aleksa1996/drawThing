@@ -103,7 +103,7 @@ class Game extends Model
      *
      * @return Round
      */
-    public function currentRound()
+    public function getCurrentRound()
     {
         return $this->rounds()->active()->latest()->take(1)->first();
     }
@@ -138,6 +138,16 @@ class Game extends Model
     {
         $this->status = 'finished';
         return $this->save();
+    }
+
+    /**
+     * Is game finished
+     *
+     * @return boolean
+     */
+    public function finished()
+    {
+        return $this->status == 'finished' || !$this->room->hasEnoughPlayersForGame() || $this->number_of_rounds == $this->getRoundsCount();
     }
 
     //scopes

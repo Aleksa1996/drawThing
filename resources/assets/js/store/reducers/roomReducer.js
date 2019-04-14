@@ -9,7 +9,8 @@ import {
 	PLAYER_LEAVED_ROOM,
 	PLAYER_KICKED,
 	REPLACE_ADMIN_ROOM,
-	CLEAR_ROOM_DATA
+	CLEAR_ROOM_DATA,
+	ROOM_FORM_UPDATED
 } from '../../actions/types';
 
 import { assign as _fp_assign } from 'lodash/fp';
@@ -26,20 +27,24 @@ const initialState = {
 
 	created_at: null,
 	//
+	errors: [],
+	//
 	creating: false,
 	created: false,
-	createError: null,
 	//
 	joining: false,
 	joined: false,
-	joinError: null,
 	//
 	lastKickedPlayer: {
 		// zero is because of componentDidUpdate : Room Maximum update depth exceeded
 		id: 0
 	},
 	//
-	players: []
+	players: [],
+	//
+	has_game_in_progress: false,
+	number_of_games: 3,
+	round_length: 60
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -52,13 +57,13 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateRoom(state, {
 				creating: false,
 				created: true,
-				createError: null,
+				errors: [],
 				...payload.room
 			});
 		}
 
 		case CREATE_ROOM_FAILURE: {
-			return updateRoom(state, { creating: false, created: false, createError: payload.message });
+			return updateRoom(state, { creating: false, created: false, errors: payload.errors });
 		}
 
 		case JOINING_ROOM: {
@@ -66,11 +71,11 @@ const reducer = (state = initialState, { type, payload }) => {
 		}
 
 		case JOIN_ROOM_SUCCESS: {
-			return updateRoom(state, { joining: false, joined: true, joinError: null, ...payload.room });
+			return updateRoom(state, { joining: false, joined: true, errors: [], ...payload.room });
 		}
 
 		case JOIN_ROOM_FAILURE: {
-			return updateRoom(state, { joining: false, joined: false, joinError: payload.message });
+			return updateRoom(state, { joining: false, joined: false, errors: payload.errors });
 		}
 
 		case PLAYER_JOINED_ROOM: {
@@ -90,6 +95,10 @@ const reducer = (state = initialState, { type, payload }) => {
 
 		case REPLACE_ADMIN_ROOM: {
 			return updateRoom(state, { administered_by: payload.player.id });
+		}
+
+		case ROOM_FORM_UPDATED: {
+			return updateRoom(state, { ...payload.room });
 		}
 
 		case CLEAR_ROOM_DATA: {

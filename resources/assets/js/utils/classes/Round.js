@@ -13,8 +13,8 @@ export default class Round extends Model {
 	finished = () => this.localStatus == 'ROUND_FINISHED';
 
 	getFormattedTimer = () => this.timer;
-	// 15 secs
-	nearEnd = () => this.inProgress() && !this.finished() && this.seconds <= 5;
+
+	nearEnd = () => this.inProgress() && !this.finished() && this.seconds <= 15;
 
 	playerGuessedWord = player => {
 		let playerScore = this.score.find(s => s.player_id == player.id);

@@ -14,18 +14,24 @@ import {
 	REPLACE_ADMIN_ROOM,
 	CLEAR_ROOM_DATA,
 	STARTING_GAME,
-	UPDATE_PLAYER
+	UPDATE_PLAYER,
+	ROOM_FORM_UPDATED
 } from './types';
 import { ws_connect, ws_subscribe, ws_emit, ws_unsubscribe } from './websocketActions';
 
+import { push, replace } from 'connected-react-router';
+
 import Helpers from '../utils/Helpers';
+
+import { debounce as _debounce } from 'lodash';
 
 const globalEvents = [
 	PLAYER_JOINED_ROOM,
 	PLAYER_KICKED,
 	PLAYER_LEAVED_ROOM,
 	REPLACE_ADMIN_ROOM,
-	STARTING_GAME
+	STARTING_GAME,
+	ROOM_FORM_UPDATED
 ];
 
 export const subscribeToRoomGlobalEvents = () => (dispatch, getState, { api, sockets }) => {
@@ -82,8 +88,12 @@ export const joinRoom = (data = null) => (dispatch, getState, { api, sockets }) 
 		.then(response => {
 			dispatch(joinRoomSuccess(response.data));
 
-			const { player } = response.data;
+			const { player, room } = response.data;
 			if (player) dispatch({ type: UPDATE_PLAYER, payload: { player } });
+			if (room.has_game_in_progress) {
+				dispatch({ type: STARTING_GAME, payload: { game: room.game } });
+				dispatch(replace('/game'));
+			}
 
 			return response;
 		})
@@ -135,3 +145,28 @@ export const kickPlayerFailure = error => ({ type: PLAYER_KICK_FAILURE, payload:
 export const leaveRoom = data => (dispatch, getState, { api, sockets }) => {
 	dispatch(ws_emit('game', 'LEAVE_ROOM', null));
 };
+
+export const emitRoomFormUpdate = data => (dispatch, getState, { api, sockets }) => {
+	const { id, username, password } = getState().player;
+	const { uuid, number_of_games, round_length } = getState().room;
+	const fdata = {
+		player: {
+			id,
+			username,
+			password
+		},
+		room: {
+			uuid,
+			number_of_games,
+			round_length,
+			...data
+		}
+	};
+
+	dispatch({ type: ROOM_FORM_UPDATED, payload: { room: fdata.room } });
+	debouncedEmitRoomFormUpdate(fdata, dispatch);
+};
+
+export const debouncedEmitRoomFormUpdate = _debounce((fdata, dispatch) => {
+	dispatch(ws_emit('game', 'ROOM_FORM_UPDATE', fdata));
+}, 500);

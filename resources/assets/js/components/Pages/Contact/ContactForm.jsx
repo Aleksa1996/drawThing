@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
-import { Field } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import { RenderInput, RenderTextarea } from '../../../hocs';
 import Button from '../../Form/Button';
 

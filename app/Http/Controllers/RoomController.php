@@ -43,6 +43,7 @@ class RoomController extends Controller
             'uuid' => '',
             'active' => true,
             'number_of_games' => 3,
+            'round_length' => 60,
             'created_by' => $player->id,
             'administered_by' => $player->id
         ]);

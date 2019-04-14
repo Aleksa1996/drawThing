@@ -1,6 +1,11 @@
 import React from 'react';
 
 const GameScore = ({ player, room, game, round }) => {
+	const playersWithScore = room.getActivePlayers().map(p => ({
+		...p,
+		score: game.getScoreForPlayer(p)
+	}));
+
 	return (
 		<div className="col-md-3 order-3 order-md-1 my-md-0 my-3">
 			<div className="game-board-container-left">
@@ -10,7 +15,7 @@ const GameScore = ({ player, room, game, round }) => {
 						<span className="text-transform-uppercase">Scoreboard</span>
 					</div>
 					<ul className="game-board-score-list">
-						{room.getActivePlayers().map(p => (
+						{game.sortPlayersByScore(playersWithScore).map((p, i) => (
 							<li key={p.id} className="game-board-score-row rounded">
 								<span className="game-board-score-avatar-container">
 									<span className="game-board-score-drawing">
@@ -21,14 +26,12 @@ const GameScore = ({ player, room, game, round }) => {
 
 									<span className="game-board-score-avatar">
 										<img src={p.avatar} className="shadow" />
-										<span className="game-board-score-position">{p.id}</span>
+										<span className="game-board-score-position">{i + 1}</span>
 									</span>
 								</span>
 								<span className="game-board-score-username">
 									{p.username} {player.id == p.id ? <small> (you)</small> : null}
-									<small className="game-board-score-points">
-										({game.getScoreForPlayer(p)}) points
-									</small>
+									<small className="game-board-score-points">({p.score}) points</small>
 								</span>
 							</li>
 						))}

@@ -18,7 +18,8 @@ class CreateRoomsTable extends Migration
 
             $table->string('uuid');
             $table->boolean('active')->default(true);
-            $table->integer('number_of_games');
+            $table->integer('number_of_games')->default(3);
+            $table->integer('round_length')->default(60);
 
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('administered_by');

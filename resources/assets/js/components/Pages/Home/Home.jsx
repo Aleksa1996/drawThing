@@ -44,12 +44,21 @@ class Home extends Component {
 						</div>
 						<div className="col-md-6 page-home-rules-item-image">
 							<a href="javascript:void(0)">
-								<img src="/img/placeholder.png" className="img-fluid shadow" />
+								<img
+									src="/img/drawthing_1.png"
+									alt="draw your drawthing avatar"
+									className="img-fluid shadow"
+								/>
 							</a>
 						</div>
 						<div className="col-md-6 page-home-rules-item-image">
 							<a href="javascript:void(0)">
-								<img src="/img/placeholder.png" className="img-fluid shadow" />
+								<img
+									src="/img/drawthing_2.png"
+									alt="create your drawthing room"
+									className="img-fluid shadow"
+									style={{ width: '350px' }}
+								/>
 							</a>
 						</div>
 						<div className="col-md-6 page-home-rules-item-text">
@@ -78,7 +87,12 @@ class Home extends Component {
 						</div>
 						<div className="col-md-6 page-home-rules-item-image">
 							<a href="javascript:void(0)">
-								<img src="/img/placeholder.png" className="img-fluid shadow" />
+								<img
+									src="/img/drawthing_3.png"
+									className="img-fluid shadow"
+									alt="play drawthing game"
+									style={{ width: '700px' }}
+								/>
 							</a>
 						</div>
 					</div>

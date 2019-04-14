@@ -109,6 +109,7 @@ class Game extends Component {
 			this.props.showModal({
 				modalType: 'SHOW_SCOREBOARD_MODAL'
 			});
+			this.props.sketchClear();
 		}
 	}
 

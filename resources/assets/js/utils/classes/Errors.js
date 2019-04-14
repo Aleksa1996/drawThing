@@ -18,9 +18,9 @@ class Errors {
 
 	isFormError = field => !this.isGeneralError(field);
 
-	getGeneralErrors = () => this.errors.filter(e => this.isGeneralError(e));
+	getGeneralErrors = () => this.errors.filter(e => this.isGeneralError(e.field));
 
-	getFormErrors = () => this.errors.filter(e => this.isFormError(e));
+	getFormErrors = () => this.errors.filter(e => this.isFormError(e.field));
 
 	remove = field => this.errors.filter(e => e.field != field);
 

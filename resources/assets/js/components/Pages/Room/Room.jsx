@@ -14,6 +14,7 @@ import {
 	showCountdown,
 	hideCountdown
 } from '../../../actions';
+import { Link } from 'react-router-dom';
 
 import { KICK_PLAYER_MODAL, INFO_MODAL } from '../../Common/Modal/modalTypes';
 import { push, replace } from 'connected-react-router';
@@ -31,6 +32,7 @@ import RoomPlayers from './RoomPlayers';
 
 import Button from '../../Form/Button';
 import Errors from '../../Common/Errors/Errors';
+import RoomForm from './RoomForm';
 
 class Room extends Component {
 	constructor(props) {
@@ -186,6 +188,7 @@ class Room extends Component {
 								handleKick={this.handleKick}
 								ref={this.joinLinkInputRef}
 							/>
+							<RoomForm player={playerModel} room={roomModel} />
 							<div className="game-created-chat-container">
 								<RoomChat
 									room={roomModel}
@@ -195,8 +198,12 @@ class Room extends Component {
 								/>
 							</div>
 							<Errors errors={gameModel.starting_game_request_errors} />
-							{roomModel.isPlayerAdmin(player) && (
-								<div className="text-center mt-3">
+							<div className="text-center mt-3 d-flex justify-content-around">
+								<Link to="/play" className="mybtn2 my-auto">
+									<i className="fa fa-arrow-left mr-2" aria-hidden="true" />
+									Leave
+								</Link>
+								{roomModel.isPlayerAdmin(player) && (
 									<Button
 										onClick={this.handleStartGame}
 										type="button"
@@ -206,8 +213,8 @@ class Room extends Component {
 									>
 										{roomModel.getActivePlayerCount() <= 1 ? 'Waiting...' : 'Start game'}
 									</Button>
-								</div>
-							)}
+								)}
+							</div>
 						</div>
 					</div>
 					<PlayRules />

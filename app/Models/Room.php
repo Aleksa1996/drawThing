@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $uuid
  * @property boolean $active
  * @property integer $number_of_games
+ * @property integer $round_length
  *
  * @property integer $created_by
  * @property integer $administered_by
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     // options
-    protected $fillable = ['uuid', 'active', 'number_of_games', 'created_by', 'administered_by'];
+    protected $fillable = ['uuid', 'active', 'number_of_games', 'round_length', 'created_by', 'administered_by'];
 
     // relationships
     public function players()
@@ -99,7 +100,7 @@ class Room extends Model
      */
     public function isEmpty()
     {
-        return $this->players()->wherePivot('active', true)->count() <= 0;
+        return $this->players()->active()->count() <= 0;
     }
 
     /**
@@ -124,7 +125,7 @@ class Room extends Model
         if (!is_array($except)) {
             $except = [$except];
         }
-        $currentGame = $this->currentGame();
+        $currentGame = $this->getCurrentGame();
 
         return $this->players()->active()
             ->whereNotIn('players.id', $except)
@@ -140,7 +141,27 @@ class Room extends Model
      */
     public function getPlayerCount()
     {
+        return $this->players()->count();
+    }
+
+    /**
+     * Get number of active players in room
+     *
+     * @return int
+     */
+    public function getActivePlayerCount()
+    {
         return $this->players()->active()->count();
+    }
+
+    /**
+     * Checking if we have enough players to play game
+     *
+     * @return boolean
+     */
+    public function hasEnoughPlayersForGame()
+    {
+        return $this->getActivePlayerCount() > 1;
     }
 
     /**
@@ -161,7 +182,7 @@ class Room extends Model
     public function createGame($status = 'starting')
     {
         $game = new Game();
-        $game->number_of_rounds = $this->getPlayerCount();
+        $game->number_of_rounds = $this->getActivePlayerCount();
         $game->status = $status;
 
         return $this->games()->save($game);
@@ -172,7 +193,7 @@ class Room extends Model
      *
      * @return Game
      */
-    public function currentGame()
+    public function getCurrentGame()
     {
         return $this->games()->active()->latest()->take(1)->first();
     }
@@ -185,8 +206,8 @@ class Room extends Model
      */
     public function isPlayerDrawing(Player $player)
     {
-        if (!($game = $this->currentGame())) return false;
-        if (!($round = $game->currentRound())) return false;
+        if (!($game = $this->getCurrentGame())) return false;
+        if (!($round = $game->getCurrentRound())) return false;
 
         return $round->drawn_by == $player->id;
     }
@@ -198,13 +219,55 @@ class Room extends Model
      */
     public function isThereNextGame()
     {
-        return $this->number_of_games > $this->getGamesCount();
+        return $this->number_of_games > $this->getGamesCount() && $this->hasEnoughPlayersForGame();
     }
 
+    /**
+     * Get final scores in room, current game
+     *
+     * @return array
+     */
     public function getFinalScores()
     {
         return $this->games()->with('rounds.players')->get()->pluck('rounds.*')->flatten();
     }
+
+    /**
+     * Set finish status on all games
+     *
+     * @return bool
+     */
+    public function finishAllGames()
+    {
+        $this->number_of_games = $this->getGamesCount();
+        $this->save();
+
+        $this->games()->update(['status' => 'finished']);
+    }
+
+    /**
+     * Set finish status on all rounds
+     *
+     * @return bool
+     */
+    public function finishAllRounds()
+    {
+        $this->load('games');
+        foreach ($this->games as $game) {
+            $game->rounds()->update(['status' => 'finished']);
+        }
+    }
+
+    /**
+     * Check whether game is in progress in room
+     *
+     * @return boolean
+     */
+    public function hasGameInProgress()
+    {
+        return $this->games()->active()->count() > 0;
+    }
+
 
     // scopes
     public function scopeFindByUuid($query, $uuid)
