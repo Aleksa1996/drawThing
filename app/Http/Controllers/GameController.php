@@ -288,7 +288,7 @@ class GameController extends WebsocketController
 
             // starting round timer
             $this->startTimer(1000, function () use (&$websocket, $room, $game, $round, $data) {
-                // tick (refresg) round every 1 sec
+                // tick (refresh) round every 1 sec
                 $round->tick();
 
                 // if round is finished do some actions

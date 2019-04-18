@@ -166,7 +166,7 @@ class Round extends Model
      */
     public function finished()
     {
-        return $this->diffBetweenStartingAndFinishingInSec() == 0 || $this->status == 'finished' || $this->whetherAllPlayersGuessedWord();
+        return $this->status == 'finished' || $this->diffBetweenStartingAndFinishingInSec() == 0 || $this->whetherAllPlayersGuessedWord() || !$this->game->room->hasEnoughPlayersForGame();
     }
 
     /**

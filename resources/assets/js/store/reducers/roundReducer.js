@@ -46,7 +46,7 @@ const reducer = (state = initialState, { type, payload }) => {
 			return updateRound(state, { ...payload.round });
 		}
 		case FINISHING_GAME: {
-			return { ...initialState };
+			return { ...initialState, timer: '00:00', seconds: 0 };
 		}
 		case STARTING_ROUND: {
 			return updateRound(state, { ...payload.round, localStatus: 'ROUND_STARTING' });
@@ -62,7 +62,9 @@ const reducer = (state = initialState, { type, payload }) => {
 				drawn_by: payload.drawn_by,
 				chosed_word: null,
 				words_to_choose: [],
-				localStatus: 'ROUND_FINISHED'
+				localStatus: 'ROUND_FINISHED',
+				timer: '00:00',
+				seconds: 0
 			});
 		}
 		case PLAYER_CHOOSING_WORD: {
