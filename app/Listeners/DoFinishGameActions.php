@@ -33,9 +33,13 @@ class DoFinishGameActions
      */
     public function handle(GameFinished $event)
     {
+        $currentRound = $event->game->getCurrentRound();
         $event->game->finish();
         $room = $event->game->room;
 
+        if (!empty($currentRound)) {
+            $currentRound->awardDrawer();
+        }
         $finishingGameData = [
             'isThereNextGame' => false,
             'rounds' => RoundResource::collection($event->game->getRounds()->load('players')),

@@ -48,8 +48,7 @@ class ScoreBoardModal extends Component {
 		const playerModel = new PlayerModel(player);
 		const roomModel = new RoomModel(room);
 		const gameModel = new GameModel(game);
-		const players = gameModel.isThereNextGame ? roomModel.getActivePlayers() : roomModel.players;
-		const playersWithScore = players.map(p => ({
+		const playersWithScore = roomModel.getActivePlayers().map(p => ({
 			...p,
 			score: gameModel.isThereNextGame
 				? gameModel.getScoreForPlayer(p)

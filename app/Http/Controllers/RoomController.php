@@ -105,6 +105,10 @@ class RoomController extends Controller
             throw ValidationException::withMessages(['_general_error' => ['The Room you tried to join does not exists anymore!']]);
         }
 
+        if ($room->hasGameInProgress()) {
+            throw ValidationException::withMessages(['_general_error' => ['The game in room you just tried to join is already in progress!']]);
+        }
+
         // check if player username already exists in room
         if ($room->isPlayerUsernameOccupied($player->username)) {
             $player->handleUsernameOccupied();
@@ -114,22 +118,7 @@ class RoomController extends Controller
         $room->players()->attach($player->id);
         WebsocketRoom::add($player->fd, $room->uuid);
 
-
-        if ($room->hasGameInProgress()) {
-            $game = $room->getCurrentGame();
-            if (empty($game)) {
-                throw ValidationException::withMessages(['_general_error' => ['Game is not valid!']]);
-            }
-            $round = $game->getCurrentRound();
-            if (empty($round)) {
-                throw ValidationException::withMessages(['_general_error' => ['Round is not valid!']]);
-            }
-            // round
-            $round->players()->attach($player->id);
-        }
-
         $playerResource = new PlayerResource($player);
-
         // sending notification that new  player has joined to room
         Websocket::setSender($player->fd);
         Websocket::broadcast()->to($room->uuid)->emit('PLAYER_JOINED_ROOM', ['player' => $playerResource]);

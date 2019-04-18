@@ -10,6 +10,7 @@ use App\Events\RoundFinished;
 use SwooleTW\Http\Websocket\Facades\Websocket;
 
 use App\Http\Resources\Round as RoundResource;
+use App\Http\Resources\PlayerScore as PlayerScoreResource;
 
 use App\Events\GameFinished;
 
@@ -43,7 +44,14 @@ class DoFinishRoundActions
 
         if (!empty($nextPlayer)) {
             $round = $game->createRound($nextPlayer);
-            $finishingRoundData = ['drawn_by' => $nextPlayer->id, 'rounds' => RoundResource::collection($game->getRounds()->load('players'))];
+
+            $event->round->player->loadScoreForRound($event->round);
+
+            $finishingRoundData = [
+                'drawn_by' => $nextPlayer->id,
+                'rounds' => RoundResource::collection($game->getRounds()->load('players')),
+                'player_drawer' => new PlayerScoreResource($event->round->player)
+            ];
             Websocket::to($room->uuid)->emit('FINISHING_ROUND', $finishingRoundData);
         } else {
             event(new GameFinished($game));
