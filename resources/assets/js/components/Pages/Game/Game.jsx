@@ -110,6 +110,7 @@ class Game extends Component {
 				modalType: 'SHOW_SCOREBOARD_MODAL'
 			});
 			this.props.sketchClear();
+			this.props.clearState(['chat']);
 		}
 	}
 
@@ -153,7 +154,6 @@ class Game extends Component {
 			}
 		}));
 
-		this.props.clearState(['chat']);
 		this.props.sketchClear();
 	};
 
@@ -197,6 +197,10 @@ class Game extends Component {
 		const chatModel = new ChatModel(chat);
 		const gameModel = new GameModel(game);
 		const roundModel = new RoundModel(round);
+
+		if (!roomModel.isReady()) {
+			return null;
+		}
 
 		return (
 			<Page title="Game - Drawthing" className="container-fluid page-game">

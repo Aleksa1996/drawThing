@@ -58,13 +58,21 @@ const reducer = (state = initialState, { type, payload }) => {
 			});
 		}
 		case FINISHING_ROUND: {
+			const { player_drawer } = payload;
+
+			let newScore = {};
+			if (player_drawer) {
+				newScore = { score: updateScore(state.score, player_drawer.score) };
+			}
+
 			return updateRound(state, {
 				drawn_by: payload.drawn_by,
 				chosed_word: null,
 				words_to_choose: [],
 				localStatus: 'ROUND_FINISHED',
 				timer: '00:00',
-				seconds: 0
+				seconds: 0,
+				...newScore
 			});
 		}
 		case PLAYER_CHOOSING_WORD: {
