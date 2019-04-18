@@ -114,6 +114,20 @@ class RoomController extends Controller
         $room->players()->attach($player->id);
         WebsocketRoom::add($player->fd, $room->uuid);
 
+
+        if ($room->hasGameInProgress()) {
+            $game = $room->getCurrentGame();
+            if (empty($game)) {
+                throw ValidationException::withMessages(['_general_error' => ['Game is not valid!']]);
+            }
+            $round = $game->getCurrentRound();
+            if (empty($round)) {
+                throw ValidationException::withMessages(['_general_error' => ['Round is not valid!']]);
+            }
+            // round
+            $round->players()->attach($player->id);
+        }
+
         $playerResource = new PlayerResource($player);
 
         // sending notification that new  player has joined to room

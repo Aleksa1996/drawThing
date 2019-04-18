@@ -16,6 +16,9 @@ use App\Http\Resources\Player as PlayerResource;
 use App\Events\GameFinished;
 use App\Events\RoundFinished;
 
+use App\Models\Room;
+use App\Models\Player;
+
 
 class DoPlayerDisconnectedActions
 {
@@ -40,39 +43,13 @@ class DoPlayerDisconnectedActions
         // get room from wich player left
         $room = $event->player->getCurrentRoom();
 
-        $this->disconnectFromRoom($event->player, $room);
-
         // if player does not have room return immediately
         if (empty($room)) return;
 
-        // if room is empty deactivate it
-        $playerCount = $room->getActivePlayerCount();
-        if ($playerCount <= 0) {
-            $room->deactivate();
-        }
+        $this->disconnectFromRoom($event->player, $room);
 
-        $game = $room->getCurrentGame();
+        $this->handleRoomByPlayerCount($event->player, $room);
 
-        // if room has only one player immediately finish all games and rounds and display final scores
-        if ($playerCount == 1) {
-            // dispatch event to finish current game and round
-            event(new GameFinished($game));
-            // finish all active games and rounds
-            $room->finishAllRounds();
-            $room->finishAllGames();
-        }
-
-        if ($playerCount > 1) {
-            $round  = $game->getCurrentRound();
-            // if player that leaved room was drawing, immediately finish current round and try to start another
-            if ($round->drawn_by == $event->player->id) {
-                if ($game->finished()) {
-                    event(new GameFinished($game));
-                } else {
-                    event(new RoundFinished($round));
-                }
-            }
-        }
 
         // if player was admin, replace him with another player in room
         if ($event->player->isAdminInRoom($room) && $newAdminPlayer = $room->setNewAdmin()) {
@@ -97,6 +74,42 @@ class DoPlayerDisconnectedActions
         $player->load('rooms');
         foreach ($player->rooms as $r) {
             WebsocketRoom::delete($player->fd, $r->uuid);
+        }
+    }
+
+    public function handleRoomByPlayerCount(Player $player, Room $room)
+    {
+        $playerCount = $room->getActivePlayerCount();
+
+        // if room is empty deactivate it
+        if ($playerCount <= 0) {
+            $room->deactivate();
+        }
+
+        // only if we have game in progress
+        if ($room->hasGameInProgress()) {
+            $game = $room->getCurrentGame();
+
+            // if room has only one player immediately finish all games and rounds and display final scores
+            if ($playerCount == 1) {
+                // dispatch event to finish current game and round
+                event(new GameFinished($game));
+                // finish all active games and rounds
+                $room->finishAllRounds();
+                $room->finishAllGames();
+            }
+
+            if ($playerCount > 1) {
+                $round  = $game->getCurrentRound();
+                // if player that leaved room was drawing, immediately finish current round and try to start another
+                if ($round->drawn_by == $player->id && ($round->status == 'starting' || $game->status == 'starting')) {
+                    if ($game->finished()) {
+                        event(new GameFinished($game));
+                    } else {
+                        event(new RoundFinished($round));
+                    }
+                }
+            }
         }
     }
 }

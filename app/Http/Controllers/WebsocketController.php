@@ -47,8 +47,6 @@ class WebsocketController extends Controller
             if (!empty($player)) {
                 event(new PlayerDisconnected($player));
             }
-
-            //
         } catch (\Exception $exception) {
             print_r(['file' => $exception->getFile(), 'line' => $exception->getLine(), 'message' => $exception->getMessage()]);
         }
