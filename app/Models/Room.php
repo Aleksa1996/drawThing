@@ -50,7 +50,8 @@ class Room extends Model
     public static function create(array $attributes)
     {
         $model = static::query()->create($attributes);
-        $model->uuid =  uniqid('room_' . $model->id . '_', true);
+        // $model->uuid =  uniqid('room_' . $model->id . '_', true);
+        $model->uuid =  'room_' . $model->id;
         $model->save();
 
         return $model;
